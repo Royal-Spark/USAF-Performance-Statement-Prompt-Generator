@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5M07SFV1BF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5M07SFV1BF');
+</script>
+    <title>USAF AI Prompt Generator</title>
+    <style>
+        :root {
+            --air-force-blue: #0033a0;
+            --air-force-dark: #001f60;
+            --air-force-light: #5d8aa8;
+            --accent-color: #00c6ff;
+            --accent-glow: rgba(0, 198, 255, 0.5);
+            --light-bg: #f5f7fa;
+            --dark-text: #2c3e50;
+            --success-color: #2ecc71;
+            --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            --input-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            --button-shadow: 0 4px 10px rgba(0, 51, 160, 0.25);
+            --button-active-shadow: 0 2px 5px rgba(0, 51, 160, 0.4);
+            --border-radius-lg: 12px;
+            --border-radius-md: 8px;
+            --border-radius-sm: 4px;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700&display=swap');
+
+        body {
+            font-family: 'Exo 2', 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.6;
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(93, 138, 168, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(0, 51, 160, 0.07) 0%, transparent 25%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--air-force-blue) 0%, var(--air-force-dark) 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            border-bottom: 5px solid var(--accent-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg); /* Rounded bottom corners */
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.4rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Updated subtitle/description styling */
+        .header-description {
+            margin-top: 15px;
+            font-weight: 300;
+            font-size: 1rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: left;
+            padding: 0 15px;
+        }
+
+        .header-description h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-align: center;
+            color: var(--accent-color);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .header-description p {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .header-description ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .header-description ul li {
+            background-color: rgba(255,255,255,0.1);
+            border-left: 4px solid var(--accent-color);
+            margin-bottom: 8px;
+            padding: 10px 15px;
+            border-radius: var(--border-radius-md);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .header-description ul li strong {
+            color: var(--accent-color);
+            margin-right: 8px;
+        }
+
+        .header-description ul li:last-child {
+            margin-bottom: 0;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--card-shadow);
+            margin-bottom: 30px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(0, 51, 160, 0.1);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            background: linear-gradient(to right, var(--air-force-blue), var(--air-force-light));
+            color: white;
+            padding: 18px 25px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255,255,255,0.2); /* Subtle line */
+        }
+
+        .card-body {
+            padding: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--air-force-blue);
+            letter-spacing: 0.3px;
+        }
+
+        input[type="text"], textarea, select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid rgba(93, 138, 168, 0.3);
+            border-radius: var(--border-radius-md);
+            font-size: 1rem;
+            font-family: inherit;
+            box-sizing: border-box;
+            transition: all 0.3s;
+            box-shadow: var(--input-shadow);
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        input[type="text"]:focus, textarea:focus, select:focus {
+            border-color: var(--accent-color);
+            outline: none;
+            box-shadow: 0 0 0 4px var(--accent-glow);
+            background-color: white;
+        }
+
+        textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+
+        button {
+            background: linear-gradient(to right, var(--air-force-blue), var(--air-force-dark));
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: var(--border-radius-md);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--button-shadow);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.5px;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.15) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        button:hover {
+            background: linear-gradient(to right, #0040c5, var(--air-force-blue));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 51, 160, 0.35);
+        }
+
+        button:active {
+            transform: translateY(1px) scale(0.98);
+            box-shadow: var(--button-active-shadow);
+            background: linear-gradient(to right, var(--air-force-dark), #002380);
+        }
+
+        .button-icon {
+            margin-right: 10px;
+            font-size: 1.1em;
+        }
+
+        .copy-button {
+            background: linear-gradient(to right, var(--success-color), #27ae60);
+            margin-top: 20px;
+        }
+
+        .copy-button:hover {
+            background: linear-gradient(to right, #2ecc71, #25a25a);
+            box-shadow: 0 6px 15px rgba(46, 204, 113, 0.35);
+        }
+
+        .copy-button:active {
+            background: linear-gradient(to right, #27ae60, #219955);
+        }
+
+        .output-container {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .output-box {
+            background-color: #f7f9fc;
+            border: 1px solid rgba(93, 138, 168, 0.3);
+            border-radius: var(--border-radius-md);
+            padding: 20px;
+            white-space: pre-wrap;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.95rem;
+            max-height: 400px;
+            overflow-y: auto;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.08);
+            line-height: 1.6;
+            color: #34495e;
+        }
+
+        .toggle-section {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 6px 12px;
+            border-radius: 20px;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            box-shadow: none;
+        }
+
+        .toggle-section:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: none;
+            box-shadow: none;
+        }
+
+        .toggle-section:active {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .reference-section {
+            background-color: #fffde7;
+            border-left: 5px solid var(--accent-color);
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+            box-shadow: var(--input-shadow);
+        }
+
+        .reference-heading {
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: var(--air-force-blue);
+        }
+
+        .example {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f5f7fa;
+            border-left: 4px solid var(--air-force-light);
+            border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .alq-container {
+            margin-top: 10px;
+            border: 2px solid rgba(93, 138, 168, 0.3);
+            border-radius: var(--border-radius-md);
+            padding: 20px;
+            background-color: #f9fafb;
+            box-shadow: var(--input-shadow);
+            transition: all 0.3s;
+        }
+
+        .alq-container:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: rgba(93, 138, 168, 0.5);
+        }
+
+        .alq-group {
+            margin-bottom: 20px;
+        }
+
+        .alq-header {
+            color: var(--air-force-blue);
+            margin-top: 0;
+            margin-bottom: 12px;
+            border-bottom: 2px solid rgba(93, 138, 168, 0.2);
+            padding-bottom: 8px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            font-size: 1.4rem;
+        }
+
+        .alq-header::before {
+            content: '';
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background-color: var(--air-force-blue);
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .alq-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 5px;
+        }
+
+        .alq-checkbox {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .alq-label {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            padding: 10px 15px;
+            border-radius: var(--border-radius-md);
+            border: 2px solid rgba(93, 138, 168, 0.2);
+            cursor: pointer;
+            width: calc(33% - 12px);
+            min-width: 200px;
+            margin: 0;
+            transition: all 0.2s;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .alq-checkbox:checked + .alq-label {
+            background-color: rgba(0, 51, 160, 0.1);
+            border-color: var(--air-force-blue);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+            transform: translateY(-2px);
+        }
+
+        .alq-checkbox:focus + .alq-label {
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .alq-checkbox + .alq-label .alq-checkmark {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            background-color: white;
+            border: 2px solid rgba(93, 138, 168, 0.4);
+            border-radius: var(--border-radius-sm);
+            margin-right: 10px;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .alq-checkbox:checked + .alq-label .alq-checkmark {
+            background-color: var(--air-force-blue);
+            border-color: var(--air-force-blue);
+        }
+
+        .alq-checkbox:checked + .alq-label .alq-checkmark::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 6px;
+            width: 4px;
+            height: 8px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .alq-desc-btn {
+            background: none;
+            border: none;
+            color: var(--air-force-blue);
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-decoration: underline;
+            padding: 0;
+            margin-top: 15px;
+            box-shadow: none;
+            transition: color 0.2s;
+            display: inline-block;
+            text-align: right;
+            align-self: flex-end;
+        }
+
+        .alq-desc-btn:hover {
+            color: var(--accent-color);
+            text-decoration: underline;
+            background: none;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .alq-desc-btn:active {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .alq-desc-container {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: var(--border-radius-md);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .alq-desc-heading {
+            margin-top: 0;
+            color: var(--air-force-blue);
+            font-weight: 600;
+        }
+
+        .alq-desc-list {
+            padding-left: 20px;
+            margin-bottom: 0;
+            line-height: 1.8;
+        }
+
+        .ai-resource-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center; /* Center content horizontally */
+            background: linear-gradient(135deg, var(--air-force-blue), var(--air-force-dark));
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: var(--border-radius-md);
+            font-weight: 600;
+            transition: all 0.3s ease; /* Smoother transitions */
+            margin: 0 8px;
+            box-shadow: var(--button-shadow);
+            position: relative;
+            overflow: hidden;
+            flex: 1; /* Allow links to take equal space */
+            min-width: 150px; /* Ensure minimum width for smaller screens */
+        }
+
+        .ai-resource-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.15) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .ai-resource-link:hover {
+            background: linear-gradient(to right, #0040c5, var(--air-force-blue));
+            transform: translateY(-3px) scale(1.02); /* Slight lift and scale */
+            box-shadow: 0 10px 20px rgba(0, 51, 160, 0.4); /* More pronounced shadow */
+        }
+
+        .ai-resource-link:active {
+            transform: translateY(0px) scale(0.98); /* Press effect */
+            box-shadow: var(--button-active-shadow);
+        }
+
+        .ai-resource-icon {
+            margin-right: 10px;
+            font-size: 1.2em; /* Slightly larger icon */
+            color: var(--accent-color); /* Accent color for the icon */
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 20px; /* Add some space above buttons */
+            margin-bottom: 20px; /* Add some space below buttons */
+        }
+
+        .description-text {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .favorite-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: rgba(255, 255, 255, 0.25);
+            border: 2px solid white;
+            border-radius: var(--border-radius-md);
+            padding: 8px 15px;
+            color: white;
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 10;
+            backdrop-filter: blur(2px);
+        }
+
+        .favorite-btn:hover {
+            background-color: white;
+            color: var(--air-force-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .favorite-btn:active {
+            transform: scale(0.98);
+        }
+
+        .favorite-icon {
+            margin-right: 8px;
+            font-size: 1.2em;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--dark-text);
+            font-size: 0.9rem;
+            margin-top: 20px;
+            background-color: white; /* Match card background */
+            border-top: 1px solid rgba(0, 51, 160, 0.1); /* Subtle border */
+            border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0; /* Rounded top corners */
+            box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.05); /* Soft shadow upwards */
+        }
+
+        /* Custom Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            backdrop-filter: blur(3px); /* Blur background */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 30px;
+            border-radius: var(--border-radius-lg);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: fadeIn 0.3s ease-out;
+            border: 1px solid rgba(0, 51, 160, 0.1);
+        }
+
+        .modal-content h3 {
+            color: var(--air-force-blue);
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .modal-content p {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        .modal-close-btn {
+            background: linear-gradient(to right, var(--air-force-blue), var(--air-force-dark));
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--border-radius-md);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: var(--button-shadow);
+        }
+
+        .modal-close-btn:hover {
+            background: linear-gradient(to right, #0040c5, var(--air-force-blue));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 51, 160, 0.35);
+        }
+
+        .modal-close-btn:active {
+            transform: translateY(1px) scale(0.98);
+            box-shadow: var(--button-active-shadow);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .card-header {
+                padding: 15px 20px;
+                font-size: 1.1rem;
+            }
+
+            .card-body {
+                padding: 20px;
+            }
+
+            .alq-label {
+                width: 100%;
+            }
+
+            .ai-resource-link {
+                width: 100%; /* Full width on small screens */
+                margin: 5px 0; /* Adjust margin for stacking */
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <button id="addToFavorites" class="favorite-btn">
+            <span class="favorite-icon">⭐</span> Add to Favorites
+        </button>
+        <h1>USAF AI Prompt Generator</h1>
+    </header>
+
+    <div style="background-color: #4CAF50; color: #000; text-align: center; padding: 10px; margin-bottom: 20px; border: 2px solid #2E7D32; border-left: 10px solid #2E7D32; border-radius: var(--border-radius-md);">
+        <strong style="font-size: 1.1rem;">⚠️ REMINDER: ONLY INPUT UNCLASSIFIED INFORMATION ⚠️</strong>
+        <p style="margin: 5px 0 0 0;">All content entered must be appropriate for public release</p>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <span>How to Use This Tool</span>
+                <button id="howToUseToggle" class="toggle-section" title="Show/Hide Instructions">ⓘ Show Instructions</button>
+            </div>
+            <div id="howToUseBody" class="card-body hidden">
+                <h2>Purpose: Get 80% of your performance statements done in minutes!</h2>
+                <p>Our AI tool empowers every Airman to rapidly turn their accomplishments into strong, AFI-structured performance statements. This saves time for both Airmen and supervisors, leading to faster, higher-quality 1206s.</p>
+                <h2>Step-by-Step Guide:</h2>
+                <ul>
+                    <li><strong>Step 1:</strong> Input Your Accomplishments: Simply type in all your details and "word vomit" your achievements.</li>
+                    <li><strong>Step 2:</strong> Generate Prompt: Click the "generate prompt" button to create your AI-ready text.</li>
+                    <li><strong>Step 3:</strong> Paste & Generate: Copy the prompt and paste it into NIPRGPT or ASK SAGE to get 7 drafted performance statements.</li>
+                    <li><strong>Step 4:</strong> Select & Refine: Review the 7 AI-generated statements and select the best parts to provide to your supervisor.</li>
+                    <li><strong>Step 5:</strong> Supervisor Review: Your supervisor refines the chosen statements for final perfection.</li>
+                </ul>
+                <p style="text-align: center; margin-top: 20px;">That's it! Get high-quality, AFI-structured performance statements in minutes.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>Input Information</span>
+                <button id="toggleReference" class="toggle-section" title="Show/Hide Reference">ⓘ Show Guidance</button>
+            </div>
+
+            <div id="referenceSection" class="reference-section hidden">
+                <h3 class="reference-heading">Official USAF Performance Statement Guidance:</h3>
+                <p>Performance Statements are the AF narrative-style of writing to communicate performance on the AF Form 1206, Nomination for Award (13 Mar 2024). They are efficient, increase clarity, and improve the ability to understand an Airman's performance correctly and equitably.</p>
+
+                <h4>Two Basic Principles:</h4>
+                <ul>
+                    <li><strong>Standalone:</strong> Each Performance Statement is a standalone sentence and includes 1) action and 2) at least one of the following: impact or results/outcome.</li>
+                    <li><strong>Readability:</strong> Performance Statements are plain language and avoid using uncommon acronyms and abbreviations.</li>
+                </ul>
+
+                <h4>Format:</h4>
+                <ul>
+                    <li>AF Form 1206, Nomination for Award (13 Mar 2024) remains the standard</li>
+                    <li>White space on the right margin is both accepted and expected</li>
+                    <li>No award nomination criteria may exceed one full page</li>
+                    <li>Bullets are not authorized</li>
+                </ul>
+
+                <h4>Example:</h4>
+                <div class="example">
+                    <p><strong>Action and Impact or Results/Outcome:</strong></p>
+                    <p>Capt Snuffy <strong>led</strong> a survey team of 33 MCA to establish an XAB in support of a PACAF ACE exercise across 4 countries and including 7 allies, <strong>culminating</strong> in 153 sorties and 334 training events completed. She also <strong>championed</strong> a critical organizational merger of the squadron's maintenance and operations; results <strong>saved</strong> 360 maintenance workhours per week and <strong>increased</strong> sortie generation by 10%.</p>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="jobTitle">Job Title/AFSC:</label>
+                    <select id="jobTitle">
+                        <option value="">-- Select Your AFSC/Job Title --</option>
+                        <option value="DOD Government Civilian">DOD Government Civilian</option>
+                        <optgroup label="Officer AFSCs">
+                            <option value="11S - Special Operations Pilot">11S - Special Operations Pilot</option>
+                            <option value="12S - Special Operations Combat Systems Officer">12S - Special Operations Combat Systems Officer</option>
+                            <option value="14F - Information Operations Officer">14F - Information Operations Officer</option>
+                            <option value="14N - Intelligence Officer">14N - Intelligence Officer</option>
+                            <option value="15W - Weather Officer">15W - Weather Officer</option>
+                            <option value="17S - Cyberspace Operations Officer">17S - Cyberspace Operations Officer</option>
+                            <option value="17D - Cyberspace Operations Officer">17D - Cyberspace Operations Officer</option>
+                            <option value="18S - Special Reconnaissance Officer">18S - Special Reconnaissance Officer</option>
+                            <option value="19Z - Special Warfare Officer">19Z - Special Warfare Officer</option>
+                            <option value="21A - Aircraft Maintenance Officer">21A - Aircraft Maintenance Officer</m>
+                            <option value="21R - Logistics Readiness Officer">21R - Logistics Readiness Officer</option>
+                            <option value="31P - Security Forces Officer">31P - Security Forces Officer</option>
+                            <option value="32E - Civil Engineer">32E - Civil Engineer</option>
+                            <option value="35P - Public Affairs Officer">35P - Public Affairs Officer</option>
+                            <option value="38F - Force Support Officer">38F - Force Support Officer</option>
+                            <option value="41A - Health Services Administrator">41A - Health Services Administrator</option>
+                            <option value="51J - Judge Advocate">51J - Judge Advocate</option>
+                            <option value="52R - Chaplain">52R - Chaplain</option>
+                            <option value="65F - Financial Management Officer">65F - Financial Management Officer</option>
+                            <option value="87I - Contracting Officer">87I - Contracting Officer</option>
+                            <option value="9E0 - Logistics Readiness Officer">9E0 - Logistics Readiness Officer</option>
+                        </optgroup>
+                        <optgroup label="Enlisted AFSCs">
+                            <option value="1A1 - Career Enlisted Aviator">1A1 - Career Enlisted Aviator</option>
+                            <option value="1B4 - Cyber Warfare Operations">1B4 - Cyber Warfare Operations</option>
+                            <option value="1C0 - Aviation Resource Management">1C0 - Aviation Resource Management</option>
+                            <option value="1C1 - Air Traffic Control">1C1 - Air Traffic Control</option>
+                            <option value="1C3 - Command and Control Operations">1C3 - Command and Control Operations</option>
+                            <option value="1C5 - Battle Management Operations">1C5 - Battle Management Operations</option>
+                            <option value="1C8 - Radar, Airfield & Weather Systems">1C8 - Radar, Airfield & Weather Systems</option>
+                            <option value="1D7 - Cyber Defense Operations">1D7 - Cyber Defense Operations</option>
+                            <option value="1N0 - All-Source Intelligence Analyst">1N0 - All-Source Intelligence Analyst</option>
+                            <option value="1N1 - Geospatial Intelligence">1N1 - Geospatial Intelligence</option>
+                            <option value="1N2 - Signals Intelligence Analyst">1N2 - Signals Intelligence Analyst</option>
+                            <option value="1N4 - Fusion Analyst">1N4 - Fusion Analyst</option>
+                            <option value="1N7 - Human Intelligence Specialist">1N7 - Human Intelligence Specialist</option>
+                            <option value="1P0 - Aircrew Flight Equipment">1P0 - Aircrew Flight Equipment</option>
+                            <option value="1S0 - Safety">1S0 - Safety</option>
+                            <option value="1T0 - Survival, Evasion, Resistance & Escape (SERE) Specialist">1T0 - Survival, Evasion, Resistance & Escape (SERE) Specialist</option>
+                            <option value="1W0 - Weather">1W0 - Weather</option>
+                            <option value="1Z1 - Pararescue">1Z1 - Pararescue</option>
+                            <option value="1Z2 - Combat Control">1Z2 - Combat Control</option>
+                            <option value="1Z3 - TACP">1Z3 - TACP</option>
+                            <option value="1Z4 - Special Reconnaissance">1Z4 - Special Reconnaissance</option>
+                            <option value="2A3 - Acft Mx">2A3 - Acft Mx</option>
+                            <option value="2A5 - Aerospace Maintenance">2A5 - Aerospace Maintenance</option>
+                            <option value="2A6 - Aircraft Systems">2A6 - Aircraft Systems</option>
+                            <option value="2A7 - Combined Low Observable and Acft Structual Mx">3E3 - Combined Low Observable and Acft Structual Mx</option>
+                            <option value="2A9 - Aerospace Maintenance (Non-Destructive Inspection)">2A9 - Aerospace Maintenance (Non-Destructive Inspection)</option>
+                            <option value="2G0 - Logistics Plans">2G0 - Logistics Plans</option>
+                            <option value="2R2 - Maintenance Management">2R2 - Maintenance Management</option>
+                            <option value="2S0 - Materiel Management">2S0 - Materiel Management</option>
+                            <option value="2T0 - Traffic Management Operations">2T0 - Traffic Management Operations</option>
+                            <option value="2T1 - Ground Transportation">2T1 - Ground Transportation</option>
+                            <option value="2T2 - Air Transportation">2T2 - Air Transportation</option>
+                            <option value="2T3X1 - Vehicle Maintenance">2T3X1 - Vehicle Maintenance</option>
+                            <option value="2T3X7 - Vehicle Fleet Management">2T3X7 - Vehicle Fleet Management</option>
+                            <option value="2W0 - Munitions Systems">2W0 - Munitions Systems</option>
+                            <option value="2W1 - Aircraft Armament Systems">2W1 - Aircraft Armament Systems</option>
+                            <option value="3E0 - Electrical Systems">3E0 - Electrical Systems</option>
+                            <option value="3E1 - Heating, Ventilation, AC, and Refrigeration">3E1 - Heating, Ventilation, AC, & Refrigeration</option>
+                            <option value="3E2 - Heavy Equipment">3E2 - Heavy Equipment</option>
+                            <option value="3E3 - Structures">3E3 - Structures</option>
+                            <option value="3E4 - Pest Management">3E4 - Pest Management</option>
+                            <option value="3E5 - Engineering">3E5 - Engineering</option>
+                            <option value="3E6 - Operations Management">3E6 - Operations Management</option>
+                            <option value="3E7 - Fire Protection">3E7 - Fire Protection</option>
+                            <option value="3E8 - Explosive Ordnance Disposal">3E8 - Explosive Ordnance Disposal</option>
+                            <option value="3E9 - Emergency Management">3E9 - Emergency Management</option>
+                            <option value="3F0 - Personnel">3F0 - Personnel</option>
+                            <option value="3F1 - Services">3F1 - Services</option>
+                            <option value="3F2 - Education and Training">3F2 - Education and Training</option>
+                            <option value="3F3 - Manpower">3F3 - Manpower</option>
+                            <option value="3F4 - Equal Opportunity">3F4 - Equal Opportunity</option>
+                            <option value="3F5 - Administration">3F5 - Administration</option>
+                            <option value="3N0 - Public Affairs">3N0 - Public Affairs</option>
+                            <option value="3N1 - Regional Bands">3N1 - Regional Bands</option>
+                            <option value="3P0 - Security Forces">3P0 - Security Forces</option>
+                            <option value="4A1 - Medical Materiel">4A1 - Medical Materiel</option>
+                            <option value="4B0 - Bioenvironmental Engineering">4B0 - Bioenvironmental Engineering</option>
+                            <option value="4N0 - Aerospace Medical Service">4N0 - Aerospace Medical Service</option>
+                            <option value="4R0 - Radiology">4R0 - Radiology</option>
+                            <option value="5J0 - Paralegal">5J0 - Paralegal</option>
+                            <option value="5R0 - Chaplain Assistant">5R0 - Chaplain Assistant</option>
+                            <option value="6F0 - Financial Management and Comptroller">6F0 - Financial Management and Comptroller</option>
+                            <option value="7S - OSI Enlisted">7S - OSI Enlisted</option>
+                            <option value="8C000 - MFR NCO">8C000 - MFR NCO</option>
+                            <option value="8F0 - First Sergeant">8F0 - First Sergeant</option>
+                            <option value="8H000 - Airman Dorm Leader">8H000 - Airmen Dorm Leader</option>
+                            <option value="8I0 - Inspector General">8I0 - Inspector General</option>
+                            <option value="8R - Recruiters">8R - Recruiters</option>
+                            <option value="8T000 - Professional Military Education Instructor">8T000 - Professional Military Education Instructor</option>
+                        </optgroup>
+                        <option value="other">Other (Specify Below)</option>
+                    </select>
+                </div>
+
+                <div id="otherJobField" class="form-group hidden">
+                    <label for="otherJobTitle">Specify Job Title:</label>
+                    <input type="text" id="otherJobTitle" placeholder="e.g., Program Manager, Mission Planner">
+                </div>
+
+                <div class="form-group">
+                    <label for="majcomName">MAJCOM:</label>
+                    <select id="majcomName">
+                        <option value="">-- Select Your MAJCOM --</option>
+                        <option value="Air Combat Command (ACC)">Air Combat Command (ACC)</option>
+                        <option value="Air Education and Training Command (AETC)">Air Education and Training Command (AETC)</option>
+                        <option value="Air Force Global Strike Command (AFGSC)">Air Force Global Strike Command (AFGSC)</option>
+                        <option value="Air Force Materiel Command (AFMC)">Air Force Materiel Command (AFMC)</option>
+                        <option value="Air Force Reserve Command (AFRC)">Air Force Reserve Command (AFRC)</option>
+                        <option value="Air Force Special Operations Command (AFSOC)">Air Force Special Operations Command (AFSOC)</option>
+                        <option value="Air Mobility Command (AMC)">Air Mobility Command (AMC)</option>
+                        <option value="Pacific Air Forces (PACAF)">Pacific Air Forces (PACAF)</option>
+                        <option value="U.S. Air Forces in Europe – Air Forces Africa (USAFE-AFAFRICA)">U.S. Air Forces in Europe – Air Forces Africa (USAFE-AFAFRICA)</option>
+                        <option value="Air Force Medical Command (AFMEDCOM)">Air Force Medical Command (AFMEDCOM)</option>
+                        <option value="Air National Guard Readiness Center (ANGRC)">Air National Guard Readiness Center (ANGRC)</option>
+                        <option value="Headquarters Air Force (HAF)">Headquarters Air Force (HAF)</option>
+                        <option value="Air Force Southern Command (AFSOUTH)">Air Force Southern Command (AFSOUTH)</option>
+                        <option value="U.S. Air Forces Central (AFCENT)"> - U.S. Air Forces Central (AFCENT)</option>
+                        
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="mgaName">Major Graded Area (MGA):</label>
+                    <select id="mgaName">
+                        <option value="">-- Select Major Graded Area --</option>
+                        <option value="Executing the Mission">Executing the Mission</option>
+                        <option value="Leading People">Leading People</option>
+                        <option value="Managing Resources">Managing Resources</option>
+                        <option value="Improving the Unit">Improving the Unit</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="accomplishment">
+                        Accomplishment: <span style="font-weight: normal;">Describe what you did with metrics in any format: bullet points, notes, sentences, or even stream of consciousness.</span>
+                    </label>
+                    <div style="position: relative;">
+                        <textarea id="accomplishment" placeholder="Describe what you did with metrics in any format: bullet points, notes, sentences, or even stream of consciousness."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Airman Leadership Quality (ALQ):</label>
+                    <div class="alq-container">
+                        <div class="alq-group">
+                            <h4 class="alq-header">Executing the Mission</h4>
+                            <div class="alq-options">
+                                <input type="checkbox" id="alq1" name="alq" value="Job Proficiency" class="alq-checkbox">
+                                <label for="alq1" class="alq-label">
+                                    <span class="alq-checkmark"></span>
+                                    <strong>Job Proficiency</strong>
+                                </label>
+
+                                <input type="checkbox" id="alq2" name="alq" value="Initiative" class="alq-checkbox">
+                                <label for="alq2" class="alq-label">
+                                    <span class="alq-checkmark"></span>
+                                    <strong>Initiative</strong>
+                                </label>
+
+                                <input type="checkbox" id="alq3" name="alq" value="Adaptability" class="alq-checkbox">
+                                <label for="alq3" class="alq-label">
+                                    <span class="alq-checkmark"></span>
+                                    <strong>Adaptability</strong>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="alq-group">
+                            <h4 class="alq-header">Leading People</h4>
+                            <div class="alq-options">
+                                <input type="checkbox" id="alq4" name="alq" value="Inclusion & Teamwork" class="alq-checkbox">
+                                <label for="alq4" class="alq-label">
+                                    <span class="alq-checkmark"></span>
+                                    <strong>Inclusion & Teamwork</strong>
+                                </label>
+
+                                <input type="checkbox" id="alq5" name="alq" value="Emotional Intelligence" class="alq-checkbox">
+                                <label for="alq5" class="alq-label">
+                                    <span class="alq-checkmark"></span>
+                                    <strong>Emotional Intelligence</strong>
+                                </label>
+
+                                <input type="checkbox" id="alq6" name="alq" value="Communication" class="alq-checkbox">
+                                <label for="alq6" class="alq-label">
+                                    <span class="alq-checkmark"></span>
+                                    <strong>Communication</strong>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="alq-group">
+                            <h4 class="alq-header">Managing Resources</h4>
+                            <div class="alq-options">
+                                <input type="checkbox" id="alq7" name="alq" value="Stewardship" class="alq-checkbox">
+                                <label for="alq7" class="alq-label">
+                                    <span class="alq-checkmark"></span>
+                                    <strong>Stewardship</strong>
+                                </label>
+
+                                <input type="checkbox" id="alq8" name="alq" value="Accountability" class="alq-checkbox">
+                                <label for="alq8" class="alq-label">
+                                    <span class="alq-checkmark"></span>
+                                    <strong>Accountability</strong>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="alq-group">
+                            <h4 class="alq-header">Improving the Unit</h4>
+                            <div class="alq-options">
+                                <input type="checkbox" id="alq9" name="alq" value="Decision Making" class="alq-checkbox">
+                                <label for="alq9" class="alq-label">
+                                    <span class="alq-checkmark"></span>
+                                    <strong>Decision Making</strong>
+                                </label>
+
+                                <input type="checkbox" id="alq10" name="alq" value="Innovation" class="alq-checkbox">
+                                <label for="alq10" class="alq-label">
+                                    <span class="alq-checkmark"></span>
+                                    <strong>Innovation</strong>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div style="text-align: right;">
+                            <button id="toggleAlqDescriptions" type="button" class="alq-desc-btn">
+                                Show ALQ Descriptions
+                            </button>
+                        </div>
+
+                        <div id="alqDescriptions" class="hidden alq-desc-container">
+                            <h4 class="alq-desc-heading">Airman Leadership Quality Definitions</h4>
+                            <ul class="alq-desc-list">
+                                <li><strong>Job Proficiency:</strong> Demonstrates technical expertise and excels in performing assigned duties.</li>
+                                <li><strong>Initiative:</strong> Takes proactive action to seize opportunities without needing direction.</li>
+                                <li><strong>Adaptability:</strong> Adjusts to changing conditions and maintains performance under pressure.</li>
+                                <li><strong>Inclusion & Teamwork:</strong> Fosters collaboration and values diverse perspectives.</li>
+                                <li><strong>Emotional Intelligence:</strong> Recognizes and manages personal emotions and those of others.</li>
+                                <li><strong>Communication:</strong> Conveys ideas clearly and effectively at all organizational levels.</li>
+                                <li><strong>Stewardship:</strong> Responsibly manages time, money, equipment, and personnel.</li>
+                                <li><strong>Accountability:</strong> Takes ownership of actions and ensures tasks are completed to expectation.</li>
+                                <li><strong>Decision Making:</strong> Analyzes situations and and makes sound, timely choices.</li>
+                                <li><strong>Innovation:</strong> Seeks creative solutions and implements improvements to enhance processes.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="purpose">Purpose:</label>
+                    <select id="purpose">
+                        <option value="award">Award Package (AF Form 1206)</option>
+                        <option value="epr">Enlisted Performance Brief (EPB)</option>
+                        <option value="opr">Officer Performance Brief (OPB)</option>
+                        <option value="weekly">Weekly Civilian Performance</option>
+                    </select>
+                </div>
+
+                <div style="display: flex; gap: 15px; margin-top: 30px;">
+                    <button id="generateButton" class="button-primary">
+                        <span class="button-icon">📝</span> Generate AI Prompt
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="outputContainer" class="card output-container">
+            <div class="card-header">
+                <span>Generated AI Prompt</span>
+            </div>
+            <div class="card-body">
+                <div id="outputPrompt" class="output-box"></div>
+                <button id="copyButton" class="copy-button">
+                    <span class="button-icon">📋</span> Copy Prompt to Clipboard
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+    <div class="card">
+        <div class="card-header">
+            <span>AI Resources</span>
+        </div>
+        <div class="card-body">
+            <p class="description-text">
+                Paste your generated prompt in NIPRGPT or ASK SAGE.
+            </p>
+            <div class="button-group">
+                <a href="https://niprgpt.mil/" target="_blank" rel="noopener noreferrer" class="ai-resource-link">
+                    <svg class="ai-resource-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 14c-1.1 0-2-.9-2-2h-1c0 1.66 1.34 3 3 3s3-1.34 3-3V8c0-1.66-1.34-3-3-3s-3 1.34-3 3h1c0-.55.45-1 1-1s1 .45 1 1v8z"></path></svg>
+                    NIPRGPT
+                </a>
+                <a href="https://chat.asksage.mil" target="_blank" rel="noopener noreferrer" class="ai-resource-link">
+                    <svg class="ai-resource-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    ASK SAGE
+                </a>
+            </div>
+            <p class="description-text">
+                Use NIPRGPT-V2 for best results.
+            </p>
+        </div>
+    </div>
+</div>
+
+    <footer>
+        USAF Performance Statement ChatGPT Prompt Generator | For official use only<br>
+        <span style="font-size: 0.8rem;">Developed to assist USAF personnel in creating effective performance statements</span>
+    </footer>
+
+    <div id="customModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3 id="modalTitle"></h3>
+            <p id="modalMessage"></p>
+            <button id="modalCloseBtn" class="modal-close-btn">OK</button>
+        </div>
+    </div>
+
+    <script>
+        // Function to display custom modal
+        function showCustomModal(title, message) {
+            const modal = document.getElementById('customModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalMessage = document.getElementById('modalMessage');
+            const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            modal.style.display = 'flex'; // Show the modal
+
+            // Close modal when OK button is clicked
+            modalCloseBtn.onclick = function() {
+                modal.style.display = 'none';
+            }
+
+            // Close modal when clicking outside of the modal content
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            }
+        }
+
+        // Function to show bookmark instructions using custom modal
+        function showBookmarkInstructions() {
+            let instructionMessage = '';
+
+            if (navigator.userAgent.indexOf('Mac') !== -1) {
+                instructionMessage = 'Press Command+D to add this page to your favorites.';
+            } else {
+                instructionMessage = 'Press Ctrl+D to add this page to your favorites.';
+            }
+            showCustomModal('Add to Favorites', instructionMessage);
+        }
+
+        // Function to check maximum ALQs selected
+        function checkMaxSelected(checkbox) {
+            const checkboxes = document.querySelectorAll('input[name="alq"]:checked');
+
+            // If more than 3 are checked, uncheck the current one
+            if (checkboxes.length > 3) {
+                checkbox.checked = false;
+                showCustomModal('Selection Limit Reached', 'You can select a maximum of 3 Airman Leadership Qualities.');
+            }
+        }
+
+        // Wait for DOM to be loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add the check to all ALQ checkboxes
+            document.querySelectorAll('.alq-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('click', function() {
+                    checkMaxSelected(this);
+                });
+            });
+
+            // Set up the bookmark button click handler
+            document.getElementById('addToFavorites').addEventListener('click', showBookmarkInstructions);
+
+            // Toggle "How to Use This Tool" section
+            document.getElementById('howToUseToggle').addEventListener('click', function() {
+                const howToUseBody = document.getElementById('howToUseBody');
+                howToUseBody.classList.toggle('hidden');
+                this.textContent = howToUseBody.classList.contains('hidden') ? 'ⓘ Show Instructions' : '✕ Hide Instructions';
+            });
+
+            // Toggle reference section
+            document.getElementById('toggleReference').addEventListener('click', function() {
+                const referenceSection = document.getElementById('referenceSection');
+                referenceSection.classList.toggle('hidden');
+                this.textContent = referenceSection.classList.contains('hidden') ? 'ⓘ Show Guidance' : '✕ Hide Guidance';
+            });
+
+            // Toggle ALQ descriptions
+            document.getElementById('toggleAlqDescriptions').addEventListener('click', function() {
+                const alqDescriptions = document.getElementById('alqDescriptions');
+                alqDescriptions.classList.toggle('hidden');
+                this.textContent = alqDescriptions.classList.contains('hidden') ? 'Show ALQ Descriptions' : 'Hide ALQ Descriptions';
+            });
+
+            // Handle "Other" Job Title field display
+            document.getElementById('jobTitle').addEventListener('change', function() {
+                const otherJobField = document.getElementById('otherJobField');
+                if (this.value === 'other') {
+                    otherJobField.classList.remove('hidden');
+                } else {
+                    otherJobField.classList.add('hidden');
+                }
+            });
+
+            // MAJCOM Missions and Example Statements
+            const majcomData = {
+                "Air Combat Command (ACC)": {
+                    mission: "Provide air combat forces to the geographic Unified Combatant Commands.",
+                    example: "Led the development of advanced air combat tactics, directly enhancing ACC's capability to provide ready air combat forces to Unified Combatant Commands."
+                },
+                "Air Education and Training Command (AETC)": {
+                    mission: "Recruit, train, and educate Airmen to deliver 21st Century Airpower.",
+                    example: "Designed and implemented a new training curriculum, significantly improving the proficiency of Airmen and aligning with AETC's mission to deliver 21st Century Airpower."
+                },
+                "Air Force Global Strike Command (AFGSC)": {
+                    mission: "Provide strategic deterrence, global strike, and combat support.",
+                    example: "Enhanced missile maintenance protocols, ensuring the reliability of strategic deterrence assets in support of AFGSC's global strike mission."
+                },
+                "Air Force Materiel Command (AFMC)": {
+                    mission: "Develop, deliver, support, and sustain war-winning capabilities.",
+                    example: "Streamlined the acquisition process for new aircraft systems, directly contributing to AFMC's mission to deliver war-winning capabilities."
+                },
+                "Air Force Reserve Command (AFRC)": {
+                    mission: "Provide combat-ready forces to fly, fight, and win.",
+                    example: "Coordinated joint training exercises, enhancing the readiness of reserve units in alignment with AFRC's mission to provide combat-ready forces."
+                },
+                "Air Force Special Operations Command (AFSOC)": {
+                    mission: "Provide Air Force special operations forces for worldwide deployment and assignment to regional unified commands.",
+                    example: "Developed innovative infiltration techniques, expanding AFSOC's global special operations capabilities."
+                },
+                "Air Mobility Command (AMC)": {
+                    mission: "Provide global air mobility... Right Effects, Right Place, Right Time.",
+                    example: "Optimized cargo routing strategies, ensuring timely delivery of supplies in support of AMC's global air mobility mission."
+                },
+                "Pacific Air Forces (PACAF)": {
+                    mission: "Deliver rapid and precise air, space, and cyberspace capabilities to protect and defend the U.S., its territories, and allies.",
+                    example: "Led multinational exercises enhancing interoperability, directly supporting PACAF's mission to defend U.S. interests and allies in the Indo-Pacific region."
+                },
+                "U.S. Air Forces in Europe – Air Forces Africa (USAFE-AFAFRICA)": {
+                    mission: "Project combat-ready airpower in Europe and Africa to defend U.S. interests, deter aggression, and strengthen partnerships.",
+                    example: "Strengthened alliances through joint operations, aligning with USAFE-AFAFRICA's mission to project combat-ready airpower and deter aggression."
+                },
+                "Air Force Medical Command (AFMEDCOM)": {
+                    mission: "Generate medically ready forces, provide installation support, and optimize healthcare delivery with the Defense Health Agency.",
+                    example: "Implemented a new health monitoring system, enhancing force medical readiness in support of AFMEDCOM's mission."
+                }
+            };
+
+            // MGA Descriptions for prompt generation
+            const mgaDescriptions = {
+                "Executing the Mission": "This area evaluates an individual’s ability to accomplish the assigned mission effectively and efficiently. It focuses on job performance, readiness, and how well the Airman or officer contributes to mission objectives. This includes tying individual actions to the unit’s Design Operational Capability (DOC) statement, Mission Essential Tasks (METs), or Mission Essential Task Lists (METLs), emphasizing readiness reporting and operational impact. For example, it assesses how an individual’s work supports the Air Force’s priorities, such as maintaining readiness under the Air Force Force Generation (AFFORGEN) model. Statements should quantify results and highlight mission-critical contributions.",
+                "Leading People": "This MPA assesses leadership effectiveness, including how well the Airman or officer fosters teamwork, motivates subordinates, and develops others. It evaluates skills in building cohesive teams, mentoring, and promoting professional growth while maintaining a positive command climate. This includes demonstrating leadership qualities such as accountability, communication, and inclusivity, as outlined in the ALQs. Examples might include leading a team to achieve a specific goal or implementing training programs that enhance team performance.",
+                "Managing Resources": "This area focuses on the stewardship of resources, including personnel, equipment, time, and budget. It evaluates how effectively an Airman or officer manages and allocates resources to support mission requirements. This includes optimizing resource use, ensuring accountability, and implementing cost-saving or efficiency-driven initiatives. Statements should highlight specific actions, such as managing a budget or improving resource readiness, with measurable outcomes.",
+                "Improving the Unit": "This MPA examines contributions to unit enhancement, innovation, and long-term improvement. It assesses how an Airman or officer identifies opportunities for growth, implements process improvements, or drives initiatives that strengthen the organization. This can include adopting new technologies, streamlining processes, or fostering a culture of continuous improvement. Statements should emphasize tangible impacts, such as increased efficiency or enhanced unit capabilities."
+            };
+
+            // Copy to clipboard function
+            document.getElementById('copyButton').addEventListener('click', function() {
+                const promptText = document.getElementById('outputPrompt').textContent;
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(promptText)
+                        .then(() => {
+                            this.innerHTML = '<span class="button-icon">✓</span> Copied!';
+                            setTimeout(() => {
+                                this.innerHTML = '<span class="button-icon">📋</span> Copy Prompt to Clipboard';
+                            }, 2000);
+                        })
+                        .catch(err => {
+                            showCustomModal('Copy Failed', 'Copy failed. Please select and copy the text manually.');
+                        });
+                } else {
+                    showCustomModal('Copy Failed', 'Copy failed. Your browser does not support automatic clipboard access. Please select and copy the text manually.');
+                }
+            });
+
+            // Add Generate AI Prompt button functionality
+            document.getElementById('generateButton').addEventListener('click', function() {
+                // Get form values
+                let jobTitle = document.getElementById('jobTitle').value;
+                if (jobTitle === 'other') {
+                    jobTitle = document.getElementById('otherJobTitle').value || 'Unspecified Job Title';
+                }
+
+                const selectedMajcom = document.getElementById('majcomName').value;
+                const selectedMGA = document.getElementById('mgaName').value; // Get selected MGA
+                const accomplishment = document.getElementById('accomplishment').value || '';
+                const purpose = document.getElementById('purpose').value;
+
+                // Check required fields
+                if (!jobTitle || !selectedMajcom || !selectedMGA || !accomplishment) { // Added selectedMGA to validation
+                    showCustomModal('Missing Information', 'Please fill in all required fields: Job Title, MAJCOM, Major Graded Area, and Accomplishment.');
+                    return;
+                }
+
+                // Get selected ALQs
+                const selectedAlqs = [];
+                document.querySelectorAll('input[name="alq"]:checked').forEach(checkbox => {
+                    selectedAlqs.push(checkbox.value);
+                });
+
+                // ALQ descriptions
+                const alqDescriptions = {
+                    "Job Proficiency": "demonstrating technical expertise and excellence in performing assigned duties",
+                    "Initiative": "taking proactive action to seize opportunities without needing direction",
+                    "Adaptability": "adjusting to changing conditions and maintaining performance under pressure",
+                    "Inclusion & Teamwork": "fostering collaboration and valuing diverse perspectives",
+                    "Emotional Intelligence": "recognizing and managing personal emotions and those of others",
+                    "Communication": "conveying ideas clearly and effectively at all organizational levels",
+                    "Stewardship": "responsibly managing time, money, equipment, and personnel",
+                    "Accountability": "taking ownership of actions and ensuring tasks are completed to expectation",
+                    "Decision Making": "analyzing situations and making sound, timely choices",
+                    "Innovation": "seeking creative solutions and implements improvements to enhance processes"
+                };
+
+                // Format ALQ section
+                let alqSection = '';
+                if (selectedAlqs.length > 0) {
+                    alqSection = 'Airman Leadership Qualities (ALQs):\n';
+                    selectedAlqs.forEach((alq, index) => {
+                        alqSection += `${index + 1}. ${alq} - ${alqDescriptions[alq]}\n`;
+                    });
+                }
+
+                const majcomMission = majcomData[selectedMajcom] ? majcomData[selectedMajcom].mission : "the overall Air Force mission";
+                const mgaDescription = mgaDescriptions[selectedMGA] ? mgaDescriptions[selectedMGA] : ""; // Get MGA description
+
+                // Build the prompt
+                const commonInstructions = `You are a USAF writing assistant specializing in crafting effective performance statements for military personnel.
+
+Job Title/AFSC: ${jobTitle}
+MAJCOM: ${selectedMajcom}
+MAJCOM Mission: ${majcomMission}
+Major Graded Area (MGA): ${selectedMGA}
+MGA Description: ${mgaDescription}
+
+Here's my accomplishment in rough format:
+${accomplishment}
+
+${alqSection}
+I need your help converting this into proper USAF Performance Statement format following these guidelines:
+- Each statement should be a standalone sentence
+- Include both the action and at least one impact or result/outcome
+- IMPORTANT: Make sure the impact directly relates to ${selectedMajcom}'s mission: "${majcomMission}" and specifically highlights contributions relevant to the "${selectedMGA}" Major Graded Area.
+- Use plain language and avoid uncommon acronyms
+- Emphasize leadership, mission impact, and quantifiable results
+- Be concise but comprehensive${selectedAlqs.length > 0 ? `
+- Highlight the selected Airman Leadership Qualities in the statements` : ''}`;
+
+                // Add purpose-specific instructions with character limits
+                let prompt = '';
+                switch(purpose) {
+                    case 'weekly':
+                        prompt = `${commonInstructions}
+
+Please create 5-7 performance statements suitable for a Weekly Civilian Performance report that highlights my most significant contributions this week. Focus on mission impact and demonstrate impact appropriate for the employee's position.
+
+IMPORTANT: Each statement MUST be EXACTLY 250 characters long - no more, no less. Count spaces, punctuation, and all other characters.
+
+No explanatory text is needed, just provide the formatted statements.`;
+                        break;
+
+                    case 'award':
+                        prompt = `${commonInstructions}
+
+Please create 5-7 performance statements suitable for an AF Form 1206 Award Package. Statements should be impactful, showcase leadership, and emphasize quantifiable results. Format should follow the example:
+
+"SSgt Smith led 15-member team in emergency response exercise, resulting in 30% faster response time and recognition from Wing Commander."
+
+IMPORTANT: Each statement MUST be EXACTLY 250 characters long - no more, no less. Count spaces, punctuation, and all other characters.
+
+No explanatory text is needed, just provide the formatted statements.`;
+                        break;
+
+                    case 'epr':
+                        prompt = `${commonInstructions}
+
+Please create 5-7 performance statements suitable for an Enlisted Performance Brief (EPB). Focus on duty performance, leadership/followership, and whole airman concept. Each statement should demonstrate impact at the appropriate level (work center, squadron, group, wing, etc.).
+
+IMPORTANT: Each statement MUST be EXACTLY 175 characters long - no more, no less. Count spaces, punctuation, and all other characters.
+
+No explanatory text is needed, just provide the formatted statements.`;
+                        break;
+
+                    case 'opr':
+                        prompt = `${commonInstructions}
+
+Please create 5-7 performance statements suitable for an Officer Performance Brief (OPB). Focus on leadership, mission accomplishment, and professional qualities. Each statement should demonstrate strategic thinking and impact appropriate for the officer's rank and position.
+
+IMPORTANT: Each statement MUST be EXACTLY 175 characters long - no more, no less. Count spaces, punctuation, and all other characters.
+
+No explanatory text is needed, just provide the formatted statements.`;
+                        break;
+                }
+
+                // Display the result
+                document.getElementById('outputPrompt').textContent = prompt;
+                document.getElementById('outputContainer').style.display = 'block';
+                document.getElementById('outputContainer').scrollIntoView({behavior: 'smooth'});
+            });
+        });
+    </script>
+</body>
+</html>
