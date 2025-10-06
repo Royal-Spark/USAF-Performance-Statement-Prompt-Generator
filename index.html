@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google Analytics -->
-<!-- Add your Gtag from analytics to the following code:       -->
-    
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-5M07SFV1BF"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5M07SFV1BF"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -13,15 +10,10 @@
   gtag('config', 'G-5M07SFV1BF');
 </script>
 
-    <!-- Google Analytics -->
-
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>USAF AI Performance Statement Refinery</title>
-    <!-- Tailwind CSS for layout -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts for typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -201,7 +193,7 @@
             background-color: #18181b;
             border: 1px solid var(--border-color);
             border-radius: 0.5rem;
-            max-height: 200px;
+            max-height: 500px;
             overflow-y: auto;
             z-index: 100;
             box-shadow: 0 10px 25px rgba(0,0,0,0.3);
@@ -342,6 +334,52 @@
             border-width: 0 2px 2px 0;
             transform: rotate(45deg);
         }
+        
+        /* START: Added CSS for Interactive Mode Toggle */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 28px;
+        }
+        .toggle-checkbox {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-label {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 34px;
+            transition: .4s;
+        }
+        .toggle-label:before {
+			position: absolute;
+			content: "";
+			height: 20px;
+			width: 20px;
+			left: 4px;
+			top: 50%;
+			transform: translateY(-50%);
+			background-color: var(--text-secondary);
+			border-radius: 50%;
+			transition: .4s;
+		}
+        .toggle-checkbox:checked + .toggle-label {
+            background: linear-gradient(to right, var(--primary-purple), var(--primary-cyan));
+            border-color: var(--primary-purple);
+        }
+        .toggle-checkbox:checked + .toggle-label:before {
+            transform: translateX(22px) translateY(-50%);
+            background-color: white;
+        }
+        /* END: Added CSS */
 
         /* --- Other Styles --- */
         .toggle-section {
@@ -574,7 +612,6 @@
     </style>
 </head>
 <body>
-    <!-- Sticky Header -->
     <header class="header">
         <div class="header-container">
             <a href="https://royal-spark.github.io/Landing-Page/" style="text-decoration: none;">
@@ -651,6 +688,10 @@
                         <label for="jobTitleContainer">Job Title/AFSC:</label>
                         <div id="jobTitleContainer"></div>
                     </div>
+					<div class="form-group">
+						<label for="rankContainer">Rank:</label>
+						<div id="rankContainer"></div>
+					</div>
                     <div id="otherJobField" class="form-group hidden">
                         <label for="otherJobTitle">Specify Job Title:</label>
                         <input type="text" id="otherJobTitle" placeholder="e.g., Program Manager">
@@ -667,7 +708,18 @@
                         <label for="purposeContainer">Purpose:</label>
                         <div id="purposeContainer"></div>
                     </div>
+					<div class="form-group flex items-center justify-between bg-transparent p-4 rounded-lg border border-dashed" style="border-color: var(--border-color);">
+                    <div class="flex flex-col">
+                         <label for="interactiveModeToggle" class="mb-1 font-semibold" style="color: var(--text-primary);">Enable Interactive Mode</label>
+                         <p class="text-xs" style="color: var(--text-secondary);">Let the AI ask you questions to build the statement.</p>
+                    </div>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="interactiveModeToggle" class="toggle-checkbox">
+                        <label for="interactiveModeToggle" class="toggle-label"></label>
+                    </div>
                 </div>
+                </div>
+				
                 <div class="form-group">
                     <label for="accomplishment">Accomplishment Details:</label>
                     <textarea id="accomplishment" placeholder="Describe what you did with metrics in any format: bullet points, notes, sentences, or even stream of consciousness."></textarea>
@@ -792,7 +844,6 @@
             </div>
         </div>
 
-        <!-- This container is now hidden by default and only used for debugging if uncommented in JS -->
         <div id="outputContainer" class="card hidden">
             <div class="card-header">
                 <span>Generated AI Prompt (for debugging)</span>
@@ -801,7 +852,28 @@
                 <div id="outputPrompt" class="output-box"></div>
             </div>
         </div>
+		
+		<div class="card">
+            <div class="card-header">
+                <span>Performance Statement Character Count</span>
+            </div>
+            <div class="card-body">
+                <div class="flex flex-col md:flex-row items-center gap-6">
+                    <textarea 
+                        id="charCounterTextBox"
+                        class="w-full h-32 p-4 rounded-lg text-lg transition duration-300 resize-y"
+                        placeholder="Paste text or type here to quickly check and revise with a live character count reading..."
+                        style="background-color: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-primary);"
+                    ></textarea>
 
+                    <div class="flex flex-col items-center justify-center p-4">
+                        <span id="charCounterCount" class="text-7xl font-bold transition-colors duration-300" style="color: var(--primary-cyan);">0</span>
+                        <span class="text-sm uppercase tracking-wider" style="color: var(--text-secondary);">Characters</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+		
         <div id="aiResourcesCard" class="card">
             <div class="card-header">
                 <span>AI Resources</span>
@@ -821,7 +893,7 @@
                     </a>
                 </div>
                 <p class="description-text">
-                    Use NIPRGPT-V2 for best results.
+                    Use NIPRGPT with Gemini 2.5 Pro or Anthropic Claude 4 for best results.
                 </p>
             </div>
         </div>
@@ -841,8 +913,7 @@
                 <input type="text" id="picker-search-input" placeholder="Type to search...">
             </div>
             <ul id="picker-options-list" class="picker-options-list">
-                <!-- Mobile options will be populated here -->
-            </ul>
+                </ul>
         </div>
     </div>
     
@@ -919,7 +990,7 @@
         { text: '1Z4 - Special Reconnaissance', value: '1Z4 - Special Reconnaissance' },
         { text: '2A3 - Acft Mx', value: '2A3 - Acft Mx' },
         { text: '2A5 - Aerospace Maintenance', value: '2A5 - Aerospace Maintenance' },
-        { text: '2A6 - Aircraft Systems', value: '2A6 - Aircraft Systems' },
+        { text: '2A6 - Aircraft Maintenance', value: '2A6 - Aircraft Maintenance' },
         { text: '2A7 - Combined Low Observable and Acft Structual Mx', value: '2A7 - Combined Low Observable and Acft Structual Mx' },
 		{ text: '2A7X2 - Nondestructive Inspection', value: '2A7X2 - Nondestructive Inspection' },
         { text: '2A9 - Aerospace Maintenance (Non-Destructive Inspection)', value: '2A9 - Aerospace Maintenance (Non-Destructive Inspection)' },
@@ -968,7 +1039,27 @@
         { text: '8T000 - Professional Military Education Instructor', value: '8T000 - Professional Military Education Instructor' },
         { text: 'Other (Specify Below)', value: 'other' }
       ];
-
+		const rankOptions = [
+			{ text: '-- Select Rank --', value: '' },
+			{ text: 'E-1 Airman Basic', value: 'E-1 Airman Basic' },
+			{ text: 'E-2 Airman', value: 'E-2 Airman' },
+			{ text: 'E-3 Airman First Class', value: 'E-3 Airman First Class' },
+			{ text: 'E-4 Senior Airman', value: 'E-4 Senior Airman' },
+			{ text: 'E-5 Staff Sergeant', value: 'E-5 Staff Sergeant' },
+			{ text: 'E-6 Technical Sergeant', value: 'E-6 Technical Sergeant' },
+			{ text: 'E-7 Master Sergeant', value: 'E-7 Master Sergeant' },
+			{ text: 'E-8 Senior Master Sergeant', value: 'E-8 Senior Master Sergeant' },
+			{ text: 'E-9 Chief Master Sergeant', value: 'E-9 Chief Master Sergeant' },
+			{ text: 'O-1 Second Lieutenant', value: 'O-1 Second Lieutenant' },
+			{ text: 'O-2 First Lieutenant', value: 'O-2 First Lieutenant' },
+			{ text: 'O-3 Captain', value: 'O-3 Captain' },
+			{ text: 'O-4 Major', value: 'O-4 Major' },
+			{ text: 'O-5 Lieutenant Colonel', value: 'O-5 Lieutenant Colonel' },
+			{ text: 'O-6 Colonel', value: 'O-6 Colonel' },
+			{ text: 'O-7 Brigadier General', value: 'O-7 Brigadier General' },
+			{ text: 'O-8 Major General', value: 'O-8 Major General' },
+			{ text: 'O-9 Lieutenant General', value: 'O-9 Lieutenant General' },
+		];
       const majcomOptions = [
         { text: '-- Select Your MAJCOM --', value: '' },
         { text: 'Air Combat Command (ACC)', value: 'Air Combat Command (ACC)' },
@@ -1172,6 +1263,7 @@
       document.addEventListener('DOMContentLoaded', function() {
         // Initialize all dropdowns
         createResponsiveSelect('jobTitleContainer', afscOptions, '');
+		createResponsiveSelect('rankContainer', rankOptions, '');
         createResponsiveSelect('majcomContainer', majcomOptions, '');
         createResponsiveSelect('mgaContainer', mgaOptions, '');
         createResponsiveSelect('purposeContainer', purposeOptions, 'award');
@@ -1222,7 +1314,26 @@
             alqDescriptions.classList.toggle('hidden');
             this.textContent = alqDescriptions.classList.contains('hidden') ? 'ⓘ Show ALQ Descriptions' : '✕ Hide ALQ Descriptions';
         });
+		
+		// --- Character Counter Logic ---
+        const charCounterTextBox = document.getElementById('charCounterTextBox');
+        const charCounterCount = document.getElementById('charCounterCount');
 
+        if (charCounterTextBox && charCounterCount) {
+            charCounterTextBox.addEventListener('input', () => {
+                const count = charCounterTextBox.value.length;
+                charCounterCount.textContent = count;
+                // Change color based on common performance statement lengths
+                if (count > 250) {
+                    charCounterCount.style.color = 'var(--danger-color)';
+                } else if (count > 175) {
+                     charCounterCount.style.color = '#f59e0b'; /* Amber color for warning */
+                } else {
+                    charCounterCount.style.color = 'var(--primary-cyan)';
+                }
+            });
+        }
+		
         // ALQ checkbox handling with max 3 selections
         let selectedAlqsOrder = [];
         document.querySelectorAll('.alq-checkbox').forEach(checkbox => {
@@ -1239,10 +1350,11 @@
             });
         });
         
-        // Generate button
+        // START: Modified JavaScript for Generate Button
         document.getElementById('generateButton').addEventListener('click', function() {
             const getElValue = (id) => document.getElementById(id)?.dataset.value || '';
-            
+            const isInteractive = document.getElementById('interactiveModeToggle').checked;
+
             let jobTitle = getElValue('jobTitle');
             if (jobTitle === 'other') {
                 jobTitle = document.getElementById('otherJobTitle').value.trim() || 'Unspecified Job Title';
@@ -1252,16 +1364,224 @@
             const selectedMGA = getElValue('mga');
             const accomplishment = document.getElementById('accomplishment').value.trim();
             const purpose = getElValue('purpose');
+            const selectedRank = getElValue('rank'); // FIXED: Added this missing variable declaration
 
-            if (!jobTitle || !selectedMajcom || !selectedMGA || !accomplishment) {
-                alertModal.classList.add('visible');
-                return;
-            }
+            let prompt = '';
 
-            const selectedAlqs = Array.from(document.querySelectorAll('input[name="alq"]:checked')).map(cb => cb.value);
-            let alqSection = selectedAlqs.length > 0 ? 'Airman Leadership Qualities (ALQs) to highlight:\n' + selectedAlqs.join(', ') + '\n\n' : '';
+            if (isInteractive) {
+                // FIXED: Removed the outer '{' and '}' from the acronym list to make it valid text within the string.
+                prompt = `You are to assume the persona of a seasoned USAF Chief Master Sergeant with extensive experience on promotion boards. Your designation is "Performance Statement Expert." Your primary mission is to assist me, a ${selectedRank} serving as a ${jobTitle}, in preparing a performance statement for my evaluation. This statement is for the ${selectedMGA} section and must reflect my readiness for promotion.
 
-            const commonInstructions = `You are a USAF writing assistant specializing in crafting effective performance statements.
+Your expertise will be guided by the following specific parameters and documents if I have uploaded them:
+
+USAF Writing Guide: The core principles of Air Force writing standards, focusing on the "Action, Impact, Result" (A-I-R) or "Accomplishment/Impact" format. Brevity, clarity, and active voice are paramount.
+
+Statements must reflect the expected level of leadership, mentorship, resource management, and strategic perspective.
+
+You may ask the me to upload previous statements or example statements to help you refine the statements. 
+
+Unit & Command Context:
+
+MAJCOM: ${selectedMajcom}
+
+Approved Acronyms: You must strictly adhere to the following list of approved acronyms and avoid any not on this list: 
+
+Common ranks/tiers across all services (SrA, Maj, Brig Gen, SNCO, etc...)
+Common office symbols (CC, CMSAF, A4, JA, etc…)
+Common organizations at squadron and above (CPTS, AFGSC, DoD, FBI, STARCOM, CCMD, FW, CJTF, etc...)
+Common weapons and platforms (F-16, AIM-9, HH-60, MILSTAR, etc…)
+Common symbols and measurements (lbs, MPH, $25B, 5%, hrs, FY23, etc…)
+
+The only other acronyms allowed are the following:
+
+  "ABM": "AIR BATTLE MANAGER",
+  "ACE": "AGILE COMBAT EMPLOYMENT",
+  "AD": "ACTIVE DUTY",
+  "ADCON": "ADMINISTRATIVE CONTROL",
+  "AFE": "AIRCREW FLIGHT EQUIPMENT",
+  "AFFORGEN": "AIR FORCE FORCE GENERATION",
+  "AFI": "AIR FORCE INSTRUCTION",
+  "AFMAN": "AIR FORCE MANUAL",
+  "AFSC": "AIR FORCE SPECIALTY CODE",
+  "AFSO21": "AIR FORCE SMART OPERATIONS FOR THE 21ST CENTURY",
+  "AGE": "AEROSPACE GROUND EQUIPMENT",
+  "AGR": "ACTIVE GUARD RESERVE",
+  "AI": "ARTIFICIAL INTELLIGENCE",
+  "ALQ": "AIRMAN LEADERSHIP QUALITY",
+  "ALS": "AIRMAN LEADERSHIP SCHOOL",
+  "AOC": "AIR OPERATIONS CENTER",
+  "AOR": "AREA OF RESPONSIBILITY",
+  "APF": "APPROPRIATED FUNDS",
+  "ART": "AIR RESERVE TECHNICIAN",
+  "AT": "ANNUAL TOUR",
+  "ATC": "AIR TRAFFIC CONTROL",
+  "ATO": "AIR TASKING ORDER",
+  "BMT": "BASIC MILITARY TRAINING",
+  "BNR": "BY NAME REQUEST",
+  "BTZ": "BELOW-THE-ZONE",
+  "C2": "COMMAND AND CONTROL",
+  "C4ISR": "COMMAND, CONTROL, COMMUNICATIONS, COMPUTERS, INTELLIGENCE, SURVEILLANCE AND RECONNAISSANCE",
+  "CAOC": "COMBINED AIR OPERATIONS CENTER",
+  "CAS": "CLOSE AIR SUPPORT",
+  "CAT": "CRISIS ACTION TEAM",
+  "CATM": "COMBAT ARMS TRAINING AND MAINTENANCE",
+  "CBRN": "CHEMICAL, BIOLOGICAL, RADIOLOGICAL, NUCLEAR",
+  "CBT": "COMPUTER BASED TRAINING",
+  "CCAF": "COMMUNITY COLLEGE OF THE AIR FORCE",
+  "CCIP": "COMMANDER'S INSPECTION PROGRAM",
+  "CDI": "COMMANDER DIRECTED INVESTIGATION",
+  "CFETP": "CAREER FIELD EDUCATION AND TRAINING PLAN",
+  "CFM": "CAREER FIELD MANAGER",
+  "CLA": "CHIEF MASTER SERGEANT LEADERSHIP ACADEMY",
+  "CLC": "CHIEF MASTER SERGEANT LEADERSHIP COURSE",
+  "COA": "COURSE OF ACTION",
+  "CODEL": "CONGRESSIONAL DELEGATION",
+  "CONOPS": "CONCEPT OF OPERATIONS",
+  "CONUS": "CONTINENTAL UNITED STATES",
+  "COOP": "CONTINUITY OF OPERATIONS",
+  "CPI": "CONTINUOUS PROCESS IMPROVEMENT",
+  "CPR": "CARDIOPULMONARY RESUSCITATION",
+  "CSAR": "COMBAT SEARCH AND RESCUE",
+  "CUI": "CONTROLLED UNCLASSIFIED INFORMATION",
+  "DAFI": "DEPARTMENT OF THE AIR FORCE INSTRUCTION",
+  "DAFMAN": "DEPARTMENT OF THE AIR FORCE MANUAL",
+  "DEOCS": "DEFENSE EQUAL OPPORTUNITY CLIMATE SURVEY",
+  "DG": "DISTINGUISHED GRADUATE",
+  "DHA": "DEFENSE HEALTH AGENCY",
+  "DSG": "DRILL STATUS GUARDSMAN",
+  "DV": "DISTINGUISHED VISITOR",
+  "EKIA": "ENEMY KILLED IN ACTION",
+  "EOC": "EMERGENCY OPERATIONS CENTER",
+  "EOD": "EXPLOSIVE ORDNANCE DISPOSAL",
+  "EOY": "END OF YEAR",
+  "EPB": "ENLISTED PERFORMANCE BRIEF",
+  "EW": "ELECTRONIC WARFARE",
+  "FAM": "FUNCTIONAL AREA MANAGER",
+  "FHP": "FLYING HOUR PROGRAM",
+  "FMC": "FULLY MISSION CAPABLE",
+  "FOB": "FORWARD OPERATING BASE",
+  "FOC": "FULL OPERATIONAL CAPABILITY",
+  "FOL": "FORWARD OPERATING LOCATION",
+  "FPCON": "FORCE PROTECTION CONDITIONS",
+  "FTEC": "FIRST TERM ENLISTED COURSE",
+  "FTU": "FORMAL TRAINING UNIT",
+  "GPA": "GRADE POINT AVERAGE",
+  "GPS": "GLOBAL POSITIONING SYSTEM",
+  "GSU": "GEOGRAPHICALLY SEPARATED UNIT",
+  "GTC": "GOVERNMENT TRAVEL CARD",
+  "IDT": "INACTIVE DUTY TRAINING",
+  "IDE": "INTERMEDIATE DEVELOPMENTAL EDUCATION",
+  "IED": "IMPROVISED EXPLOSIVE DEVICE",
+  "IMA": "INDIVIDUAL MOBILIZATION AUGMENTEE",
+  "IOC": "INITIAL OPERATIONAL CAPABILITY",
+  "IP": "INSTRUCTOR PILOT",
+  "ISR": "INTELLIGENCE, SURVEILLANCE, AND RECONNAISSANCE",
+  "IT": "INFORMATION TECHNOLOGY",
+  "JADC2": "JOINT ALL DOMAIN COMMAND AND CONTROL",
+  "JROTC": "JUNIOR RESERVE OFFICER TRAINING CORPS",
+  "KIA": "KILLED IN ACTION",
+  "LOE": "LINE OF EFFORT",
+  "MCA": "MULTI-CAPABLE AIRMEN",
+  "MDS": "MISSION DESIGN SERIES",
+  "MILCON": "MILITARY CONSTRUCTION",
+  "MILPDS": "MILITARY PERSONNEL DATA SYSTEM",
+  "MOA": "MEMORANDUM OF AGREEMENT",
+  "MOU": "MEMORANDUM OF UNDERSTANDING",
+  "MTF": "MEDICAL TREATMENT FACILITY",
+  "MWR": "MORALE, WELFARE, AND RECREATION",
+  "MX": "MAINTENANCE",
+  "NC3": "NUCLEAR COMMAND, CONTROL, AND COMMUNICATIONS",
+  "NCOA": "NONCOMMISSIONED OFFICER ACADEMY",
+  "NCR": "NATIONAL CAPITAL REGION",
+  "NDAA": "NATIONAL DEFENSE AUTHORIZATION ACT",
+  "NDS": "NATIONAL DEFENSE STRATEGY",
+  "NEO": "NONCOMBATANT EVACUATION OPERATION",
+  "NIPR": "NON-SECURE INTERNET PROTOCOL ROUTER",
+  "NMC": "NON MISSION CAPABLE",
+  "O&M": "OPERATIONS AND MAINTENANCE",
+  "OCO": "OVERSEAS CONTINGENCY OPERATIONS",
+  "OCONUS": "OUTSIDE CONTINENTAL UNITED STATES",
+  "OJT": "ON THE JOB TRAINING",
+  "OPLAN": "OPERATIONS PLAN",
+  "OPSEC": "OPERATIONAL SECURITY",
+  "OTS": "OFFICER TRAINING SCHOOL",
+  "PCS": "PERMANENT CHANGE OF STATION",
+  "PDE": "PRIMARY DEVELOPMENTAL EDUCATION",
+  "PFA": "PHYSICAL FITNESS ASSESSMENT",
+  "PME": "PROFESSIONAL MILITARY EDUCATION",
+  "POC": "POINT OF CONTACT",
+  "PT": "PHYSICAL TRAINING",
+  "QA": "QUALITY ASSURANCE",
+  "QoL": "QUALITY OF LIFE",
+  "ROE": "RULES OF ENGAGEMENT",
+  "ROTC": "RESERVE OFFICER TRAINING CORPS",
+  "RPA": "REMOTELY PILOTED AIRCRAFT",
+  "SAPR": "SEXUAL ASSAULT PREVENTION AND RESPONSE",
+  "SCIF": "SENSITIVE COMPARTMENTED INFORMATION FACILITY",
+  "SDE": "SENIOR DEVELOPMENTAL EDUCATION",
+  "SERE": "SURVIVAL, EVASION, RESISTANCE, ESCAPE",
+  "SIPR": "SECRET INTERNET PROTOCOL ROUTER",
+  "SME": "SUBJECT MATTER EXPERT",
+  "SNCOA": "SENIOR NONCOMMISSIONED OFFICER ACADEMY",
+  "SOF": "SPECIAL OPERATIONS FORCES",
+  "SOP": "STANDARD OPERATING PROCEDURES",
+  "SOS": "SQUADRON OFFICER SCHOOL",
+  "STEM": "SCIENCE, TECHNOLOGY, ENGINEERING, AND MATHEMATICS",
+  "TACP": "TACTICAL AIR CONTROL PARTY",
+  "TCCC": "TACTICAL COMBAT CASUALTY CARE",
+  "TDY": "TEMPORARY DUTY",
+  "TFI": "TOTAL FORCE INTEGRATION",
+  "TR": "TRADITIONAL RESERVIST",
+  "TS": "TOP SECRET",
+  "TTP": "TACTICS, TECHNIQUES, AND PROCEDURES",
+  "UCI": "UNIT COMPLIANCE INSPECTION",
+  "UCMJ": "UNIFORM CODE OF MILITARY JUSTICE",
+  "UEI": "UNIT EFFECTIVENESS INSPECTION",
+  "UTA": "UNIT TRAINING ASSEMBLY",
+  "UTC": "UNIT TYPE CODE",
+  "UXO": "UNEXPLODED ORDNANCE",
+  "WRM": "WAR RESERVE MATERIEL",
+  "XAB": "EXPEDITIONARY AIRBASE"
+
+
+Your Process:
+
+Acknowledge and Internalize: First, confirm you have assimilated the principles from these guides and fully understand your role as a Performance Statement Expert. Acknowledge my rank, my target promotion rank, and the Major Graded Area of focus.
+
+Initiate Dialogue: Once you are ready, prompt me to provide my accomplishment for the ${selectedMGA} bullet.
+
+Probe for Details (Crucial Step): Do not accept my initial input at face value. Your most important task is to ask probing, clarifying questions to uncover the details needed for a high-impact statement. You must actively seek out:
+
+Quantifiable Data: Ask for numbers (e.g., "How many personnel were trained?", "What was the dollar value of the equipment saved?", "By what percentage did you improve efficiency?").
+
+Scope of Impact: Determine the breadth of the accomplishment (e.g., "Was this a workcenter, squadron, or wing-level initiative?", "Did this program get adopted by the MAJCOM?").
+
+Leadership & Mentorship: Inquire about my specific role in leading and developing others (e.g., "Who did you lead in this project?", "Did you mentor any Airmen to achieve awards or skill-level upgrades?").
+
+Strategic Relevance: Connect the action to the larger mission (e.g., "How did this effort support the Commander's priorities, the Squadron's mission, or align with the goals of [User's MAJCOM]?").
+
+Your goal is to transform my basic inputs into a powerful, concise, and promotion-worthy performance statement that clearly demonstrates my readiness for the responsibilities of a [Target Promotion Rank].
+
+Please start a conversation with me. My raw accomplishment details are below.
+
+My Accomplishment:
+${accomplishment}
+
+Based on this, ask me your first question to help me identify the primary ACTION I took. After I answer, continue asking questions one by one to uncover the quantifiable IMPACT of my action, and finally, how that impact ties to the mission. You may provide a DRAFT statement at first but emphasize it is what it could look like and requires refinement. 
+
+Begin now by introducing yourself and asking your first question.`;
+            
+            } else {
+                // This is the original logic for non-interactive mode
+                if (!jobTitle || !selectedMajcom || !selectedMGA || !accomplishment) {
+                    alertModal.classList.add('visible');
+                    return;
+                }
+
+                const selectedAlqs = Array.from(document.querySelectorAll('input[name="alq"]:checked')).map(cb => cb.value);
+                let alqSection = selectedAlqs.length > 0 ? 'Airman Leadership Qualities (ALQs) to highlight:\n' + selectedAlqs.join(', ') + '\n\n' : '';
+
+                const commonInstructions = `You are a USAF writing assistant specializing in crafting effective performance statements.
 
 Job Title/AFSC: ${jobTitle}
 MAJCOM: ${selectedMajcom}
@@ -1277,43 +1597,50 @@ ${alqSection}Please convert this into 5-7 proper USAF Performance Statements fol
 - Use plain language and avoid uncommon acronyms.
 - Emphasize leadership, mission impact, and quantifiable results.`;
 
-            let prompt = '';
-            
-            switch(purpose) {
-                case 'weekly':
-                    prompt = `${commonInstructions}\n\nPlease create 5-7 performance statements suitable for a Weekly Civilian Performance report that highlights my most significant contributions this week. Focus on mission impact and demonstrate impact appropriate for the employee's position.\n\nIMPORTANT: Each statement MUST be EXACTLY 250 characters long (including spaces and punctuation). Provide only the formatted statements.`;
-                    break;
-                case 'award':
-                    prompt = `${commonInstructions}\n\nPlease create 5-7 performance statements suitable for an AF Form 1206 Award Package. Statements should be impactful, showcase leadership, and emphasize quantifiable results.\n\nIMPORTANT: Each statement MUST be EXACTLY 250 characters long (including spaces and punctuation). Provide only the formatted statements.`;
-                    break;
-                case 'epr':
-                    prompt = `${commonInstructions}\n\nPlease create 5-7 performance statements suitable for an Enlisted Performance Brief (EPB). Focus on duty performance, leadership/followership, and whole airman concept.\n\nIMPORTANT: Each statement MUST be EXACTLY 175 characters long (including spaces and punctuation). Provide only the formatted statements.`;
-                    break;
-                case 'opr':
-                    prompt = `${commonInstructions}\n\nPlease create 5-7 performance statements suitable for an Officer Performance Brief (OPB). Focus on leadership, mission accomplishment, and professional qualities.\n\nIMPORTANT: Each statement MUST be EXACTLY 175 characters long (including spaces and punctuation). Provide only the formatted statements.`;
-                    break;
+                switch(purpose) {
+                    case 'weekly':
+                        prompt = `${commonInstructions}\n\nPlease create 5-7 performance statements suitable for a Weekly Civilian Performance report that highlights my most significant contributions this week. Focus on mission impact and demonstrate impact appropriate for the employee's position.\n\nIMPORTANT: Each statement MUST be EXACTLY 250 characters long (including spaces and punctuation). Provide only the formatted statements.`;
+                        break;
+                    case 'award':
+                        prompt = `${commonInstructions}\n\nPlease create 5-7 performance statements suitable for an AF Form 1206 Award Package. Statements should be impactful, showcase leadership, and emphasize quantifiable results.\n\nIMPORTANT: Each statement MUST be EXACTLY 250 characters long (including spaces and punctuation). Provide only the formatted statements.`;
+                        break;
+                    case 'epr':
+                        prompt = `${commonInstructions}\n\nPlease create 5-7 performance statements suitable for an Enlisted Performance Brief (EPB). Focus on duty performance, leadership/followership, and whole airman concept.\n\nIMPORTANT: Each statement MUST be EXACTLY 175 characters long (including spaces and punctuation). Provide only the formatted statements.`;
+                        break;
+                    case 'opr':
+                        prompt = `${commonInstructions}\n\nPlease create 5-7 performance statements suitable for an Officer Performance Brief (OPB). Focus on leadership, mission accomplishment, and professional qualities.\n\nIMPORTANT: Each statement MUST be EXACTLY 175 characters long (including spaces and punctuation). Provide only the formatted statements.`;
+                        break;
+                }
             }
 
             // The following line can be uncommented for debugging purposes
+            // document.getElementById('outputContainer').classList.remove('hidden');
             // document.getElementById('outputPrompt').textContent = prompt;
             
-            // Copy prompt to clipboard
-            const tempTextArea = document.createElement("textarea");
-            tempTextArea.value = prompt;
-            document.body.appendChild(tempTextArea);
-            tempTextArea.select();
-            document.execCommand("copy");
-            document.body.removeChild(tempTextArea);
+			
+			// --- 3. Copy to Clipboard and Update UI ---
 
-            const generateButton = this;
-            generateButton.textContent = 'Copied!';
-            setTimeout(() => { generateButton.textContent = 'Generate & Copy Prompt'; }, 2000);
-            
-            // Scroll to AI resources
-            document.getElementById('aiResourcesCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
-        });
+			const tempTextArea = document.createElement("textarea");
+			tempTextArea.value = prompt;
+			document.body.appendChild(tempTextArea);
+			tempTextArea.select();
+			document.execCommand("copy");
+			document.body.removeChild(tempTextArea);
+		
+			const generateButton = this;
+			generateButton.textContent = 'Copied!';
+			setTimeout(() => {
+				generateButton.textContent = 'Generate & Copy Prompt';
+			}, 2000);
 
-        // --- Reset Logic with Modal ---
+			// Scroll to AI resources
+			document.getElementById('aiResourcesCard').scrollIntoView({
+				behavior: 'smooth',
+				block: 'center'
+			});
+		});
+
+        // START: Modified JavaScript for Reset Logic
         resetBtn.addEventListener('click', () => confirmModal.classList.add('visible'));
         cancelBtn.addEventListener('click', () => confirmModal.classList.remove('visible'));
         confirmBtn.addEventListener('click', () => {
@@ -1330,6 +1657,9 @@ ${alqSection}Please convert this into 5-7 proper USAF Performance Statements fol
             document.querySelectorAll('.alq-checkbox').forEach(cb => cb.checked = false);
             selectedAlqsOrder = [];
             
+            // Reset the interactive mode toggle
+            document.getElementById('interactiveModeToggle').checked = false;
+
             // Hide output
             document.getElementById('outputContainer').classList.add('hidden');
             document.getElementById('outputPrompt').textContent = '';
@@ -1337,6 +1667,8 @@ ${alqSection}Please convert this into 5-7 proper USAF Performance Statements fol
             // Close modal
             confirmModal.classList.remove('visible');
         });
+        // END: Modified JavaScript
+
         confirmModal.addEventListener('click', (e) => {
             if (e.target === confirmModal) confirmModal.classList.remove('visible');
         });
