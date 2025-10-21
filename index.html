@@ -12,7 +12,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>USAF AI Performance Statement Refinery</title>
+    <title>USAF AI Performance Statement & Decoration Refinery</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -61,7 +61,8 @@
             transition: opacity 0.5s ease-out;
             position: relative; 
         }
-        #award-selection-screen {
+
+        #award-selection-screen, #decoration-selection-screen {
             opacity: 0;
             pointer-events: none;
             position: absolute; 
@@ -94,6 +95,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            text-align: center;
             font-size: 1.25rem;
             font-weight: 600;
             color: var(--text-primary);
@@ -109,7 +111,7 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
-        .award-bubble {
+        .award-bubble { /* Re-using this for decoration bubbles too */
             width: auto; 
             height: auto;
             padding: 1rem 2rem;
@@ -122,15 +124,17 @@
         }
 
         /* --- Animation Styles --- */
-        #main-tool-container {
+        #main-tool-container, #decoration-tool-container {
             display: none;
             opacity: 0;
             transition: opacity 0.5s ease-in 0.5s;
         }
-        body.selection-made #main-tool-container {
+        body.selection-made #main-tool-container,
+        body.selection-made #decoration-tool-container {
             display: block;
             opacity: 1;
         }
+
         body.selection-made .selection-container {
             display: none;
         }
@@ -149,12 +153,14 @@
             animation: fadeIn 0.8s ease-out forwards;
         }
 
-        /* Award Step Animation */
-        body.award-step-1 #initial-selection-screen {
+        /* Sub-selection screen animations */
+        body.award-step-1 #initial-selection-screen,
+        body.decoration-step-1 #initial-selection-screen {
             opacity: 0;
             pointer-events: none;
         }
-        body.award-step-1 #award-selection-screen {
+        body.award-step-1 #award-selection-screen,
+        body.decoration-step-1 #decoration-selection-screen {
             opacity: 1;
             pointer-events: all;
             transition: opacity 0.5s ease-out 0.4s;
@@ -505,9 +511,9 @@
         <div id="initial-selection-screen" class="selection-container">
             <h2 class="selection-title">What would you like to create?</h2>
             <div class="bubble-container">
-                <button id="select-report" class="selection-bubble" data-choice="performance-report">EPB / OPB </button>
+                <button id="select-report" class="selection-bubble" data-choice="performance-report">EPB / OPB</button>
                 <button id="select-award" class="selection-bubble" data-choice="award-package">Award Package</button>
-                <button id="select-decoration" class="selection-bubble disabled" data-choice="decoration">Decoration</button>
+                <button id="select-decoration" class="selection-bubble" data-choice="decoration">Decoration</button>
             </div>
         </div>
 
@@ -517,89 +523,132 @@
                 <button class="selection-bubble award-bubble" data-choice="award-sijanLeadership">Sijan</button>
                 <button class="selection-bubble award-bubble" data-choice="award-leoMarquez">Leo Marquez</button>
                 <button class="selection-bubble award-bubble" data-choice="award-quarterlyAnnual">Annual / Quarterly Award</button>
-<!--             <button class="selection-bubble award-bubble" data-choice="award-msm">MSM</button> -- -->
-<!--                <button class="selection-bubble award-bubble" data-choice="award-afcm">AFCM</button> -- -->
                 <button class="selection-bubble award-bubble" data-choice="award-custom">Custom</button>
              </div>
         </div>
+        
+        <div id="decoration-selection-screen" class="selection-container">
+             <h2 class="selection-title" style="animation: none;">Which Decoration?</h2>
+             <div class="bubble-container">
+                <button class="selection-bubble award-bubble" data-choice="decoration-pcs">PCS / PCA Decoration</button>
+                <button class="selection-bubble award-bubble" data-choice="decoration-msm">MSM</button>
+                <button class="selection-bubble award-bubble" data-choice="decoration-afcm">AFCM / AFAM</button>
+             </div>
+        </div>
 
-        <div id="main-tool-container" class="lg:grid lg:grid-cols-3 lg:gap-8">
-            <div id="animated-title-container"></div>
-            
-            <div class="card lg:col-span-2">
-                <div class="card-header">
-                    <span>Input Information</span>
-                    <button id="resetBtn" class="btn btn-danger">Start Over</button>
-                </div>
-                <div class="card-body">
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div class="form-group">
-                            <label for="jobTitleContainer">Job Title/AFSC: (Optional)</label>
-                            <div id="jobTitleContainer"></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="rankContainer">Rank: (Optional)</label>
-                            <div id="rankContainer"></div>
-                        </div>
-                        <div id="otherJobField" class="form-group hidden md:col-span-2">
-                            <label for="otherJobTitle">Specify Job Title:</label>
-                            <input type="text" id="otherJobTitle" placeholder="e.g., Program Manager">
-                        </div>
-                         <div class="form-group">
-                            <label for="majcomContainer">MAJCOM: (Optional)</label>
-                            <div id="majcomContainer"></div>
-                        </div>
+        <div id="main-content-area" class="lg:grid lg:grid-cols-3 lg:gap-8">
+            <div id="animated-title-container" class="lg:col-span-3"></div>
 
-                        <div id="mga-form-group" class="form-group">
-                            <label for="mgaContainer">Major Graded Area (MGA): (Optional)</label>
-                            <div id="mgaContainer"></div>
-                        </div>
-                        
-                        <div id="custom-award-instructions-form-group" class="form-group hidden">
-                            <label for="customAwardInstructions">Custom Award Instructions: (Optional)</label>
-                            <input type="text" id="customAwardInstructions" placeholder="e.g., 'Focus on innovation' or 'Package for wing level'" style="width: 100%; background-color: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 0.5rem; padding: 0.75rem 1rem;">
-                        </div>
-
+            <!-- Performance Report & Award Package Tool -->
+            <div id="main-tool-container" class="lg:col-span-2">
+                <div class="card">
+                    <div class="card-header">
+                        <span>Input Information</span>
+                        <button id="resetBtn" class="btn btn-danger">Start Over</button>
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="accomplishment">Accomplishment Details: (Required)</label>
-                        <textarea id="accomplishment" placeholder="Describe what you did with metrics in any format: bullet points, notes, sentences, or even stream of consciousness."></textarea>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <button id="generateButton" class="btn btn-primary w-full">Generate & Copy Prompt</button>
-                        <a href="https://niprgpt.mil/" target="_blank" rel="noopener noreferrer" id="nipr-link-btn" class="btn btn-ghost hidden">
-                            Go to NIPRGPT
-                        </a>
+                    <div class="card-body">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="form-group">
+                                <label for="jobTitleContainer">Job Title/AFSC: (Optional)</label>
+                                <div id="jobTitleContainer"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="rankContainer">Rank: (Optional)</label>
+                                <div id="rankContainer"></div>
+                            </div>
+                            <div id="otherJobField" class="form-group hidden md:col-span-2">
+                                <label for="otherJobTitle">Specify Job Title:</label>
+                                <input type="text" id="otherJobTitle" placeholder="e.g., Program Manager">
+                            </div>
+                            <div class="form-group">
+                                <label for="majcomContainer">MAJCOM: (Optional)</label>
+                                <div id="majcomContainer"></div>
+                            </div>
+                            <div id="mga-form-group" class="form-group">
+                                <label for="mgaContainer">Major Graded Area (MGA): (Optional)</label>
+                                <div id="mgaContainer"></div>
+                            </div>
+                            <div id="custom-award-instructions-form-group" class="form-group hidden">
+                                <label for="customAwardInstructions">Custom Award Instructions: (Optional)</label>
+                                <input type="text" id="customAwardInstructions" placeholder="e.g., 'Focus on innovation' or 'Package for wing level'">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="accomplishment">Accomplishment Details: (Required)</label>
+                            <textarea id="accomplishment" placeholder="Describe what you did with metrics in any format..."></textarea>
+                        </div>
+                        <div class="flex flex-col items-center gap-4 mt-4">
+                            <button id="generateButtonMain" class="btn btn-primary w-full text-lg">Generate & Copy Prompt</button>
+                            <a href="https://niprgpt.mil/" target="_blank" rel="noopener noreferrer" id="nipr-link-btn-main" class="btn btn-ghost w-full hidden">
+                                Go to NIPRGPT
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-	</div>
 
-	<div id="award-info-panel" class="card hidden">
-		<div class="card-header">
-			<span id="award-info-title">Award Information</span>
-		</div>
-		<div class="card-body" id="award-info-content" style="color: var(--text-secondary); line-height: 1.6;">
-			<p>Select an award to see its rules and goals.</p>
-		</div>
-	</div>
-	<div id="final-cards-container" class="hidden lg:col-span-2">
-
-            <div id="final-cards-container" class="hidden lg:col-span-2">
+            <!-- Decoration Tool -->
+            <div id="decoration-tool-container" class="lg:col-span-3">
                  <div class="card">
                     <div class="card-header">
-                        <span>Performance Statement Character Count</span>
+                        <span>Decoration Achievements</span>
+                        <button id="resetBtn2" class="btn btn-danger">Start Over</button>
                     </div>
                     <div class="card-body">
-                        <div class="flex flex-col md:flex-row items-center gap-6">
-                            <textarea 
-                                id="charCounterTextBox"
-                                class="w-full h-32 p-4 rounded-lg text-lg transition duration-300 resize-y"
-                                placeholder="Paste text or type here to quickly check and revise with a live character count reading..."
-                                style="background-color: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-primary);"
-                            ></textarea>
+                        <p class="text-sm text-center mb-6" style="color: var(--text-secondary);">
+                            Paste your top 3-5 performance statements from your tour into the blocks below. The AI will assemble them into a cohesive decoration narrative.
+                        </p>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="form-group">
+                                <label for="dec-achievement-1">Achievement 1</label>
+                                <textarea id="dec-achievement-1" placeholder="Paste your strongest performance statement here..."></textarea>
+                            </div>
+                             <div class="form-group">
+                                <label for="dec-achievement-2">Achievement 2</label>
+                                <textarea id="dec-achievement-2" placeholder="Paste your next strongest performance statement..."></textarea>
+                            </div>
+                             <div class="form-group">
+                                <label for="dec-achievement-3">Achievement 3</label>
+                                <textarea id="dec-achievement-3" placeholder="...and another one."></textarea>
+                            </div>
+                             <div class="form-group">
+                                <label for="dec-achievement-4">Achievement 4</label>
+                                <textarea id="dec-achievement-4" placeholder="...and another one."></textarea>
+                            </div>
+                             <div class="form-group lg:col-span-2">
+                                <label for="dec-achievement-5">Achievement 5</label>
+                                <textarea id="dec-achievement-5" placeholder="...and another one."></textarea>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center gap-4 mt-4">
+                             <button id="generateButtonDec" class="btn btn-primary w-full text-lg">Generate & Copy Prompt</button>
+                             <a href="https://niprgpt.mil/" target="_blank" rel="noopener noreferrer" id="nipr-link-btn-dec" class="btn btn-ghost w-full hidden">
+                                Go to NIPRGPT
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Info Panel (Stays on the right) -->
+            <div id="info-panel-wrapper" class="lg:col-start-3 lg:row-start-2">
+                <div id="award-info-panel" class="card hidden">
+                    <div class="card-header">
+                        <span id="award-info-title">Award Information</span>
+                    </div>
+                    <div class="card-body" id="award-info-content" style="color: var(--text-secondary); line-height: 1.6;">
+                        <p>Select an award to see its rules and goals.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Character Counter -->
+            <div id="final-cards-container" class="hidden lg:col-span-3">
+                 <div class="card">
+                    <div class="card-header"><span>Performance Statement Character Count</span></div>
+                    <div class="card-body">
+                        <div class="flex flex-col md:flex-row items-center gap-6">
+                            <textarea id="charCounterTextBox" class="w-full h-32 p-4 rounded-lg text-lg transition duration-300 resize-y" placeholder="Paste text or type here..."></textarea>
                             <div class="flex flex-col items-center justify-center p-4">
                                 <span id="charCounterCount" class="text-7xl font-bold transition-colors duration-300" style="color: var(--primary-cyan);">0</span>
                                 <span class="text-sm uppercase tracking-wider" style="color: var(--text-secondary);">Characters</span>
@@ -612,26 +661,21 @@
     </main>
 
     <footer>
-        USAF Performance Statement AI Prompt Generator | For official use only
+        USAF AI Prompt Generator | For official use only
     </footer>
     
    <div id="picker-overlay" class="picker-overlay">
         <div class="picker-modal">
-            <div class="picker-header">
-                <input type="text" id="picker-search-input" placeholder="Type to search...">
-            </div>
-            <ul id="picker-options-list" class="picker-options-list">
-            </ul>
+            <div class="picker-header"><input type="text" id="picker-search-input" placeholder="Type to search..."></div>
+            <ul id="picker-options-list" class="picker-options-list"></ul>
         </div>
     </div>
     
     <div id="alert-modal" class="modal-overlay">
         <div class="modal-content">
             <h3 id="alert-title" class="modal-title">Input Required</h3>
-            <p id="alert-body" class="modal-body">Please fill in the 'Accomplishment Details' field before generating a prompt.</p>
-            <div class="modal-actions">
-                <button id="alert-ok" class="btn btn-primary">OK</button>
-            </div>
+            <p id="alert-body" class="modal-body">Please fill in the required fields before generating a prompt.</p>
+            <div class="modal-actions"><button id="alert-ok" class="btn btn-primary">OK</button></div>
         </div>
     </div>
 
@@ -648,156 +692,66 @@
 
     <script>
       let userChoice = '';
-let activeBubbleText = '';
-let promptData = {};
-const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
+      let activeBubbleText = '';
+      let promptData = {};
+      const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
 
-const afscOptions = [
-  { text: '-- Select Your AFSC/Job Title --', value: '' },
-  { text: 'DOD Government Civilian', value: 'DOD Government Civilian' },
-  { text: '11S - Special Operations Pilot', value: '11S - Special Operations Pilot' },
-  { text: '12S - Special Operations Combat Systems Officer', value: '12S - Special Operations Combat Systems Officer' },
-  { text: '14F - Information Operations Officer', value: '14F - Information Operations Officer' },
-  { text: '14N - Intelligence Officer', value: '14N - Intelligence Officer' },
-  { text: '15W - Weather Officer', value: '15W - Weather Officer' },
-  { text: '17S - Cyberspace Operations Officer', value: '17S - Cyberspace Operations Officer' },
-  { text: '17D - Cyberspace Operations Officer', value: '17D - Cyberspace Operations Officer' },
-  { text: '18S - Special Reconnaissance Officer', value: '18S - Special Reconnaissance Officer' },
-  { text: '19Z - Special Warfare Officer', value: '19Z - Special Warfare Officer' },
-  { text: '21A - Aircraft Maintenance Officer', value: '21A - Aircraft Maintenance Officer' },
-  { text: '21R - Logistics Readiness Officer', value: '21R - Logistics Readiness Officer' },
-  { text: '31P - Security Forces Officer', value: '31P - Security Forces Officer' },
-  { text: '32E - Civil Engineer', value: '32E - Civil Engineer' },
-  { text: '35P - Public Affairs Officer', value: '35P - Public Affairs Officer' },
-  { text: '38F - Force Support Officer', value: '38F - Force Support Officer' },
-  { text: '41A - Health Services Administrator', value: '41A - Health Services Administrator' },
-  { text: '51J - Judge Advocate', value: '51J - Judge Advocate' },
-  { text: '52R - Chaplain', value: '52R - Chaplain' },
-  { text: '65F - Financial Management Officer', value: '65F - Financial Management Officer' },
-  { text: '87I - Contracting Officer', value: '87I - Contracting Officer' },
-  { text: '9E0 - Logistics Readiness Officer', value: '9E0 - Logistics Readiness Officer' },
-  { text: '1A1 - Career Enlisted Aviator', value: '1A1 - Career Enlisted Aviator' },
-  { text: '1B4 - Cyber Warfare Operations', value: '1B4 - Cyber Warfare Operations' },
-  { text: '1C0 - Aviation Resource Management', value: '1C0 - Aviation Resource Management' },
-  { text: '1C1 - Air Traffic Control', value: '1C1 - Air Traffic Control' },
-  { text: '1C3 - Command and Control Operations', value: '1C3 - Command and Control Operations' },
-  { text: '1C5 - Battle Management Operations', value: '1C5 - Battle Management Operations' },
-  { text: '1C8 - Radar, Airfield & Weather Systems', value: '1C8 - Radar, Airfield & Weather Systems' },
-  { text: '1D7 - Cyber Defense Operations', value: '1D7 - Cyber Defense Operations' },
-  { text: '1N0 - All-Source Intelligence Analyst', value: '1N0 - All-Source Intelligence Analyst' },
-  { text: '1N1 - Geospatial Intelligence', value: '1N1 - Geospatial Intelligence' },
-  { text: '1N2 - Signals Intelligence Analyst', value: '1N2 - Signals Intelligence Analyst' },
-  { text: '1N4 - Fusion Analyst', value: '1N4 - Fusion Analyst' },
-  { text: '1N7 - Human Intelligence Specialist', value: '1N7 - Human Intelligence Specialist' },
-  { text: '1P0 - Aircrew Flight Equipment', value: '1P0 - Aircrew Flight Equipment' },
-  { text: '1S0 - Safety', value: '1S0 - Safety' },
-  { text: '1T0 - Survival, Evasion, Resistance & Escape (SERE) Specialist', value: '1T0 - Survival, Evasion, Resistance & Escape (SERE) Specialist' },
-  { text: '1W0 - Weather', value: '1W0 - Weather' },
-  { text: '1Z1 - Pararescue', value: '1Z1 - Pararescue' },
-  { text: '1Z2 - Combat Control', value: '1Z2 - Combat Control' },
-  { text: '1Z3 - TACP', value: '1Z3 - TACP' },
-  { text: '1Z4 - Special Reconnaissance', value: '1Z4 - Special Reconnaissance' },
-  { text: '2A3 - Acft Mx', value: '2A3 - Acft Mx' },
-  { text: '2A5 - Aerospace Maintenance', value: '2A5 - Aerospace Maintenance' },
-  { text: '2A6 - Aircraft Maintenance', value: '2A6 - Aircraft Maintenance' },
-  { text: '2A7 - Combined Low Observable and Acft Structual Mx', value: '2A7 - Combined Low Observable and Acft Structual Mx' },
-  { text: '2A7X2 - Nondestructive Inspection', value: '2A7X2 - Nondestructive Inspection' },
-  { text: '2A9 - Aerospace Maintenance (Non-Destructive Inspection)', value: '2A9 - Aerospace Maintenance (Non-Destructive Inspection)' },
-  { text: '2G0 - Logistics Plans', value: '2G0 - Logistics Plans' },
-  { text: '2R2 - Maintenance Management', value: '2R2 - Maintenance Management' },
-  { text: '2S0 - Materiel Management', value: '2S0 - Materiel Management' },
-  { text: '2T0 - Traffic Management Operations', value: '2T0 - Traffic Management Operations' },
-  { text: '2T1 - Ground Transportation', value: '2T1 - Ground Transportation' },
-  { text: '2T2 - Air Transportation', value: '2T2 - Air Transportation' },
-  { text: '2T3X1 - Vehicle Maintenance', value: '2T3X1 - Vehicle Maintenance' },
-  { text: '2T3X7 - Vehicle Fleet Management', value: '2T3X7 - Vehicle Fleet Management' },
-  { text: '2W0 - Munitions Systems', value: '2W0 - Munitions Systems' },
-  { text: '2W1 - Aircraft Armament Systems', value: '2W1 - Aircraft Armament Systems' },
-  { text: '3E0 - Electrical Systems', value: '3E0 - Electrical Systems' },
-  { text: '3E1 - Heating, Ventilation, AC, and Refrigeration', value: '3E1 - Heating, Ventilation, AC, and Refrigeration' },
-  { text: '3E2 - Heavy Equipment', value: '3E2 - Heavy Equipment' },
-  { text: '3E3 - Structures', value: '3E3 - Structures' },
-  { text: '3E4 - Pest Management', value: '3E4 - Pest Management' },
-  { text: '3E5 - Engineering', value: '3E5 - Engineering' },
-  { text: '3E6 - Operations Management', value: '3E6 - Operations Management' },
-  { text: '3E7 - Fire Protection', value: '3E7 - Fire Protection' },
-  { text: '3E8 - Explosive Ordnance Disposal', value: '3E8 - Explosive Ordnance Disposal' },
-  { text: '3E9 - Emergency Management', value: '3E9 - Emergency Management' },
-  { text: '3F0 - Personnel', value: '3F0 - Personnel' },
-  { text: '3F1 - Services', value: '3F1 - Services' },
-  { text: '3F2 - Education and Training', value: '3F2 - Education and Training' },
-  { text: '3F3 - Manpower', value: '3F3 - Manpower' },
-  { text: '3F4 - Equal Opportunity', value: '3F4 - Equal Opportunity' },
-  { text: '3F5 - Administration', value: '3F5 - Administration' },
-  { text: '3N0 - Public Affairs', value: '3N0 - Public Affairs' },
-  { text: '3N1 - Regional Bands', value: '3N1 - Regional Bands' },
-  { text: '3P0 - Security Forces', value: '3P0 - Security Forces' },
-  { text: '4A1 - Medical Materiel', value: '4A1 - Medical Materiel' },
-  { text: '4B0 - Bioenvironmental Engineering', value: '4B0 - Bioenvironmental Engineering' },
-  { text: '4N0 - Aerospace Medical Service', value: '4N0 - Aerospace Medical Service' },
-  { text: '4R0 - Radiology', value: '4R0 - Radiology' },
-  { text: '5J0 - Paralegal', value: '5J0 - Paralegal' },
-  { text: '5R0 - Chaplain Assistant', value: '5R0 - Chaplain Assistant' },
-  { text: '6F0 - Financial Management and Comptroller', value: '6F0 - Financial Management and Comptroller' },
-  { text: '7S - OSI Enlisted', value: '7S - OSI Enlisted' },
-  { text: '8C000 - MFR NCO', value: '8C000 - MFR NCO' },
-  { text: '8F0 - First Sergeant', value: '8F0 - First Sergeant' },
-  { text: '8H000 - Airman Dorm Leader', value: '8H000 - Airman Dorm Leader' },
-  { text: '8I0 - Inspector General', value: '8I0 - Inspector General' },
-  { text: '8R - Recruiters', value: '8R - Recruiters' },
-  { text: '8T000 - Professional Military Education Instructor', value: '8T000 - Professional Military Education Instructor' },
-  { text: 'Other (Specify Below)', value: 'other' }
-];
+      // Data arrays for dropdowns...
+      const afscOptions = [
+        { text: '-- Select Your AFSC/Job Title --', value: '' },
+        { text: 'DOD Government Civilian', value: 'DOD Government Civilian' },
+        { text: '11S - Special Operations Pilot', value: '11S - Special Operations Pilot' },
+        { text: '14F - Information Operations Officer', value: '14F - Information Operations Officer' },
+        { text: '14N - Intelligence Officer', value: '14N - Intelligence Officer' },
+        { text: '17S - Cyberspace Operations Officer', value: '17S - Cyberspace Operations Officer' },
+        { text: '1D7 - Cyber Defense Operations', value: '1D7 - Cyber Defense Operations' },
+        { text: '1N0 - All-Source Intelligence Analyst', value: '1N0 - All-Source Intelligence Analyst' },
+        { text: '2A6 - Aircraft Maintenance', value: '2A6 - Aircraft Maintenance' },
+        { text: '3F0 - Personnel', value: '3F0 - Personnel' },
+        { text: '3P0 - Security Forces', value: '3P0 - Security Forces' },
+        { text: '6F0 - Financial Management and Comptroller', value: '6F0 - Financial Management and Comptroller' },
+        { text: 'Other (Specify Below)', value: 'other' }
+      ];
+      const rankOptions = [
+        { text: '-- Select Rank --', value: '' },
+        { text: 'E-1 Airman Basic', value: 'E-1 Airman Basic' },
+        { text: 'E-2 Airman', value: 'E-2 Airman' },
+        { text: 'E-3 Airman First Class', value: 'E-3 Airman First Class' },
+        { text: 'E-4 Senior Airman', value: 'E-4 Senior Airman' },
+        { text: 'E-5 Staff Sergeant', value: 'E-5 Staff Sergeant' },
+        { text: 'E-6 Technical Sergeant', value: 'E-6 Technical Sergeant' },
+        { text: 'E-7 Master Sergeant', value: 'E-7 Master Sergeant' },
+        { text: 'E-8 Senior Master Sergeant', value: 'E-8 Senior Master Sergeant' },
+        { text: 'E-9 Chief Master Sergeant', value: 'E-9 Chief Master Sergeant' },
+        { text: 'O-1 Second Lieutenant', value: 'O-1 Second Lieutenant' },
+        { text: 'O-2 First Lieutenant', value: 'O-2 First Lieutenant' },
+        { text: 'O-3 Captain', value: 'O-3 Captain' },
+        { text: 'O-4 Major', value: 'O-4 Major' },
+        { text: 'O-5 Lieutenant Colonel', value: 'O-5 Lieutenant Colonel' },
+        { text: 'O-6 Colonel', value: 'O-6 Colonel' },
+      ];
+      const majcomOptions = [
+        { text: '-- Select Your MAJCOM --', value: '' },
+        { text: 'Air Combat Command (ACC)', value: 'Air Combat Command (ACC)' },
+        { text: 'Air Education and Training Command (AETC)', value: 'Air Education and Training Command (AETC)' },
+        { text: 'Air Force Global Strike Command (AFGSC)', value: 'Air Force Global Strike Command (AFGSC)' },
+        { text: 'Air Force Materiel Command (AFMC)', value: 'Air Force Materiel Command (AFMC)' },
+        { text: 'Air Force Reserve Command (AFRC)', value: 'Air Force Reserve Command (AFRC)' },
+        { text: 'Air Force Special Operations Command (AFSOC)', value: 'Air Force Special Operations Command (AFSOC)' },
+        { text: 'Air Mobility Command (AMC)', value: 'Air Mobility Command (AMC)' },
+        { text: 'Pacific Air Forces (PACAF)', value: 'Pacific Air Forces (PACAF)' },
+        { text: 'U.S. Air Forces in Europe – Air Forces Africa (USAFE-AFAFRICA)', value: 'U.S. Air Forces in Europe – Air Forces Africa (USAFE-AFAFRICA)' }
+      ];
+      const mgaOptions = [
+        { text: '-- Select Major Graded Area --', value: '' },
+        { text: 'Executing the Mission', value: 'Executing the Mission' },
+        { text: 'Leading People', value: 'Leading People' },
+        { text: 'Managing Resources', value: 'Managing Resources' },
+        { text: 'Improving the Unit', value: 'Improving the Unit' }
+      ];
 
-const rankOptions = [
-  { text: '-- Select Rank --', value: '' },
-  { text: 'E-1 Airman Basic', value: 'E-1 Airman Basic' },
-  { text: 'E-2 Airman', value: 'E-2 Airman' },
-  { text: 'E-3 Airman First Class', value: 'E-3 Airman First Class' },
-  { text: 'E-4 Senior Airman', value: 'E-4 Senior Airman' },
-  { text: 'E-5 Staff Sergeant', value: 'E-5 Staff Sergeant' },
-  { text: 'E-6 Technical Sergeant', value: 'E-6 Technical Sergeant' },
-  { text: 'E-7 Master Sergeant', value: 'E-7 Master Sergeant' },
-  { text: 'E-8 Senior Master Sergeant', value: 'E-8 Senior Master Sergeant' },
-  { text: 'E-9 Chief Master Sergeant', value: 'E-9 Chief Master Sergeant' },
-  { text: 'O-1 Second Lieutenant', value: 'O-1 Second Lieutenant' },
-  { text: 'O-2 First Lieutenant', value: 'O-2 First Lieutenant' },
-  { text: 'O-3 Captain', value: 'O-3 Captain' },
-  { text: 'O-4 Major', value: 'O-4 Major' },
-  { text: 'O-5 Lieutenant Colonel', value: 'O-5 Lieutenant Colonel' },
-  { text: 'O-6 Colonel', value: 'O-6 Colonel' },
-  { text: 'O-7 Brigadier General', value: 'O-7 Brigadier General' },
-  { text: 'O-8 Major General', value: 'O-8 Major General' },
-  { text: 'O-9 Lieutenant General', value: 'O-9 Lieutenant General' }
-];
-
-const majcomOptions = [
-  { text: '-- Select Your MAJCOM --', value: '' },
-  { text: 'Air Combat Command (ACC)', value: 'Air Combat Command (ACC)' },
-  { text: 'Air Education and Training Command (AETC)', value: 'Air Education and Training Command (AETC)' },
-  { text: 'Air Force Global Strike Command (AFGSC)', value: 'Air Force Global Strike Command (AFGSC)' },
-  { text: 'Air Force Materiel Command (AFMC)', value: 'Air Force Materiel Command (AFMC)' },
-  { text: 'Air Force Reserve Command (AFRC)', value: 'Air Force Reserve Command (AFRC)' },
-  { text: 'Air Force Special Operations Command (AFSOC)', value: 'Air Force Special Operations Command (AFSOC)' },
-  { text: 'Air Mobility Command (AMC)', value: 'Air Mobility Command (AMC)' },
-  { text: 'Pacific Air Forces (PACAF)', value: 'Pacific Air Forces (PACAF)' },
-  { text: 'U.S. Air Forces in Europe – Air Forces Africa (USAFE-AFAFRICA)', value: 'U.S. Air Forces in Europe – Air Forces Africa (USAFE-AFAFRICA)' },
-  { text: 'Air Force Medical Command (AFMEDCOM)', value: 'Air Force Medical Command (AFMEDCOM)' },
-  { text: 'Air National Guard Readiness Center (ANGRC)', value: 'Air National Guard Readiness Center (ANGRC)' },
-  { text: 'Headquarters Air Force (HAF)', value: 'Headquarters Air Force (HAF)' },
-  { text: 'Air Force Southern Command (AFSOUTH)', value: 'Air Force Southern Command (AFSOUTH)' },
-  { text: 'U.S. Air Forces Central (AFCENT)', value: 'U.S. Air Forces Central (AFCENT)' }
-];
-
-const mgaOptions = [
-  { text: '-- Select Major Graded Area --', value: '' },
-  { text: 'Executing the Mission', value: 'Executing the Mission' },
-  { text: 'Leading People', value: 'Leading People' },
-  { text: 'Managing Resources', value: 'Managing Resources' },
-  { text: 'Improving the Unit', value: 'Improving the Unit' }
-];
-
-const awardInfoContent = {
+      // Placeholder content for info panels
+      const awardInfoContent = {
   sijanLeadership: `
     <h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Lance P. Sijan Leadership Award</h3>
     
@@ -1024,502 +978,412 @@ const awardInfoContent = {
   `
 };
 
-// Picker/Dropdown System
-const pickerOverlay = document.getElementById('picker-overlay');
-const pickerSearchInput = document.getElementById('picker-search-input');
-const pickerOptionsList = document.getElementById('picker-options-list');
-let currentPickerField = null;
-let currentPickerOptions = [];
-
-function openPicker(fieldId, options) {
-  currentPickerField = fieldId;
-  currentPickerOptions = options;
-  pickerSearchInput.value = '';
-  renderPickerOptions(options);
-  pickerOverlay.classList.add('visible');
-  pickerSearchInput.focus();
-}
-
-function closePicker() {
-  pickerOverlay.classList.remove('visible');
-  currentPickerField = null;
-  currentPickerOptions = [];
-}
-
-function renderPickerOptions(options) {
-  pickerOptionsList.innerHTML = '';
-  options.forEach(opt => {
-    const li = document.createElement('li');
-    li.className = 'picker-option-item';
-    li.textContent = opt.text;
-    li.dataset.value = opt.value;
-    li.addEventListener('click', () => selectPickerOption(opt));
-    pickerOptionsList.appendChild(li);
-  });
-}
-
-function selectPickerOption(option) {
-  if (!currentPickerField) return;
-  
-  const field = document.getElementById(currentPickerField);
-  if (field) {
-    field.textContent = option.text;
-    field.dataset.value = option.value;
-    
-    if (currentPickerField === 'jobTitle' && option.value === 'other') {
-      document.getElementById('otherJobField').classList.remove('hidden');
-    } else if (currentPickerField === 'jobTitle') {
-      document.getElementById('otherJobField').classList.add('hidden');
-    }
-  }
-  
-  closePicker();
-}
-
-pickerSearchInput.addEventListener('input', (e) => {
-  const query = e.target.value.toLowerCase();
-  const filtered = currentPickerOptions.filter(opt => 
-    opt.text.toLowerCase().includes(query)
-  );
-  renderPickerOptions(filtered);
-});
-
-pickerOverlay.addEventListener('click', (e) => {
-  if (e.target === pickerOverlay) closePicker();
-});
-
-// Desktop Dropdown System
-let activeDropdown = null;
-
-function createDropdown(containerId, options, fieldId) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  
-  const selected = document.createElement('div');
-  selected.className = 'custom-dropdown-selected';
-  selected.id = fieldId;
-  selected.textContent = options[0].text;
-  selected.dataset.value = options[0].value;
-  
-  selected.addEventListener('click', (e) => {
-    e.stopPropagation();
-    closeAllDropdowns();
-    
-    const rect = selected.getBoundingClientRect();
-    const dropdown = document.createElement('div');
-    dropdown.className = 'floating-dropdown-options';
-    dropdown.style.position = 'absolute';
-    dropdown.style.top = `${rect.bottom + window.scrollY + 5}px`;
-    dropdown.style.left = `${rect.left + window.scrollX}px`;
-    dropdown.style.width = `${rect.width}px`;
-    
-    options.forEach(opt => {
-      const optDiv = document.createElement('div');
-      optDiv.className = 'floating-dropdown-option';
-      optDiv.textContent = opt.text;
-      optDiv.dataset.value = opt.value;
-      
-      if (opt.value === selected.dataset.value) {
-        optDiv.classList.add('selected');
+      // Picker/Dropdown System (No changes needed here)
+      const pickerOverlay = document.getElementById('picker-overlay');
+      const pickerSearchInput = document.getElementById('picker-search-input');
+      const pickerOptionsList = document.getElementById('picker-options-list');
+      let currentPickerField = null;
+      let currentPickerOptions = [];
+      function openPicker(fieldId, options) {
+        currentPickerField = fieldId; currentPickerOptions = options;
+        pickerSearchInput.value = ''; renderPickerOptions(options);
+        pickerOverlay.classList.add('visible'); pickerSearchInput.focus();
       }
-      
-      optDiv.addEventListener('click', () => {
-        selected.textContent = opt.text;
-        selected.dataset.value = opt.value;
+      function closePicker() { pickerOverlay.classList.remove('visible'); }
+      function renderPickerOptions(options) {
+        pickerOptionsList.innerHTML = '';
+        options.forEach(opt => {
+            const li = document.createElement('li');
+            li.className = 'picker-option-item'; li.textContent = opt.text; li.dataset.value = opt.value;
+            li.addEventListener('click', () => selectPickerOption(opt));
+            pickerOptionsList.appendChild(li);
+        });
+      }
+      function selectPickerOption(option) {
+        if (!currentPickerField) return;
+        const field = document.getElementById(currentPickerField);
+        if (field) {
+            field.textContent = option.text; field.dataset.value = option.value;
+            if (currentPickerField === 'jobTitle' && option.value === 'other') {
+                document.getElementById('otherJobField').classList.remove('hidden');
+            } else if (currentPickerField === 'jobTitle') {
+                document.getElementById('otherJobField').classList.add('hidden');
+            }
+        }
+        closePicker();
+      }
+      pickerSearchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase();
+        const filtered = currentPickerOptions.filter(opt => opt.text.toLowerCase().includes(query));
+        renderPickerOptions(filtered);
+      });
+      pickerOverlay.addEventListener('click', (e) => { if (e.target === pickerOverlay) closePicker(); });
+      let activeDropdown = null;
+      function createDropdown(containerId, options, fieldId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        const selected = document.createElement('div');
+        selected.className = 'custom-dropdown-selected'; selected.id = fieldId;
+        selected.textContent = options[0].text; selected.dataset.value = options[0].value;
+        selected.addEventListener('click', (e) => {
+            e.stopPropagation(); closeAllDropdowns();
+            const rect = selected.getBoundingClientRect();
+            const dropdown = document.createElement('div');
+            dropdown.className = 'floating-dropdown-options';
+            dropdown.style.cssText = `position: absolute; top: ${rect.bottom + window.scrollY + 5}px; left: ${rect.left + window.scrollX}px; width: ${rect.width}px;`;
+            options.forEach(opt => {
+                const optDiv = document.createElement('div');
+                optDiv.className = 'floating-dropdown-option'; optDiv.textContent = opt.text;
+                if (opt.value === selected.dataset.value) optDiv.classList.add('selected');
+                optDiv.addEventListener('click', () => {
+                    selected.textContent = opt.text; selected.dataset.value = opt.value;
+                    if (fieldId === 'jobTitle' && opt.value === 'other') {
+                        document.getElementById('otherJobField').classList.remove('hidden');
+                    } else if (fieldId === 'jobTitle') {
+                        document.getElementById('otherJobField').classList.add('hidden');
+                    }
+                    closeAllDropdowns();
+                });
+                dropdown.appendChild(optDiv);
+            });
+            document.body.appendChild(dropdown); activeDropdown = dropdown;
+        });
+        container.appendChild(selected);
+      }
+      function closeAllDropdowns() { if (activeDropdown) { activeDropdown.remove(); activeDropdown = null; } }
+      function createResponsiveSelect(containerId, options, fieldId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        if (isTouchDevice) {
+            const picker = document.createElement('div');
+            picker.className = 'custom-picker-input'; picker.id = fieldId;
+            picker.textContent = options[0].text; picker.dataset.value = options[0].value;
+            picker.addEventListener('click', () => openPicker(fieldId, options));
+            container.appendChild(picker);
+        } else { createDropdown(containerId, options, fieldId); }
+      }
+
+      // Helper Functions
+      function showModal(id) { document.getElementById(id)?.classList.add('visible'); }
+      function hideModal(id) { document.getElementById(id)?.classList.remove('visible'); }
+
+      // PROMPT ASSEMBLY LOGIC
+      function assembleInteractivePrompt(inputs) {
+        const { rank, jobTitle, majcom, mga, userChoice, accomplishment, customAwardInstructions } = inputs;
+        let promptParts = [promptData.base || "// BASE PROMPT PLACEHOLDER"];
         
-        if (fieldId === 'jobTitle' && opt.value === 'other') {
-          document.getElementById('otherJobField').classList.remove('hidden');
-        } else if (fieldId === 'jobTitle') {
-          document.getElementById('otherJobField').classList.add('hidden');
+        const juniorRanks = ['E-1', 'E-2', 'E-3', 'E-4'];
+        const isJuniorEnlisted = rank ? juniorRanks.some(jr => rank.startsWith(jr)) : false;
+        
+        if (isJuniorEnlisted) promptParts.push(promptData.rankAddons?.e1_e4 || "// E1-E4 ADDON PLACEHOLDER");
+        else promptParts.push(promptData.rankAddons?.e6_plus || "// E5+ ADDON PLACEHOLDER");
+        
+        if (jobTitle) promptParts.push((promptData.contextAddons?.jobTitle || "// JOB TITLE CONTEXT PLACEHOLDER").replace('{jobTitle}', jobTitle));
+        if (majcom) promptParts.push((promptData.contextAddons?.majcom || "// MAJCOM CONTEXT PLACEHOLDER").replace('{majcom}', majcom));
+        
+        if (userChoice === 'performance-report') {
+            if (mga) promptParts.push((promptData.contextAddons?.mga || "// MGA CONTEXT PLACEHOLDER").replace('{mga}', mga));
+            promptParts.push(promptData.typeAddons?.performanceReport || "// PERFORMANCE REPORT TASK PLACEHOLDER");
+        } else if (userChoice.startsWith('award-')) {
+            promptParts.push(promptData.typeAddons?.awardPackage || "// AWARD PACKAGE TASK PLACEHOLDER");
+            const awardKey = userChoice.replace('award-', '');
+            if (promptData.awardAddons?.[awardKey]) promptParts.push(promptData.awardAddons[awardKey]);
+            if (customAwardInstructions) promptParts.push(`USER'S CUSTOM INSTRUCTIONS: ${customAwardInstructions}`);
         }
         
-        closeAllDropdowns();
-      });
-      
-      dropdown.appendChild(optDiv);
-    });
-    
-    document.body.appendChild(dropdown);
-    activeDropdown = dropdown;
-  });
-  
-  container.appendChild(selected);
-}
-
-function closeAllDropdowns() {
-  if (activeDropdown) {
-    activeDropdown.remove();
-    activeDropdown = null;
-  }
-}
-
-// Responsive Select System
-function createResponsiveSelect(containerId, options, fieldId) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  
-  if (isTouchDevice) {
-    const picker = document.createElement('div');
-    picker.className = 'custom-picker-input';
-    picker.id = fieldId;
-    picker.textContent = options[0].text;
-    picker.dataset.value = options[0].value;
-    picker.addEventListener('click', () => openPicker(fieldId, options));
-    container.appendChild(picker);
-  } else {
-    createDropdown(containerId, options, fieldId);
-  }
-}
-
-// Helper Functions
-function showModal(id) {
-  document.getElementById(id)?.classList.add('visible');
-}
-
-function hideModal(id) {
-  document.getElementById(id)?.classList.remove('visible');
-}
-
-function assembleInteractivePrompt(inputs) {
-  // --- CHANGE 1: Added 'customAwardInstructions' to the list ---
-  const { rank, jobTitle, majcom, mga, userChoice, accomplishment, customAwardInstructions } = inputs;
-  let promptParts = [];
-
-  if (promptData.base) {
-    promptParts.push(promptData.base);
-  } else {
-    console.error("Base prompt is missing from prompts.json");
-    promptParts.push("You are a USAF Performance Statement Writing Coach.");
-  }
-
-  const juniorRanks = ['E-1', 'E-2', 'E-3', 'E-4'];
-  const isJuniorEnlisted = rank ? juniorRanks.some(jr => rank.startsWith(jr)) : false;
-  
-  if (isJuniorEnlisted && promptData.rankAddons?.e1_e4) {
-    promptParts.push(promptData.rankAddons.e1_e4);
-  } else if (promptData.rankAddons?.e6_plus) {
-    promptParts.push(promptData.rankAddons.e6_plus);
-  }
-
-  if (jobTitle && promptData.contextAddons?.jobTitle) {
-    promptParts.push(promptData.contextAddons.jobTitle.replace('{jobTitle}', jobTitle));
-  }
-  if (majcom && promptData.contextAddons?.majcom) {
-    promptParts.push(promptData.contextAddons.majcom.replace('{majcom}', majcom));
-  }
-  
-  // --- CHANGE 2: Only add MGA if it's NOT an award ---
-  if (mga && !userChoice.startsWith('award-') && promptData.contextAddons?.mga) {
-    promptParts.push(promptData.contextAddons.mga.replace('{mga}', mga));
-  }
-
-  if (userChoice === 'performance-report' && promptData.typeAddons?.performanceReport) {
-    promptParts.push(promptData.typeAddons.performanceReport);
-  } else if (userChoice.startsWith('award-') && promptData.typeAddons?.awardPackage) {
-    promptParts.push(promptData.typeAddons.awardPackage);
-    
-    const awardKey = userChoice.replace('award-', '');
-    if (promptData.awardAddons && promptData.awardAddons[awardKey]) {
-      promptParts.push(promptData.awardAddons[awardKey]);
-    }
-
-    // --- CHANGE 3: Inject the custom instructions if they exist ---
-    if (customAwardInstructions) {
-      promptParts.push(`USER'S CUSTOM INSTRUCTIONS: ${customAwardInstructions}`);
-    }
-  }
-
-  if (promptData.finalInstructions) {
-    promptParts.push(promptData.finalInstructions);
-  }
-
-  promptParts.push(`\n**MY ACCOMPLISHMENT DETAILS:**\n${accomplishment}`);
-  
-  return promptParts.join('\n\n');
-}
-
-// Main Application Logic
-document.addEventListener('DOMContentLoaded', function() {
-  
-  promptData = {
-  "base": "You are to assume the persona of a seasoned USAF Chief Master Sergeant, serving as a \"Royal Spark Performance Statement Expert.\" Your reputation is built on decades of experience reviewing records and sitting on promotion boards. Your primary mission is to assist me in crafting a powerful performance statement for my evaluation. \n\n## Core Directives & Rules of Engagement\n\n1.  **Strict Statement Construction Guidelines:**\n    * **Format:** Adhere to the modern narrative format (a single, complete sentence).\n    * **Model:** Follow the \"Action, Impact, Result\" (AIR) model.\n    * **Pronouns:** Do not use personal pronouns (He/She).\n    * **Language:** Use clear, concise language. Avoid jargon and unapproved acronyms.\n    * **Focus:** Emphasize leadership, mentorship, and tangible, measurable outcomes (e.g., dollars saved, hours reduced, personnel trained, percentage increased).\n\n2.  **Acronym Discipline:** You will *only* use acronyms from the approved list below. Do not introduce any others.\n    * **Common:** Ranks (SrA, Maj), offices (CC, JA), orgs (CPTS, AFGSC, DoD), platforms (F-16, HH-60), measurements (lbs, MPH, $25B, 5%, hrs, FY23).\n    * **List:**\n        \"ABM\": \"AIR BATTLE MANAGER\", \"ACE\": \"AGILE COMBAT EMPLOYMENT\", \"AD\": \"ACTIVE DUTY\", \"ADCON\": \"ADMINISTRATIVE CONTROL\", \"AFE\": \"AIRCREW FLIGHT EQUIPMENT\", \"AFFORGEN\": \"AIR FORCE FORCE GENERATION\", \"AFI\": \"AIR FORCE INSTRUCTION\", \"AFMAN\": \"AIR FORCE MANUAL\", \"AFSC\": \"AIR FORCE SPECIALTY CODE\", \"AFSO21\": \"AIR FORCE SMART OPERATIONS FOR THE 21ST CENTURY\", \"AGE\": \"AEROSPACE GROUND EQUIPMENT\", \"AGR\": \"ACTIVE GUARD RESERVE\", \"AI\": \"ARTIFICIAL INTELLIGENCE\", \"ALQ\": \"AIRMAN LEADERSHIP QUALITY\", \"ALS\": \"AIRMAN LEADERSHIP SCHOOL\", \"AOC\": \"AIR OPERATIONS CENTER\", \"AOR\": \"AREA OF RESPONSIBILITY\", \"APF\": \"APPROPRIATED FUNDS\", \"ART\": \"AIR RESERVE TECHNICIAN\", \"AT\": \"ANNUAL TOUR\", \"ATC\": \"AIR TRAFFIC CONTROL\", \"ATO\": \"AIR TASKING ORDER\", \"BMT\": \"BASIC MILITARY TRAINING\", \"BNR\": \"BY NAME REQUEST\", \"BTZ\": \"BELOW-THE-ZONE\", \"C2\": \"COMMAND AND CONTROL\", \"C4ISR\": \"COMMAND, CONTROL, COMMUNICATIONS, COMPUTERS, INTELLIGENCE, SURVEILLANCE AND RECONNAISSANCE\", \"CAOC\": \"COMBINED AIR OPERATIONS CENTER\", \"CAS\": \"CLOSE AIR SUPPORT\", \"CAT\": \"CRISIS ACTION TEAM\", \"CATM\": \"COMBAT ARMS TRAINING AND MAINTENANCE\", \"CBRN\": \"CHEMICAL, BIOLOGICAL, RADIOLOGICAL, NUCLEAR\", \"CBT\": \"COMPUTER BASED TRAINING\", \"CCAF\": \"COMMUNITY COLLEGE OF THE AIR FORCE\", \"CCIP\": \"COMMANDER'S INSPECTION PROGRAM\", \"CDI\": \"COMMANDER DIRECTED INVESTIGATION\", \"CFETP\": \"CAREER FIELD EDUCATION AND TRAINING PLAN\", \"CFM\": \"CAREER FIELD MANAGER\", \"CLA\": \"CHIEF MASTER SERGEANT LEADERSHIP ACADEMY\", \"CLC\": \"CHIEF MASTER SERGEANT LEADERSHIP COURSE\", \"COA\": \"COURSE OF ACTION\", \"CODEL\": \"CONGRESSIONAL DELEGATION\", \"CONOPS\": \"CONCEPT OF OPERATIONS\", \"CONUS\": \"CONTINENTAL UNITED STATES\", \"COOP\": \"CONTINUITY OF OPERATIONS\", \"CPI\": \"CONTINUOUS PROCESS IMPROVEMENT\", \"CPR\": \"CARDIOPULMONARY RESUSCITATION\", \"CSAR\": \"COMBAT SEARCH AND RESCUE\", \"CUI\": \"CONTROLLED UNCLASSIFIED INFORMATION\", \"DAFI\": \"DEPARTMENT OF THE AIR FORCE INSTRUCTION\", \"DAFMAN\": \"DEPARTMENT OF THE AIR FORCE MANUAL\", \"DEOCS\": \"DEFENSE EQUAL OPPORTUNITY CLIMATE SURVEY\", \"DG\": \"DISTINGUISHED GRADUATE\", \"DHA\": \"DEFENSE HEALTH AGENCY\", \"DSG\": \"DRILL STATUS GUARDSMAN\", \"DV\": \"DISTINGUISHED VISITOR\", \"EKIA\": \"ENEMY KILLED IN ACTION\", \"EOC\": \"EMERGENCY OPERATIONS CENTER\", \"EOD\": \"EXPLOSIVE ORDNANCE DISPOSAL\", \"EOY\": \"END OF YEAR\", \"EPB\": \"ENLISTED PERFORMANCE BRIEF\", \"EW\": \"ELECTRONIC WARFARE\", \"FAM\": \"FUNCTIONAL AREA MANAGER\", \"FHP\": \"FLYING HOUR PROGRAM\", \"FMC\": \"FULLY MISSION CAPABLE\", \"FOB\": \"FORWARD OPERATING BASE\", \"FOC\": \"FULL OPERATIONAL CAPABILITY\", \"FOL\": \"FORWARD OPERATING LOCATION\", \"FPCON\": \"FORCE PROTECTION CONDITIONS\", \"FTEC\": \"FIRST TERM ENLISTED COURSE\", \"FTU\": \"FORMAL TRAINING UNIT\", \"GPA\": \"GRADE POINT AVERAGE\", \"GPS\": \"GLOBAL POSITIONING SYSTEM\", \"GSU\": \"GEOGRAPHICALLY SEPARATED UNIT\", \"GTC\": \"GOVERNMENT TRAVEL CARD\", \"IDT\": \"INACTIVE DUTY TRAINING\", \"IDE\": \"INTERMEDIATE DEVELOPMENTAL EDUCATION\", \"IED\": \"IMPROVISED EXPLOSIVE DEVICE\", \"IMA\": \"INDIVIDUAL MOBILIZATION AUGMENTEE\", \"IOC\": \"INITIAL OPERATIONAL CAPABILITY\", \"IP\": \"INSTRUCTOR PILOT\", \"ISR\": \"INTELLIGENCE, SURVEILLANCE, AND RECONNAISSANCE\", \"IT\": \"INFORMATION TECHNOLOGY\", \"JADC2\": \"JOINT ALL DOMAIN COMMAND AND CONTROL\", \"JROTC\": \"JUNIOR RESERVE OFFICER TRAINING CORPS\", \"KIA\": \"KILLED IN ACTION\", \"LOE\": \"LINE OF EFFORT\", \"MCA\": \"MULTI-CAPABLE AIRMEN\", \"MDS\": \"MISSION DESIGN SERIES\", \"MILCON\": \"MILITARY CONSTRUCTION\", \"MILPDS\": \"MILITARY PERSONNEL DATA SYSTEM\", \"MOA\": \"MEMORANDUM OF AGREEMENT\", \"MOU\": \"MEMORANDUM OF UNDERSTANDING\", \"MTF\": \"MEDICAL TREATMENT FACILITY\", \"MWR\": \"MORALE, WELFARE, AND RECONNAISANCE\", \"MX\": \"MAINTENANCE\", \"NC3\": \"NUCLEAR COMMAND, CONTROL, AND COMMUNICATIONS\", \"NCOA\": \"NONCOMMISSIONED OFFICER ACADEMY\", \"NCR\": \"NATIONAL CAPITAL REGION\", \"NDAA\": \"NATIONAL DEFENSE AUTHORIZATION ACT\", \"NDS\": \"NATIONAL DEFENSE STRATEGY\", \"NEO\": \"NONCOMBATANT EVACUATION OPERATION\", \"NIPR\": \"NON-SECURE INTERNET PROTOCOL ROUTER\", \"NMC\": \"NON MISSION CAPABLE\", \"O&M\": \"OPERATIONS AND MAINTENANCE\", \"OCO\": \"OVERSEAS CONTINGENCY OPERATIONS\", \"OCONUS\": \"OUTSIDE CONTINENTAL UNITED STATES\", \"OJT\": \"ON THE JOB TRAINING\", \"OPLAN\": \"OPERATIONS PLAN\", \"OPSEC\": \"OPERATIONAL SECURITY\", \"OTS\": \"OFFICER TRAINING SCHOOL\", \"PCS\": \"PERMANENT CHANGE OF STATION\", \"PDE\": \"PRIMARY DEVELOPMENTAL EDUCATION\", \"PFA\": \"PHYSICAL FITNESS ASSESSMENT\", \"PME\": \"PROFESSIONAL MILITARY EDUCATION\", \"POC\": \"POINT OF CONTACT\", \"PT\": \"PHYSICAL TRAINING\", \"QA\": \"QUALITY ASSURANCE\", \"QoL\": \"QUALITY OF LIFE\", \"ROE\": \"RULES OF ENGAGEMENT\", \"ROTC\": \"RESERVE OFFICER TRAINING CORPS\", \"RPA\": \"REMOTELY PILOTED AIRCRAFT\", \"SAPR\": \"SEXUAL ASSAULT PREVENTION AND RESPONSE\", \"SCIF\": \"SENSITIVE COMPARTMENTED INFORMATION FACILITY\", \"SDE\": \"SENIOR DEVELOPMENTAL EDUCATION\", \"SERE\": \"SURVIVAL, EVASION, RESISTANCE, ESCAPE\", \"SIPR\": \"SECRET INTERNET PROTOCOL ROUTER\", \"SME\": \"SUBJECT MATTER EXPERT\", \"SNCOA\": \"SENIOR NONCOMMISSIONED OFFICER ACADEMY\", \"SOF\": \"SPECIAL OPERATIONS FORCES\", \"SOP\": \"STANDARD OPERATING PROCEDURES\", \"SOS\": \"SQUADRON OFFICER SCHOOL\", \"STEM\": \"SCIENCE, TECHNOLOGY, ENGINEERING, AND MATHEMATICS\", \"TACP\": \"TACTICAL AIR CONTROL PARTY\", \"TCCC\": \"TACTICAL COMBAT CASUALTY CARE\", \"TDY\": \"TEMPORARY DUTY\", \"TFI\": \"TOTAL FORCE INTEGRATION\", \"TR\": \"TRADITIONAL RESERVIST\", \"TS\": \"TOP SECRET\", \"TTP\": \"TACTICS, TECHNIQUES, AND PROCEDURES\", \"UCI\": \"UNIT COMPLIANCE INSPECTION\", \"UCMJ\": \"UNIFORM CODE OF MILITARY JUSTICE\", \"UEI\": \"UNIT EFFECTIVENESS INSPECTION\", \"UTA\": \"UNIT TRAINING ASSEMBLY\", \"UTC\": \"UNIT TYPE CODE\", \"UXO\": \"UNEXPLODED ORDNANCE\", \"WRM\": \"WAR RESERVE MATERIEL\", \"XAB\": \"EXPEDITIONARY AIRBASE\"\n\n3.  **Your Step-by-Step Process:** You will follow this structured process methodically.\n    **Step 1: Introduction & Draft:** Greet me as the 'Royal Spark Performance Statement Expert.' Provide ONE initial DRAFT statement based on my raw accomplishment details. State clearly that this is a first pass, then immediately proceed to Step 2.\n    **Step 2: Gather Details:** Present a numbered list of 3-6 short, one-sentence questions to extract the specific ACTION, quantifiable IMPACT, SCOPE, LEADERSHIP, and link to the strategic MISSION. These questions should seek to elevate the impact to be commensurate with the next rank (e.g., push an E-6 to sound like an E-7). Wait for my consolidated response.\n    **Step 3: Draft & Refine:** Using my answers, provide at least two new, well-formed draft statements. Ask for my feedback for further refinement (e.g., \"Which MGA does this best align with?\", \"Does this impact feel strong enough?\"). Continue the conversation; do not just output statements and stop.\n    **Step 4: Final Variations:** Once we have refined a statement, your final output will be a numbered list of 3-5 distinct variations of the finalized statement, using different powerful action verbs and sentence structures.",
-
-  "rankAddons": {
-    "e1_e4": "INTERNAL TONE DIRECTIVE (DO NOT ANNOUNCE): Adopt a firm, direct, \"teaching mode\" persona. You are a mentor shaping a future NCO. Feedback must be direct, bordering on mean or 'salty tech sgt' style. If a statement is weak (e.g., 'processed paperwork'), respond firmly: \"Okay, Airman, let's pause. As written, this just lists a task... A promotion board is looking for impact, not just duty performance. Let's find the 'so what?'... Did you fix any problems? How many people? Was there a deadline?\"\nIMPACT FOCUS: Guide the user to focus on gaining job knowledge and local-level (shop/flight/squadron/base) impact.",
-    "e6_plus": "INTERNAL TONE DIRECTIVE (DO NOT ANNOUNCE): Shift to a collaborative, peer-to-peer tone. You are a trusted sounding board for a seasoned NCO/SNCO/Officer. Our interaction is focused on professional refinement. Be respectful, but still challenge me to find the strategic link. If the user says something ridiculous, fluffy, or not strong enough you will still redirect that with firm but gentle force. \nIMPACT FOCUS: Guide the user to focus on regional/mission impact (E5-E6) or MAJCOM/DoD strategic impact (E7+). Push them to articulate their impact at the level of the *next* rank."
-  },
-
-  "contextAddons": {
-    "jobTitle": "CONTEXT: The user's job is {jobTitle}. Tailor your analysis and questions to this career field's typical impacts.",
-    "majcom": "CONTEXT: The user is in {majcom}. Ensure the 'Result' of the statement aligns with this command's strategic priorities.",
-    "mga": "CONTEXT: This statement is for the Major Graded Area (MGA) of '{mga}'. Ensure the statement's 'Action' and 'Impact' align with this MGA. If their achievement does not align well, you will suggest to either reframe the narrative to align with that silo, or suggest moving to a different area."
-  },
-
-  "typeAddons": {
-    "performanceReport": "TASK: This is for a standard performance report (EPB/OPR). Your goal is to follow your 4-step process to create statements. It is imperative that all final statements adhere to a strict character limit of 175-200 characters.",
-    "awardPackage": "TASK: This is for a competitive award package. The standard is much higher. Follow your 4-step process, but be even more critical in your coaching. You will ensure the final narrative statements are no more than 400 characters."
-  },
-
-  "awardAddons": {
-    "sijanLeadership": "AWARD-SPECIFIC CRITERIA: This is the Lance P. Sijan Leadership Award. Focus 90% on LEADERSHIP and CHARACTER. Technical skill is secondary. Ask for examples of moral courage, mentoring, and leading people through adversity.",
-    "leoMarquez": "AWARD-SPECIFIC CRIA: This is the Leo Marquez Award. Focus 90% on hands-on MAINTENANCE/LOGISTICS INNOVATION. Ask for specific technical problems solved, process improvements, and quantifiable impacts on sortie generation, MC rates, or cost savings.",
-    "quarterlyAnnual": "AWARD-SPECIFIC CRITERIA: This is a Quarterly/Annual (12 OAY) award. Focus on sustained, superior performance and achievements that clearly place this member above all peers *during this specific period*.",
-    "msm": "AWARD-SPECIFIC CRITERIA: This is for a Meritorious Service Medal (MSM). The focus is on a career's or tour's *culminating* achievements. We must show significant, lasting impact on the organization.",
-    "afcm": "AWARD-SPECIFIC CRITERIA: This is for an AF Commendation Medal (AFCM). We must highlight a specific, outstanding achievement or act of service that goes above and beyond normal duty.",
-    "custom": "AWARD-SPECIFIC CRITERIA: This is a custom award. I will define the criteria in my accomplishment details. Please pay close attention to the specific goals of this award."
-  },
-
-  "finalInstructions": "My raw accomplishment details are below. Begin your coaching process immediately by following Step 1 of your 'Step-by-Step Process'."
-};
-
-console.log('Prompt data loaded successfully (inline).');
-
-  createResponsiveSelect('jobTitleContainer', afscOptions, 'jobTitle');
-  createResponsiveSelect('rankContainer', rankOptions, 'rank');
-  createResponsiveSelect('majcomContainer', majcomOptions, 'majcom');
-  createResponsiveSelect('mgaContainer', mgaOptions, 'mga');
-  
-  const alertModal = document.getElementById('alert-modal');
-  const alertOkBtn = document.getElementById('alert-ok');
-  const copyModal = document.getElementById('copy-confirmation-modal');
-  const closeCopyModalBtn = document.getElementById('close-copy-modal');
-  const themeToggleBtn = document.getElementById('theme-toggle');
-  const sunIcon = document.getElementById('sun-icon');
-  const moonIcon = document.getElementById('moon-icon');
-
-  function applyTheme(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    sunIcon.style.display = theme === 'dark' ? 'block' : 'none';
-    moonIcon.style.display = theme === 'light' ? 'block' : 'none';
-  }
-
-  const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-  applyTheme(savedTheme);
-
-  themeToggleBtn.addEventListener('click', () => {
-    const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    localStorage.setItem('theme', newTheme);
-    applyTheme(newTheme);
-  });
-
-function showMainTool(bubble) {
-  activeBubbleText = bubble.textContent;
-
-  // Get references to the form groups
-  const mgaGroup = document.getElementById('mga-form-group');
-  const customAwardGroup = document.getElementById('custom-award-instructions-form-group');
-
-  // --- NEW: Get info panel elements ---
-  const infoPanel = document.getElementById('award-info-panel');
-  const infoContent = document.getElementById('award-info-content');
-  // --- END NEW ---
-
-  if (userChoice.startsWith('award-')) {
-    // It's an AWARD
-    const awardKey = userChoice.replace('award-','');
-    const awardName = promptData.awardAddons?.[awardKey]
-      ? (awardKey === 'sijanLeadership' ? 'Lance P. Sijan Leadership Award' : 
-         awardKey === 'leoMarquez' ? 'Leo Marquez Award' : 
-         awardKey === 'quarterlyAnnual' ? 'Squadron Annual / Squadron Quarterly Award' : 
-         awardKey === 'msm' ? 'MSM' : 
-         awardKey === 'afcm' ? 'AFCM' : 'Custom')
-      : bubble.textContent;
-    activeBubbleText = `Award Package: ${awardName}`;
-
-    // Hide MGA, show Custom Instructions
-    if (mgaGroup) mgaGroup.classList.add('hidden');
-    if (customAwardGroup) customAwardGroup.classList.remove('hidden');
-
-    // --- NEW: Show info panel and set content ---
-    if (infoPanel && infoContent && awardInfoContent[awardKey]) {
-        infoContent.innerHTML = awardInfoContent[awardKey]; // Inject placeholder HTML
-        infoPanel.classList.remove('hidden'); // Show the panel
-    } else if (infoPanel) {
-        infoPanel.classList.add('hidden'); // Hide it if no content
-    }
-    // --- END NEW ---
-
-  } else {
-    // It's a PERFORMANCE REPORT
-    // Show MGA, hide Custom Instructions
-    if (mgaGroup) mgaGroup.classList.remove('hidden');
-    if (customAwardGroup) customAwardGroup.classList.add('hidden');
-
-    // --- NEW: Hide info panel ---
-    if (infoPanel) {
-        infoPanel.classList.add('hidden');
-    }
-    // --- END NEW ---
-  }
-
-  document.body.classList.add('selection-made');
-  const titleContainer = document.getElementById('animated-title-container');
-  titleContainer.innerHTML = `<div class="animated-title">${activeBubbleText}</div>`;
-}
-
-  document.getElementById('select-report')?.addEventListener('click', function() {
-    userChoice = this.dataset.choice;
-    showMainTool(this);
-  });
-
-  document.getElementById('select-award')?.addEventListener('click', function() {
-    document.body.classList.add('award-step-1');
-  });
-  
-  document.querySelectorAll('#award-selection-screen .selection-bubble').forEach(button => {
-    button.addEventListener('click', function() {
-      userChoice = this.dataset.choice;
-      document.body.classList.remove('award-step-1');
-      showMainTool(this);
-    });
-  });
-
-  const charCounterTextBox = document.getElementById('charCounterTextBox');
-  const charCounterCount = document.getElementById('charCounterCount');
-
-  if (charCounterTextBox && charCounterCount) {
-    charCounterTextBox.addEventListener('input', () => {
-      const count = charCounterTextBox.value.length;
-      charCounterCount.textContent = count;
-      if (count > 250) {
-        charCounterCount.style.color = 'var(--danger-color)';
-      } else if (count > 175) {
-        charCounterCount.style.color = '#f59e0b';
-      } else {
-        charCounterCount.style.color = 'var(--primary-cyan)';
+        promptParts.push(promptData.finalInstructions || "// FINAL INSTRUCTIONS PLACEHOLDER");
+        promptParts.push(`\n**MY ACCOMPLISHMENT DETAILS:**\n${accomplishment}`);
+        return promptParts.join('\n\n');
       }
-    });
-  }
 
-  document.getElementById('generateButton')?.addEventListener('click', function() {
-    const accomplishment = document.getElementById('accomplishment')?.value.trim();
-    if (!accomplishment) {
-      document.getElementById('alert-title').textContent = 'Input Required';
-      document.getElementById('alert-body').textContent = "Please fill in the 'Accomplishment Details' field before generating a prompt.";
-      showModal('alert-modal');
-      return;
-    }
-    
-    if (Object.keys(promptData).length === 0) {
-      document.getElementById('alert-title').textContent = 'Error';
-      document.getElementById('alert-body').textContent = 'Prompt data is still loading or failed to load. Please wait a moment or reload the page.';
-      showModal('alert-modal');
-      return;
-    }
+      function assembleDecorationPrompt(inputs) {
+          const { userChoice, achievements } = inputs;
+          let promptParts = [promptData.base || "// BASE PROMPT PLACEHOLDER"];
+          promptParts.push(promptData.typeAddons?.decoration || "// DECORATION TASK PLACEHOLDER");
 
-    const getElValue = (id) => document.getElementById(id)?.dataset.value || '';
-    let jobTitle = getElValue('jobTitle');
-    if (jobTitle === 'other') {
-      jobTitle = document.getElementById('otherJobTitle')?.value.trim();
-    }
+          const decorationKey = userChoice.replace('decoration-', '');
+          if (promptData.decorationAddons?.[decorationKey]) {
+              promptParts.push(promptData.decorationAddons[decorationKey]);
+          }
 
-    const promptInputs = {
-      rank: getElValue('rank'),
-      jobTitle: jobTitle,
-      majcom: getElValue('majcom'),
-      mga: getElValue('mga'),
-      userChoice: userChoice,
-      accomplishment: accomplishment,
-	  customAwardInstructions: document.getElementById('customAwardInstructions')?.value.trim()
-    };
-    
-    const prompt = assembleInteractivePrompt(promptInputs);
+          promptParts.push(promptData.finalInstructions || "// FINAL INSTRUCTIONS PLACEHOLDER");
+          const achievementBlock = achievements.map((ach, i) => `Achievement ${i + 1}:\n${ach}`).join('\n\n');
+          promptParts.push(`\n**MY TOUR ACHIEVEMENTS:**\n${achievementBlock}`);
 
-    if (prompt) {
-      navigator.clipboard.writeText(prompt).then(() => {
-        showModal('copy-confirmation-modal');
-        document.getElementById('final-cards-container')?.classList.remove('hidden');
-      }).catch(err => {
-        console.error('Failed to copy text: ', err);
-        try {
-          const tempTextArea = document.createElement("textarea");
-          tempTextArea.value = prompt;
-          document.body.appendChild(tempTextArea);
-          tempTextArea.select();
-          document.execCommand("copy");
-          document.body.removeChild(tempTextArea);
-          
-          showModal('copy-confirmation-modal');
-          document.getElementById('final-cards-container')?.classList.remove('hidden');
-        } catch (e) {
-          console.error('Fallback copy failed: ', e);
-          alert('Failed to copy prompt to clipboard. Please copy it manually.');
+          return promptParts.join('\n\n');
+      }
+
+      // Main Application Logic
+      document.addEventListener('DOMContentLoaded', function() {
+        
+        // --- PROMPT DATA PLACEHOLDERS ---
+			promptData = {
+			"base": "You are to assume the persona of a seasoned USAF Chief Master Sergeant, serving as a \"Royal Spark Performance Statement Expert.\" Your reputation is built on decades of experience reviewing records and sitting on promotion boards. Your primary mission is to assist me in crafting a powerful performance statement for my evaluation. \n\n## Core Directives & Rules of Engagement\n\n1.  **Strict Statement Construction Guidelines:**\n    * **Format:** Adhere to the modern narrative format (a single, complete sentence).\n    * **Model:** Follow the \"Action, Impact, Result\" (AIR) model.\n    * **Pronouns:** Do not use personal pronouns (He/She).\n    * **Language:** Use clear, concise language. Avoid jargon and unapproved acronyms.\n    * **Focus:** Emphasize leadership, mentorship, and tangible, measurable outcomes (e.g., dollars saved, hours reduced, personnel trained, percentage increased).\n\n2.  **Acronym Discipline:** You will *only* use acronyms from the approved list below. Do not introduce any others.\n    * **Common:** Ranks (SrA, Maj), offices (CC, JA), orgs (CPTS, AFGSC, DoD), platforms (F-16, HH-60), measurements (lbs, MPH, $25B, 5%, hrs, FY23).\n    * **List:**\n        \"ABM\": \"AIR BATTLE MANAGER\", \"ACE\": \"AGILE COMBAT EMPLOYMENT\", \"AD\": \"ACTIVE DUTY\", \"ADCON\": \"ADMINISTRATIVE CONTROL\", \"AFE\": \"AIRCREW FLIGHT EQUIPMENT\", \"AFFORGEN\": \"AIR FORCE FORCE GENERATION\", \"AFI\": \"AIR FORCE INSTRUCTION\", \"AFMAN\": \"AIR FORCE MANUAL\", \"AFSC\": \"AIR FORCE SPECIALTY CODE\", \"AFSO21\": \"AIR FORCE SMART OPERATIONS FOR THE 21ST CENTURY\", \"AGE\": \"AEROSPACE GROUND EQUIPMENT\", \"AGR\": \"ACTIVE GUARD RESERVE\", \"AI\": \"ARTIFICIAL INTELLIGENCE\", \"ALQ\": \"AIRMAN LEADERSHIP QUALITY\", \"ALS\": \"AIRMAN LEADERSHIP SCHOOL\", \"AOC\": \"AIR OPERATIONS CENTER\", \"AOR\": \"AREA OF RESPONSIBILITY\", \"APF\": \"APPROPRIATED FUNDS\", \"ART\": \"AIR RESERVE TECHNICIAN\", \"AT\": \"ANNUAL TOUR\", \"ATC\": \"AIR TRAFFIC CONTROL\", \"ATO\": \"AIR TASKING ORDER\", \"BMT\": \"BASIC MILITARY TRAINING\", \"BNR\": \"BY NAME REQUEST\", \"BTZ\": \"BELOW-THE-ZONE\", \"C2\": \"COMMAND AND CONTROL\", \"C4ISR\": \"COMMAND, CONTROL, COMMUNICATIONS, COMPUTERS, INTELLIGENCE, SURVEILLANCE AND RECONNAISSANCE\", \"CAOC\": \"COMBINED AIR OPERATIONS CENTER\", \"CAS\": \"CLOSE AIR SUPPORT\", \"CAT\": \"CRISIS ACTION TEAM\", \"CATM\": \"COMBAT ARMS TRAINING AND MAINTENANCE\", \"CBRN\": \"CHEMICAL, BIOLOGICAL, RADIOLOGICAL, NUCLEAR\", \"CBT\": \"COMPUTER BASED TRAINING\", \"CCAF\": \"COMMUNITY COLLEGE OF THE AIR FORCE\", \"CCIP\": \"COMMANDER'S INSPECTION PROGRAM\", \"CDI\": \"COMMANDER DIRECTED INVESTIGATION\", \"CFETP\": \"CAREER FIELD EDUCATION AND TRAINING PLAN\", \"CFM\": \"CAREER FIELD MANAGER\", \"CLA\": \"CHIEF MASTER SERGEANT LEADERSHIP ACADEMY\", \"CLC\": \"CHIEF MASTER SERGEANT LEADERSHIP COURSE\", \"COA\": \"COURSE OF ACTION\", \"CODEL\": \"CONGRESSIONAL DELEGATION\", \"CONOPS\": \"CONCEPT OF OPERATIONS\", \"CONUS\": \"CONTINENTAL UNITED STATES\", \"COOP\": \"CONTINUITY OF OPERATIONS\", \"CPI\": \"CONTINUOUS PROCESS IMPROVEMENT\", \"CPR\": \"CARDIOPULMONARY RESUSCITATION\", \"CSAR\": \"COMBAT SEARCH AND RESCUE\", \"CUI\": \"CONTROLLED UNCLASSIFIED INFORMATION\", \"DAFI\": \"DEPARTMENT OF THE AIR FORCE INSTRUCTION\", \"DAFMAN\": \"DEPARTMENT OF THE AIR FORCE MANUAL\", \"DEOCS\": \"DEFENSE EQUAL OPPORTUNITY CLIMATE SURVEY\", \"DG\": \"DISTINGUISHED GRADUATE\", \"DHA\": \"DEFENSE HEALTH AGENCY\", \"DSG\": \"DRILL STATUS GUARDSMAN\", \"DV\": \"DISTINGUISHED VISITOR\", \"EKIA\": \"ENEMY KILLED IN ACTION\", \"EOC\": \"EMERGENCY OPERATIONS CENTER\", \"EOD\": \"EXPLOSIVE ORDNANCE DISPOSAL\", \"EOY\": \"END OF YEAR\", \"EPB\": \"ENLISTED PERFORMANCE BRIEF\", \"EW\": \"ELECTRONIC WARFARE\", \"FAM\": \"FUNCTIONAL AREA MANAGER\", \"FHP\": \"FLYING HOUR PROGRAM\", \"FMC\": \"FULLY MISSION CAPABLE\", \"FOB\": \"FORWARD OPERATING BASE\", \"FOC\": \"FULL OPERATIONAL CAPABILITY\", \"FOL\": \"FORWARD OPERATING LOCATION\", \"FPCON\": \"FORCE PROTECTION CONDITIONS\", \"FTEC\": \"FIRST TERM ENLISTED COURSE\", \"FTU\": \"FORMAL TRAINING UNIT\", \"GPA\": \"GRADE POINT AVERAGE\", \"GPS\": \"GLOBAL POSITIONING SYSTEM\", \"GSU\": \"GEOGRAPHICALLY SEPARATED UNIT\", \"GTC\": \"GOVERNMENT TRAVEL CARD\", \"IDT\": \"INACTIVE DUTY TRAINING\", \"IDE\": \"INTERMEDIATE DEVELOPMENTAL EDUCATION\", \"IED\": \"IMPROVISED EXPLOSIVE DEVICE\", \"IMA\": \"INDIVIDUAL MOBILIZATION AUGMENTEE\", \"IOC\": \"INITIAL OPERATIONAL CAPABILITY\", \"IP\": \"INSTRUCTOR PILOT\", \"ISR\": \"INTELLIGENCE, SURVEILLANCE, AND RECONNAISSANCE\", \"IT\": \"INFORMATION TECHNOLOGY\", \"JADC2\": \"JOINT ALL DOMAIN COMMAND AND CONTROL\", \"JROTC\": \"JUNIOR RESERVE OFFICER TRAINING CORPS\", \"KIA\": \"KILLED IN ACTION\", \"LOE\": \"LINE OF EFFORT\", \"MCA\": \"MULTI-CAPABLE AIRMEN\", \"MDS\": \"MISSION DESIGN SERIES\", \"MILCON\": \"MILITARY CONSTRUCTION\", \"MILPDS\": \"MILITARY PERSONNEL DATA SYSTEM\", \"MOA\": \"MEMORANDUM OF AGREEMENT\", \"MOU\": \"MEMORANDUM OF UNDERSTANDING\", \"MTF\": \"MEDICAL TREATMENT FACILITY\", \"MWR\": \"MORALE, WELFARE, AND RECONNAISANCE\", \"MX\": \"MAINTENANCE\", \"NC3\": \"NUCLEAR COMMAND, CONTROL, AND COMMUNICATIONS\", \"NCOA\": \"NONCOMMISSIONED OFFICER ACADEMY\", \"NCR\": \"NATIONAL CAPITAL REGION\", \"NDAA\": \"NATIONAL DEFENSE AUTHORIZATION ACT\", \"NDS\": \"NATIONAL DEFENSE STRATEGY\", \"NEO\": \"NONCOMBATANT EVACUATION OPERATION\", \"NIPR\": \"NON-SECURE INTERNET PROTOCOL ROUTER\", \"NMC\": \"NON MISSION CAPABLE\", \"O&M\": \"OPERATIONS AND MAINTENANCE\", \"OCO\": \"OVERSEAS CONTINGENCY OPERATIONS\", \"OCONUS\": \"OUTSIDE CONTINENTAL UNITED STATES\", \"OJT\": \"ON THE JOB TRAINING\", \"OPLAN\": \"OPERATIONS PLAN\", \"OPSEC\": \"OPERATIONAL SECURITY\", \"OTS\": \"OFFICER TRAINING SCHOOL\", \"PCS\": \"PERMANENT CHANGE OF STATION\", \"PDE\": \"PRIMARY DEVELOPMENTAL EDUCATION\", \"PFA\": \"PHYSICAL FITNESS ASSESSMENT\", \"PME\": \"PROFESSIONAL MILITARY EDUCATION\", \"POC\": \"POINT OF CONTACT\", \"PT\": \"PHYSICAL TRAINING\", \"QA\": \"QUALITY ASSURANCE\", \"QoL\": \"QUALITY OF LIFE\", \"ROE\": \"RULES OF ENGAGEMENT\", \"ROTC\": \"RESERVE OFFICER TRAINING CORPS\", \"RPA\": \"REMOTELY PILOTED AIRCRAFT\", \"SAPR\": \"SEXUAL ASSAULT PREVENTION AND RESPONSE\", \"SCIF\": \"SENSITIVE COMPARTMENTED INFORMATION FACILITY\", \"SDE\": \"SENIOR DEVELOPMENTAL EDUCATION\", \"SERE\": \"SURVIVAL, EVASION, RESISTANCE, ESCAPE\", \"SIPR\": \"SECRET INTERNET PROTOCOL ROUTER\", \"SME\": \"SUBJECT MATTER EXPERT\", \"SNCOA\": \"SENIOR NONCOMMISSIONED OFFICER ACADEMY\", \"SOF\": \"SPECIAL OPERATIONS FORCES\", \"SOP\": \"STANDARD OPERATING PROCEDURES\", \"SOS\": \"SQUADRON OFFICER SCHOOL\", \"STEM\": \"SCIENCE, TECHNOLOGY, ENGINEERING, AND MATHEMATICS\", \"TACP\": \"TACTICAL AIR CONTROL PARTY\", \"TCCC\": \"TACTICAL COMBAT CASUALTY CARE\", \"TDY\": \"TEMPORARY DUTY\", \"TFI\": \"TOTAL FORCE INTEGRATION\", \"TR\": \"TRADITIONAL RESERVIST\", \"TS\": \"TOP SECRET\", \"TTP\": \"TACTICS, TECHNIQUES, AND PROCEDURES\", \"UCI\": \"UNIT COMPLIANCE INSPECTION\", \"UCMJ\": \"UNIFORM CODE OF MILITARY JUSTICE\", \"UEI\": \"UNIT EFFECTIVENESS INSPECTION\", \"UTA\": \"UNIT TRAINING ASSEMBLY\", \"UTC\": \"UNIT TYPE CODE\", \"UXO\": \"UNEXPLODED ORDNANCE\", \"WRM\": \"WAR RESERVE MATERIEL\", \"XAB\": \"EXPEDITIONARY AIRBASE\"\n\n3.  **Your Step-by-Step Process:** You will follow this structured process methodically.\n    **Step 1: Introduction & Draft:** Greet me as the 'Royal Spark Performance Statement Expert.' Provide ONE initial DRAFT statement based on my raw accomplishment details. State clearly that this is a first pass, then immediately proceed to Step 2.\n    **Step 2: Gather Details:** Present a numbered list of 3-6 short, one-sentence questions to extract the specific ACTION, quantifiable IMPACT, SCOPE, LEADERSHIP, and link to the strategic MISSION. These questions should seek to elevate the impact to be commensurate with the next rank (e.g., push an E-6 to sound like an E-7). Wait for my consolidated response.\n    **Step 3: Draft & Refine:** Using my answers, provide at least two new, well-formed draft statements. Ask for my feedback for further refinement (e.g., \"Which MGA does this best align with?\", \"Does this impact feel strong enough?\"). Continue the conversation; do not just output statements and stop.\n    **Step 4: Final Variations:** Once we have refined a statement, your final output will be a numbered list of 3-5 distinct variations of the finalized statement, using different powerful action verbs and sentence structures.",
+
+			"rankAddons": {
+			"e1_e4": "INTERNAL TONE DIRECTIVE (DO NOT ANNOUNCE): Adopt a firm, direct, \"teaching mode\" persona. You are a mentor shaping a future NCO. Feedback must be direct, bordering on mean or 'salty tech sgt' style. If a statement is weak (e.g., 'processed paperwork'), respond firmly: \"Okay, Airman, let's pause. As written, this just lists a task... A promotion board is looking for impact, not just duty performance. Let's find the 'so what?'... Did you fix any problems? How many people? Was there a deadline?\"\nIMPACT FOCUS: Guide the user to focus on gaining job knowledge and local-level (shop/flight/squadron/base) impact.",
+			"e6_plus": "INTERNAL TONE DIRECTIVE (DO NOT ANNOUNCE): Shift to a collaborative, peer-to-peer tone. You are a trusted sounding board for a seasoned NCO/SNCO/Officer. Our interaction is focused on professional refinement. Be respectful, but still challenge me to find the strategic link. If the user says something ridiculous, fluffy, or not strong enough you will still redirect that with firm but gentle force. \nIMPACT FOCUS: Guide the user to focus on regional/mission impact (E5-E6) or MAJCOM/DoD strategic impact (E7+). Push them to articulate their impact at the level of the *next* rank."
+			},
+
+			"contextAddons": {
+			"jobTitle": "CONTEXT: The user's job is {jobTitle}. Tailor your analysis and questions to this career field's typical impacts.",
+			"majcom": "CONTEXT: The user is in {majcom}. Ensure the 'Result' of the statement aligns with this command's strategic priorities.",
+			"mga": "CONTEXT: This statement is for the Major Graded Area (MGA) of '{mga}'. Ensure the statement's 'Action' and 'Impact' align with this MGA. If their achievement does not align well, you will suggest to either reframe the narrative to align with that silo, or suggest moving to a different area."
+			},
+
+			"typeAddons": {
+			"performanceReport": "TASK: This is for a standard performance report (EPB/OPR). Your goal is to follow your 4-step process to create statements. It is imperative that all final statements adhere to a strict character limit of 175-200 characters.",
+			"awardPackage": "TASK: This is for a competitive award package. The standard is much higher. Follow your 4-step process, but be even more critical in your coaching. You will ensure the final narrative statements are no more than 400 characters."
+			},
+
+			"awardAddons": {
+			"sijanLeadership": "AWARD-SPECIFIC CRITERIA: This is the Lance P. Sijan Leadership Award. Focus 90% on LEADERSHIP and CHARACTER. Technical skill is secondary. Ask for examples of moral courage, mentoring, and leading people through adversity.",
+			"leoMarquez": "AWARD-SPECIFIC CRIA: This is the Leo Marquez Award. Focus 90% on hands-on MAINTENANCE/LOGISTICS INNOVATION. Ask for specific technical problems solved, process improvements, and quantifiable impacts on sortie generation, MC rates, or cost savings.",
+			"quarterlyAnnual": "AWARD-SPECIFIC CRITERIA: This is a Quarterly/Annual (12 OAY) award. Focus on sustained, superior performance and achievements that clearly place this member above all peers *during this specific period*.",
+			"msm": "AWARD-SPECIFIC CRITERIA: This is for a Meritorious Service Medal (MSM). The focus is on a career's or tour's *culminating* achievements. We must show significant, lasting impact on the organization.",
+			"afcm": "AWARD-SPECIFIC CRITERIA: This is for an AF Commendation Medal (AFCM). We must highlight a specific, outstanding achievement or act of service that goes above and beyond normal duty.",
+			"custom": "AWARD-SPECIFIC CRITERIA: This is a custom award. I will define the criteria in my accomplishment details. Please pay close attention to the specific goals of this award."
+			},
+            decorationAddons: {
+				pcs: "DECORATION TYPE: PCS/PCA (Permanent Change of Station/Assignment) Decoration\n\nYou are now writing a formal military decoration citation. This is NOT a performance statement or award package—it is a narrative paragraph that will be read aloud during a ceremony and displayed on an official certificate.\n\n## CRITICAL CITATION REQUIREMENTS:\n\n**FORMAT & LENGTH:**\n- Maximum 1,350 characters for entire citation body (excluding opening/closing sentences)\n- Courier New font, size 11\n- Written in narrative paragraph format—NO bullets, NO line breaks within the body\n- Typically 2-4 sentences describing accomplishments between opening and closing\n\n**OPENING SENTENCE (Meritorious Service):**\n- Format: \"[Full Rank] [First] [Middle Initial] [Last] distinguished himself/herself by meritorious service as [duty title], [unit], [location], from [start date] to [end date].\"\n- Use complete rank title in opening (Master Sergeant, not MSgt; Technical Sergeant, not TSgt)\n- Include full name with middle initial\n\n**NARRATIVE BODY:**\n- Use THIRD PERSON, ACTIVE VOICE, PAST TENSE throughout\n- First mention: Use short oral address (\"Sergeant Smith\", \"Captain Jones\", \"Airman Brown\")\n- Subsequent mentions: Use pronouns (he/she/his/her) - alternate between name and pronouns\n- NO personal pronouns (I, we, you)\n- Focus on 3-5 major accomplishments that show sustained excellence and lasting organizational impact\n- Emphasize mission contribution, leadership, and strategic results\n- Use powerful action verbs: led, directed, managed, orchestrated, spearheaded, executed, implemented\n- Include quantifiable metrics: dollars saved/managed, percentages improved, people led, assets controlled\n- During this period, [member's] outstanding professional skill, leadership, and ceaseless efforts resulted in...\n- Avoid passive constructions: \"was responsible for\" → \"directed\"; \"was instrumental in\" → \"led\"\n\n**WRITING STYLE:**\n- NO abbreviations except Jr., Sr., II, III (spell out: United States Air Force, Air Force Base, Department of Defense, etc.)\n- NO acronyms unless on approved DAF abbreviations list (see your approved list)\n- Numbers nine and below: spell out (\"three,\" \"five\")\n- Numbers 10 and above: use numerals (\"10,\" \"250,\" \"1,000\")\n- Dollar amounts: \"$2 million\" or \"two million dollars\" (both acceptable)\n- NO special characters, symbols (except $), or superscripts\n- NO classified information\n- NO organizational designators (e.g., \"SCOO\")\n- Avoid jargon or \"geek-speak\" not understood by general public\n- Avoid exaggerated superlatives (\"unprecedented,\" \"unparalleled,\" \"unequaled\")\n\n**CLOSING SENTENCE (Standard):**\n- \"The distinctive accomplishments of [Rank] [Last Name] reflect credit upon himself/herself and the United States Air Force.\"\n\n**FOR RETIREMENT:**\n- \"The distinctive accomplishments of [Rank] [Last Name] culminate a long and distinguished career in the service of his/her country and reflect credit upon himself/herself and the United States Air Force.\"\n\n**FOR SEPARATION:**\n- \"The distinctive accomplishments of [Rank] [Last Name] while serving his/her country reflect credit upon himself/herself and the United States Air Force.\"\n\n## YOUR PROCESS:\n1. Confirm you have: rank, full name, duty title, unit, location, start/end dates\n2. Review the member's accomplishments from their entire tour\n3. Select 3-5 most significant achievements that show strategic, lasting impact\n4. Synthesize these into a flowing narrative paragraph (not individual bullets)\n5. Use transitions to connect achievements smoothly\n6. Ensure proper voice (third person, active, past tense) and formatting\n7. Count characters to ensure ≤1,350 in the body\n8. Apply correct opening and closing sentences\n\nThis citation must capture the substance of the decoration with dignity and clarity. Write with the formality befitting a ceremony where this will be read aloud.",
+
+				msm: "DECORATION TYPE: Meritorious Service Medal (MSM)\n\nYou are now writing a formal military decoration citation. This is NOT a performance statement or award package—it is a narrative paragraph that will be read aloud during a ceremony and displayed on an official certificate.\n\n## CRITICAL CITATION REQUIREMENTS:\n\n**FORMAT & LENGTH:**\n- Maximum 1,350 characters for entire citation body (excluding opening/closing sentences)\n- Courier New font, size 11\n- Written in narrative paragraph format—NO bullets, NO line breaks within the body\n- Typically 2-4 sentences describing accomplishments between opening and closing\n\n**OPENING SENTENCE:**\nFor period of service (most common for MSM):\n- Format 1: \"[Full Rank] [First] [Middle Initial] [Last] distinguished himself/herself in the performance of outstanding service to the United States as [duty title], [unit], [location], from [start date] to [end date].\"\n\nFor specific achievement (less common for MSM):\n- Format 2: \"[Full Rank] [First] [Middle Initial] [Last] distinguished himself/herself by outstanding achievement as [duty title], [unit], [location], on [date] OR from [start date] to [end date].\"\n\n- Use complete rank title in opening (Master Sergeant, not MSgt; Major, not Maj)\n- Include full name with middle initial\n\n**NARRATIVE BODY:**\n- Use THIRD PERSON, ACTIVE VOICE, PAST TENSE throughout\n- First mention: Use short oral address (\"Sergeant Smith\", \"Major Jones\", \"Airman Brown\")\n- Subsequent mentions: Use pronouns (he/she/his/her) - alternate between name and pronouns\n- NO personal pronouns (I, we, you)\n- MSM-SPECIFIC FOCUS: Tour-level or career-culminating achievements showing sustained excellence\n- Emphasize: Strategic impact, organizational transformation, significant lasting contributions\n- \"During this period, the outstanding professional skill, leadership, and ceaseless efforts of [rank last name] resulted in major contributions to the effectiveness and success of...\"\n- Use powerful action verbs: transformed, revolutionized, orchestrated, spearheaded, directed, championed\n- Include quantifiable metrics at wing/MAJCOM/DoD level when possible\n- Avoid passive constructions: \"was instrumental in\" → \"led\"; \"was responsible for\" → \"directed\"\n\n**WRITING STYLE:**\n- NO abbreviations except Jr., Sr., II, III (spell out: United States Air Force, Air Force Base, Department of Defense)\n- NO acronyms unless on approved DAF abbreviations list\n- Numbers nine and below: spell out; numbers 10 and above: use numerals\n- Dollar amounts: \"$5 million\" or \"five million dollars\"\n- NO special characters (except $), symbols, or superscripts\n- NO classified information or organizational designators\n- Avoid jargon not understood by general public\n- Avoid exaggerated superlatives\n\n**CLOSING SENTENCE:**\n\nStandard:\n- \"The distinctive accomplishments of [Rank] [Last Name] reflect credit upon himself/herself and the United States Air Force.\"\n\nRetirement:\n- \"The distinctive accomplishments of [Rank] [Last Name] culminate a long and distinguished career in the service of his/her country and reflect credit upon himself/herself and the United States Air Force.\"\n\nSeparation:\n- \"The distinctive accomplishments of [Rank] [Last Name] while serving his/her country reflect credit upon himself/herself and the United States Air Force.\"\n\n## MSM STANDARDS:\n- Typically awarded to field grade officers (O-4 to O-6) and senior NCOs (E-7 to E-9)\n- Recognizes 2-4 years of sustained superior performance OR significant career-level achievement\n- Impact should be at wing/base/MAJCOM level\n- Shows lasting organizational improvements and strategic mission contributions\n\n## YOUR PROCESS:\n1. Confirm all required information (rank, name, duty title, unit, location, dates)\n2. Identify 3-5 tour-defining accomplishments with strategic impact\n3. Synthesize into flowing narrative showing sustained excellence\n4. Ensure proper voice, tone, and formatting\n5. Verify character count ≤1,350 in body\n6. Apply correct opening/closing sentences\n\nWrite with the formality and dignity appropriate for this mid-level decoration.",
+
+				afcm: "DECORATION TYPE: Air Force Commendation Medal (AFCM) / Air Force Achievement Medal (AFAM)\n\nYou are now writing a formal military decoration citation. This is NOT a performance statement or award package—it is a narrative paragraph that will be read aloud during a ceremony and displayed on an official certificate.\n\n## CRITICAL CITATION REQUIREMENTS:\n\n**FORMAT & LENGTH:**\n- Maximum 1,350 characters for entire citation body (excluding opening/closing sentences)\n- Courier New font, size 11\n- Written in narrative paragraph format—NO bullets, NO line breaks within the body\n- AFCM: Typically 2-3 sentences; AFAM: Typically 1-2 sentences\n\n**OPENING SENTENCE:**\n\nFor AFCM/AFAM - Meritorious Service:\n- \"[Full Rank] [First] [Middle Initial] [Last] distinguished himself/herself by meritorious service as [duty title], [unit], [location], from [start date] to [end date].\"\n\nFor AFCM/AFAM - Outstanding Achievement:\n- \"[Full Rank] [First] [Middle Initial] [Last] distinguished himself/herself by outstanding achievement as [duty title], [unit], [location], from [start date] to [end date].\"\n\nFor one-time accomplishment:\n- \"[Full Rank] [First] [Middle Initial] [Last] distinguished himself/herself by outstanding achievement (at or near [location]) on [date].\"\n\nFor Act of Courage (rare):\n- \"[Full Rank] [First] [Middle Initial] [Last] distinguished himself/herself by an act of courage as [duty title] OR while assigned to [unit], [location], on [date].\"\n\n- Use complete rank title in opening (Staff Sergeant, not SSgt; Captain, not Capt)\n- Include full name with middle initial\n\n**NARRATIVE BODY:**\n- Use THIRD PERSON, ACTIVE VOICE, PAST TENSE throughout\n- First mention: Use short oral address (\"Sergeant Smith\", \"Captain Jones\", \"Airman Brown\")\n- Subsequent mentions: Use pronouns (he/she/his/her) - alternate between name and pronouns\n- NO personal pronouns (I, we, you)\n\n**AFCM FOCUS (1-2 years or specific achievement):**\n- \"During this period, the professional skill, leadership, and ceaseless efforts of [rank last name] contributed to the effectiveness and success of...\"\n- Emphasize: Squadron/group-level impact, distinctive performance, mission success\n- Show what makes this achievement stand out above normal duty expectations\n- Typical scenarios: 18-24 month tour, deployment (4-6 months), major project completion, mid-tour recognition\n\n**AFAM FOCUS (shorter period or single achievement):**\n- Emphasize: Specific outstanding accomplishment or meritorious service rendered on behalf of the Air Force\n- Typical scenarios: 1 year of service, completion of significant project, support during contingency, exceptional act\n- Flight/squadron-level impact is appropriate\n\n**For Acts of Courage:**\n- Describe the specific act, circumstances, and outcome\n- Example: \"On that date, [rank last name] arrived at the scene of an automobile accident which seriously injured the driver of the vehicle. Without regard for his/her personal safety, [he/she]...\"\n\n**ACTION VERBS & STYLE:**\n- Use strong verbs: led, managed, coordinated, executed, implemented, streamlined\n- Include quantifiable results: efficiency gains, cost savings, mission improvements\n- Avoid passive voice: \"was responsible for\" → \"managed\"; \"was key to\" → \"ensured\"\n\n**WRITING STYLE:**\n- NO abbreviations except Jr., Sr., II, III (spell out: United States Air Force, Air Force Base, Department of Defense)\n- NO acronyms unless on approved DAF abbreviations list\n- Numbers nine and below: spell out; numbers 10 and above: use numerals\n- Dollar amounts: \"$1 million\" or \"one million dollars\"\n- NO special characters (except $), symbols, or superscripts\n- NO classified information or organizational designators\n- Avoid jargon not understood by general public\n- Avoid exaggerated superlatives\n\n**CLOSING SENTENCE:**\n\nStandard (Service or Achievement):\n- \"The distinctive accomplishments of [Rank] [Last Name] reflect credit upon himself/herself and the United States Air Force.\"\n\nAct of Courage:\n- \"By his/her prompt action and humanitarian regard for his/her fellowman, [Rank] [Last Name] has reflected credit upon himself/herself and the United States Air Force.\"\n\nAFAM Alternative (sometimes used):\n- \"The professional abilities and outstanding accomplishments of [Rank] [Last Name] reflect great credit upon himself/herself and the United States Air Force.\"\n\nRetirement (rare for AFCM/AFAM):\n- \"The distinctive accomplishments of [Rank] [Last Name] culminate a distinguished career in the service of his/her country and reflect credit upon himself/herself and the United States Air Force.\"\n\n## DECORATION STANDARDS:\n\n**AFCM:**\n- Mid-level decoration for distinctive achievement or meritorious service\n- Typically: Company grade officers (O-1 to O-3), NCOs (E-5 to E-6)\n- Period: 1-2 years of service OR specific outstanding achievement\n- Impact: Squadron/group-level, clearly above normal duty\n- Approval: Colonel (O-6) or higher\n\n**AFAM:**\n- Recognition for outstanding achievement or meritorious service rendered specifically on behalf of AF\n- Typically: Junior officers, junior NCOs, airmen\n- Period: 1 year OR specific achievement\n- Impact: Flight/squadron-level\n- Approval: Squadron Commander or higher (varies by unit)\n\n## YOUR PROCESS:\n1. Determine if this is AFCM or AFAM level\n2. Confirm: rank, name, duty title, unit, location, dates, type (service vs achievement vs courage)\n3. Identify 1-3 most distinctive accomplishments\n4. Write flowing narrative showing clear mission impact\n5. Ensure proper voice, tone, and formatting\n6. Verify character count ≤1,350 in body\n7. Apply correct opening/closing sentences for decoration type and reason\n\nWrite with appropriate formality while keeping the narrative crisp and focused on what makes this recognition deserved."
+			},
+            finalInstructions: "Begin by giving the user a short introduction, a draft of your example, and questions to guide them to a final product."
+        };
+        console.log('Placeholder prompt data loaded.');
+        
+        // Initialize all dropdowns/pickers
+        createResponsiveSelect('jobTitleContainer', afscOptions, 'jobTitle');
+        createResponsiveSelect('rankContainer', rankOptions, 'rank');
+        createResponsiveSelect('majcomContainer', majcomOptions, 'majcom');
+        createResponsiveSelect('mgaContainer', mgaOptions, 'mga');
+        
+        // Modal and Theme toggle setup
+        const alertModal = document.getElementById('alert-modal');
+        const alertOkBtn = document.getElementById('alert-ok');
+        const copyModal = document.getElementById('copy-confirmation-modal');
+        const closeCopyModalBtn = document.getElementById('close-copy-modal');
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const sunIcon = document.getElementById('sun-icon');
+        const moonIcon = document.getElementById('moon-icon');
+        
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            sunIcon.style.display = theme === 'dark' ? 'block' : 'none';
+            moonIcon.style.display = theme === 'light' ? 'block' : 'none';
         }
+
+        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        applyTheme(savedTheme);
+
+        themeToggleBtn.addEventListener('click', () => {
+            const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        // Main UI controller function
+        function showTool(bubble) {
+            activeBubbleText = bubble.textContent;
+            const titleContainer = document.getElementById('animated-title-container');
+            const mainTool = document.getElementById('main-tool-container');
+            const decTool = document.getElementById('decoration-tool-container');
+            const mgaGroup = document.getElementById('mga-form-group');
+            const customAwardGroup = document.getElementById('custom-award-instructions-form-group');
+            const infoPanelWrapper = document.getElementById('info-panel-wrapper');
+            const infoPanel = document.getElementById('award-info-panel');
+            const infoContent = document.getElementById('award-info-content');
+            
+            // Hide/reset everything by default
+            mainTool.style.display = 'none';
+            decTool.style.display = 'none';
+            infoPanelWrapper.style.display = 'none';
+            infoPanel.classList.add('hidden');
+
+            if (userChoice.startsWith('award-')) {
+                mainTool.style.display = '';
+                mainTool.classList.remove('lg:col-span-3');
+                mainTool.classList.add('lg:col-span-2');
+                infoPanelWrapper.style.display = '';
+
+                const awardKey = userChoice.replace('award-','');
+                activeBubbleText = `Award Package: ${bubble.textContent}`;
+                mgaGroup.classList.add('hidden');
+                customAwardGroup.classList.remove('hidden');
+                if (infoPanel && infoContent && awardInfoContent[awardKey]) {
+                    infoPanel.classList.remove('hidden');
+                    infoContent.innerHTML = awardInfoContent[awardKey];
+                }
+            } else if (userChoice === 'performance-report') {
+                mainTool.style.display = '';
+                mainTool.classList.remove('lg:col-span-2');
+                mainTool.classList.add('lg:col-span-3');
+                infoPanelWrapper.style.display = 'none';
+
+                activeBubbleText = `Performance Report`;
+                mgaGroup.classList.remove('hidden');
+                customAwardGroup.classList.add('hidden');
+            } else if (userChoice.startsWith('decoration-')) {
+                decTool.style.display = '';
+                infoPanelWrapper.style.display = 'none';
+                activeBubbleText = `Decoration: ${bubble.textContent}`;
+            }
+
+            document.body.classList.add('selection-made');
+            titleContainer.innerHTML = `<div class="animated-title">${activeBubbleText}</div>`;
+        }
+
+        // --- Event Listeners for main selections ---
+        document.getElementById('select-report')?.addEventListener('click', function() {
+            userChoice = this.dataset.choice;
+            showTool(this);
+        });
+        document.getElementById('select-award')?.addEventListener('click', () => document.body.classList.add('award-step-1'));
+        document.getElementById('select-decoration')?.addEventListener('click', () => document.body.classList.add('decoration-step-1'));
+
+        // --- Event Listeners for sub-selections ---
+        document.querySelectorAll('#award-selection-screen .selection-bubble').forEach(button => {
+            button.addEventListener('click', function() {
+                userChoice = this.dataset.choice;
+                document.body.classList.remove('award-step-1');
+                showTool(this);
+            });
+        });
+        document.querySelectorAll('#decoration-selection-screen .selection-bubble').forEach(button => {
+            button.addEventListener('click', function() {
+                userChoice = this.dataset.choice;
+                document.body.classList.remove('decoration-step-1');
+                showTool(this);
+            });
+        });
+
+        // --- Character Counter Logic ---
+        const charCounterTextBox = document.getElementById('charCounterTextBox');
+        const charCounterCount = document.getElementById('charCounterCount');
+        if (charCounterTextBox && charCounterCount) {
+            charCounterTextBox.addEventListener('input', () => {
+                const count = charCounterTextBox.value.length;
+                charCounterCount.textContent = count;
+                charCounterCount.style.color = count > 250 ? 'var(--danger-color)' : count > 175 ? '#f59e0b' : 'var(--primary-cyan)';
+            });
+        }
+        
+        // --- Generate Button Logic ---
+        function handleGenerate() {
+            let prompt = '';
+            let isValid = false;
+
+            if (userChoice.startsWith('decoration-')) {
+                const achievements = [
+                    document.getElementById('dec-achievement-1')?.value.trim(),
+                    document.getElementById('dec-achievement-2')?.value.trim(),
+                    document.getElementById('dec-achievement-3')?.value.trim(),
+                    document.getElementById('dec-achievement-4')?.value.trim(),
+                    document.getElementById('dec-achievement-5')?.value.trim(),
+                ].filter(Boolean);
+
+                if (achievements.length < 3) {
+                     document.getElementById('alert-title').textContent = 'Input Required';
+                     document.getElementById('alert-body').textContent = "Please fill in at least the first three 'Achievement' fields for the decoration.";
+                     showModal('alert-modal');
+                     return;
+                }
+                isValid = true;
+                prompt = assembleDecorationPrompt({ userChoice, achievements });
+
+            } else {
+                const accomplishment = document.getElementById('accomplishment')?.value.trim();
+                if (!accomplishment) {
+                    document.getElementById('alert-title').textContent = 'Input Required';
+                    document.getElementById('alert-body').textContent = "Please fill in the 'Accomplishment Details' field before generating a prompt.";
+                    showModal('alert-modal');
+                    return;
+                }
+                isValid = true;
+                const getElValue = (id) => document.getElementById(id)?.dataset.value || '';
+                let jobTitle = getElValue('jobTitle');
+                if (jobTitle === 'other') jobTitle = document.getElementById('otherJobTitle')?.value.trim();
+                
+                const promptInputs = {
+                    rank: getElValue('rank'), jobTitle, majcom: getElValue('majcom'), mga: getElValue('mga'), userChoice, accomplishment,
+                    customAwardInstructions: document.getElementById('customAwardInstructions')?.value.trim()
+                };
+                prompt = assembleInteractivePrompt(promptInputs);
+            }
+
+            if (isValid && prompt) {
+                navigator.clipboard.writeText(prompt).then(() => {
+                    showModal('copy-confirmation-modal');
+                    document.getElementById('final-cards-container')?.classList.remove('hidden');
+                }).catch(err => {
+                    console.error('Clipboard copy failed: ', err);
+                    alert('Failed to copy. Please copy the prompt manually from the console.');
+                    console.log("--- PROMPT ---", prompt);
+                });
+            }
+        }
+        
+        document.getElementById('generateButtonMain')?.addEventListener('click', handleGenerate);
+        document.getElementById('generateButtonDec')?.addEventListener('click', handleGenerate);
+
+        // --- Reset Logic ---
+        function handleReset() {
+            ['accomplishment', 'otherJobTitle', 'customAwardInstructions', 'dec-achievement-1', 'dec-achievement-2', 'dec-achievement-3', 'dec-achievement-4', 'dec-achievement-5'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            
+            ['jobTitle', 'rank', 'majcom', 'mga'].forEach(id => {
+                const el = document.getElementById(id);
+                const options = (id === 'jobTitle') ? afscOptions : (id === 'rank') ? rankOptions : (id === 'majcom') ? majcomOptions : mgaOptions;
+                if (el) {
+                    el.textContent = options[0].text;
+                    el.dataset.value = options[0].value;
+                }
+            });
+
+            document.body.className = '';
+            userChoice = '';
+            activeBubbleText = '';
+            document.getElementById('animated-title-container').innerHTML = '';
+            
+            ['otherJobField', 'custom-award-instructions-form-group', 'award-info-panel', 'final-cards-container', 'nipr-link-btn-main', 'nipr-link-btn-dec'].forEach(id => {
+                 document.getElementById(id)?.classList.add('hidden');
+            });
+             document.getElementById('info-panel-wrapper').style.display = 'none';
+            document.getElementById('mga-form-group')?.classList.remove('hidden');
+             document.getElementById('main-tool-container').style.display = 'none';
+             document.getElementById('decoration-tool-container').style.display = 'none';
+            
+            if (charCounterTextBox) charCounterTextBox.value = '';
+            if (charCounterCount) {
+                charCounterCount.textContent = '0';
+                charCounterCount.style.color = 'var(--primary-cyan)';
+            }
+        }
+        document.getElementById('resetBtn')?.addEventListener('click', handleReset);
+        document.getElementById('resetBtn2')?.addEventListener('click', handleReset);
+        
+        // Modal closing logic
+        function showNiprLink() {
+            hideModal('copy-confirmation-modal');
+            if (userChoice.startsWith('decoration-')) {
+                 document.getElementById('nipr-link-btn-dec')?.classList.remove('hidden');
+            } else {
+                 document.getElementById('nipr-link-btn-main')?.classList.remove('hidden');
+            }
+        }
+        alertOkBtn?.addEventListener('click', () => hideModal('alert-modal'));
+        alertModal?.addEventListener('click', (e) => { if (e.target === alertModal) hideModal('alert-modal'); });
+        closeCopyModalBtn?.addEventListener('click', showNiprLink);
+        copyModal?.addEventListener('click', (e) => { if (e.target === copyModal) showNiprLink(); });
+
+        window.addEventListener('click', () => { if (!isTouchDevice) closeAllDropdowns(); });
       });
-    }
-  });
-
-  function handleReset() {
-    document.getElementById('otherJobField')?.classList.add('hidden');
-    document.getElementById('otherJobTitle').value = '';
-    document.getElementById('accomplishment').value = '';
-    
-	document.getElementById('custom-award-instructions-form-group')?.classList.add('hidden'); // Hide custom box
-    document.getElementById('customAwardInstructions').value = ''; // Clear its text
-    document.getElementById('mga-form-group')?.classList.remove('hidden'); // Re-show MGA box
-	
-	document.getElementById('award-info-panel')?.classList.add('hidden'); // Hide the info panel
-	
-    const jobTitle = document.getElementById('jobTitle');
-    const rank = document.getElementById('rank');
-    const majcom = document.getElementById('majcom');
-    const mga = document.getElementById('mga');
-    
-    if (jobTitle) {
-      jobTitle.textContent = afscOptions[0].text;
-      jobTitle.dataset.value = afscOptions[0].value;
-    }
-    if (rank) {
-      rank.textContent = rankOptions[0].text;
-      rank.dataset.value = rankOptions[0].value;
-    }
-    if (majcom) {
-      majcom.textContent = majcomOptions[0].text;
-      majcom.dataset.value = majcomOptions[0].value;
-    }
-    if (mga) {
-      mga.textContent = mgaOptions[0].text;
-      mga.dataset.value = mgaOptions[0].value;
-    }
-    
-    document.getElementById('final-cards-container')?.classList.add('hidden');
-    document.getElementById('animated-title-container').innerHTML = '';
-    document.getElementById('nipr-link-btn')?.classList.add('hidden');
-    userChoice = '';
-    activeBubbleText = '';
-    document.body.classList.remove('selection-made', 'award-step-1');
-    
-    if (charCounterTextBox) charCounterTextBox.value = '';
-    if (charCounterCount) {
-      charCounterCount.textContent = '0';
-      charCounterCount.style.color = 'var(--primary-cyan)';
-    }
-  }
-
-  document.getElementById('resetBtn')?.addEventListener('click', handleReset);
-  
-  alertOkBtn?.addEventListener('click', () => hideModal('alert-modal'));
-  alertModal?.addEventListener('click', (e) => {
-    if (e.target === alertModal) hideModal('alert-modal');
-  });
-
-  closeCopyModalBtn?.addEventListener('click', () => {
-    hideModal('copy-confirmation-modal');
-    document.getElementById('nipr-link-btn')?.classList.remove('hidden');
-  });
-  copyModal?.addEventListener('click', (e) => {
-    if (e.target === copyModal) {
-      hideModal('copy-confirmation-modal');
-      document.getElementById('nipr-link-btn')?.classList.remove('hidden');
-    }
-  });
-
-  window.addEventListener('click', () => {
-    if (!isTouchDevice) {
-      closeAllDropdowns();
-    }
-  });
-});
     </script>
 </body>
 </html>
+
