@@ -500,12 +500,12 @@
         </div>
     </header>
 
-    <main class="max-w-4xl mx-auto px-4 sm:px-6 pb-6 pt-8">
+	<main class="max-w-7xl mx-auto px-4 sm:px-6 pb-6 pt-8">
         
         <div id="initial-selection-screen" class="selection-container">
             <h2 class="selection-title">What would you like to create?</h2>
             <div class="bubble-container">
-                <button id="select-report" class="selection-bubble" data-choice="performance-report">Performance Report</button>
+                <button id="select-report" class="selection-bubble" data-choice="performance-report">EPB / OPB </button>
                 <button id="select-award" class="selection-bubble" data-choice="award-package">Award Package</button>
                 <button id="select-decoration" class="selection-bubble disabled" data-choice="decoration">Decoration</button>
             </div>
@@ -523,10 +523,10 @@
              </div>
         </div>
 
-        <div id="main-tool-container">
+        <div id="main-tool-container" class="lg:grid lg:grid-cols-3 lg:gap-8">
             <div id="animated-title-container"></div>
             
-            <div class="card">
+            <div class="card lg:col-span-2">
                 <div class="card-header">
                     <span>Input Information</span>
                     <button id="resetBtn" class="btn btn-danger">Start Over</button>
@@ -549,10 +549,17 @@
                             <label for="majcomContainer">MAJCOM: (Optional)</label>
                             <div id="majcomContainer"></div>
                         </div>
-                        <div class="form-group">
+
+                        <div id="mga-form-group" class="form-group">
                             <label for="mgaContainer">Major Graded Area (MGA): (Optional)</label>
                             <div id="mgaContainer"></div>
                         </div>
+                        
+                        <div id="custom-award-instructions-form-group" class="form-group hidden">
+                            <label for="customAwardInstructions">Custom Award Instructions: (Optional)</label>
+                            <input type="text" id="customAwardInstructions" placeholder="e.g., 'Focus on innovation' or 'Package for wing level'" style="width: 100%; background-color: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 0.5rem; padding: 0.75rem 1rem;">
+                        </div>
+
                     </div>
                     
                     <div class="form-group">
@@ -567,8 +574,19 @@
                     </div>
                 </div>
             </div>
+	</div>
 
-            <div id="final-cards-container" class="hidden">
+	<div id="award-info-panel" class="card hidden">
+		<div class="card-header">
+			<span id="award-info-title">Award Information</span>
+		</div>
+		<div class="card-body" id="award-info-content" style="color: var(--text-secondary); line-height: 1.6;">
+			<p>Select an award to see its rules and goals.</p>
+		</div>
+	</div>
+	<div id="final-cards-container" class="hidden lg:col-span-2">
+
+            <div id="final-cards-container" class="hidden lg:col-span-2">
                  <div class="card">
                     <div class="card-header">
                         <span>Performance Statement Character Count</span>
@@ -779,6 +797,57 @@ const mgaOptions = [
   { text: 'Improving the Unit', value: 'Improving the Unit' }
 ];
 
+const awardInfoContent = {
+  sijanLeadership: `
+    <h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Lance P. Sijan Leadership Award</h3>
+    <p style="margin-bottom: 1rem;"><strong>Goal:</strong> Placeholder text about recognizing high-quality leadership and character...</p>
+    <ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+      <li>Rule 1: Focus on moral courage...</li>
+      <li>Rule 2: Leadership in action, not just job performance...</li>
+      <li>Rule 3: Placeholder rule...</li>
+    </ul>
+  `,
+  leoMarquez: `
+    <h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Leo Marquez Award</h3>
+    <p style="margin-bottom: 1rem;"><strong>Goal:</strong> Placeholder text for recognizing excellence in maintenance and logistics...</p>
+    <ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+      <li>Rule 1: Focus on hands-on innovation...</li>
+      <li>Rule 2: Quantifiable impact on sortie rates, MC rates, or cost...</li>
+      <li>Rule 3: Placeholder rule...</li>
+    </ul>
+  `,
+  quarterlyAnnual: `
+    <h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Quarterly / Annual Awards</h3>
+    <p style="margin-bottom: 1rem;"><strong>Goal:</strong> Placeholder for recognizing sustained, superior performance over the period...</p>
+    <ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+      <li>Rule 1: Must clearly articulate impact *within the period*...</li>
+      <li>Rule 2: Whole-person concept is important...</li>
+      <li>Rule 3: Placeholder rule...</li>
+    </ul>
+  `,
+  msm: `
+    <h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Meritorious Service Medal (MSM)</h3>
+    <p style="margin-bottom: 1rem;"><strong>Goal:</strong> Placeholder for a culminating, end-of-tour, or retirement decoration...</p>
+    <ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+      <li>Rule 1: Focus on *career* or *tour-level* achievements...</li>
+      <li>Rule 2: Must show significant, lasting impact...</li>
+    </ul>
+  `,
+  afcm: `
+    <h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Air Force Commendation Medal (AFCM)</h3>
+    <p style="margin-bottom: 1rem;"><strong>Goal:</strong> Placeholder for a specific, outstanding achievement...</p>
+    <ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+      <li>Rule 1: Highlights a single act or service...</li>
+      <li>Rule 2: Goes above and beyond normal duty...</li>
+    </ul>
+  `,
+  custom: `
+    <h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Custom Award</h3>
+    <p><strong>Goal:</strong> This is for a non-standard award (e.g., unit-level, functional, etc.).</p>
+    <p style="margin-top: 1rem;">Use the "Custom Award Instructions" box to provide specific criteria for the AI coach.</p>
+  `
+};
+
 // Picker/Dropdown System
 const pickerOverlay = document.getElementById('picker-overlay');
 const pickerSearchInput = document.getElementById('picker-search-input');
@@ -936,7 +1005,8 @@ function hideModal(id) {
 }
 
 function assembleInteractivePrompt(inputs) {
-  const { rank, jobTitle, majcom, mga, userChoice, accomplishment } = inputs;
+  // --- CHANGE 1: Added 'customAwardInstructions' to the list ---
+  const { rank, jobTitle, majcom, mga, userChoice, accomplishment, customAwardInstructions } = inputs;
   let promptParts = [];
 
   if (promptData.base) {
@@ -961,7 +1031,9 @@ function assembleInteractivePrompt(inputs) {
   if (majcom && promptData.contextAddons?.majcom) {
     promptParts.push(promptData.contextAddons.majcom.replace('{majcom}', majcom));
   }
-  if (mga && promptData.contextAddons?.mga) {
+  
+  // --- CHANGE 2: Only add MGA if it's NOT an award ---
+  if (mga && !userChoice.startsWith('award-') && promptData.contextAddons?.mga) {
     promptParts.push(promptData.contextAddons.mga.replace('{mga}', mga));
   }
 
@@ -973,6 +1045,11 @@ function assembleInteractivePrompt(inputs) {
     const awardKey = userChoice.replace('award-', '');
     if (promptData.awardAddons && promptData.awardAddons[awardKey]) {
       promptParts.push(promptData.awardAddons[awardKey]);
+    }
+
+    // --- CHANGE 3: Inject the custom instructions if they exist ---
+    if (customAwardInstructions) {
+      promptParts.push(`USER'S CUSTOM INSTRUCTIONS: ${customAwardInstructions}`);
     }
   }
 
@@ -1049,23 +1126,60 @@ console.log('Prompt data loaded successfully (inline).');
     applyTheme(newTheme);
   });
 
-  function showMainTool(bubble) {
-    activeBubbleText = bubble.textContent;
-    if (userChoice.startsWith('award-')) {
-      const awardKey = userChoice.replace('award-','');
-      const awardName = promptData.awardAddons?.[awardKey]
-        ? (awardKey === 'sijanLeadership' ? 'Lance P. Sijan Leadership Award' : 
-           awardKey === 'leoMarquez' ? 'Leo Marquez Award' : 
-           awardKey === 'quarterlyAnnual' ? 'Squadron Annual / Squadron Quarterly Award' : 
-           awardKey === 'msm' ? 'MSM' : 
-           awardKey === 'afcm' ? 'AFCM' : 'Custom')
-        : bubble.textContent;
-      activeBubbleText = `Award Package: ${awardName}`;
+function showMainTool(bubble) {
+  activeBubbleText = bubble.textContent;
+
+  // Get references to the form groups
+  const mgaGroup = document.getElementById('mga-form-group');
+  const customAwardGroup = document.getElementById('custom-award-instructions-form-group');
+
+  // --- NEW: Get info panel elements ---
+  const infoPanel = document.getElementById('award-info-panel');
+  const infoContent = document.getElementById('award-info-content');
+  // --- END NEW ---
+
+  if (userChoice.startsWith('award-')) {
+    // It's an AWARD
+    const awardKey = userChoice.replace('award-','');
+    const awardName = promptData.awardAddons?.[awardKey]
+      ? (awardKey === 'sijanLeadership' ? 'Lance P. Sijan Leadership Award' : 
+         awardKey === 'leoMarquez' ? 'Leo Marquez Award' : 
+         awardKey === 'quarterlyAnnual' ? 'Squadron Annual / Squadron Quarterly Award' : 
+         awardKey === 'msm' ? 'MSM' : 
+         awardKey === 'afcm' ? 'AFCM' : 'Custom')
+      : bubble.textContent;
+    activeBubbleText = `Award Package: ${awardName}`;
+
+    // Hide MGA, show Custom Instructions
+    if (mgaGroup) mgaGroup.classList.add('hidden');
+    if (customAwardGroup) customAwardGroup.classList.remove('hidden');
+
+    // --- NEW: Show info panel and set content ---
+    if (infoPanel && infoContent && awardInfoContent[awardKey]) {
+        infoContent.innerHTML = awardInfoContent[awardKey]; // Inject placeholder HTML
+        infoPanel.classList.remove('hidden'); // Show the panel
+    } else if (infoPanel) {
+        infoPanel.classList.add('hidden'); // Hide it if no content
     }
-    document.body.classList.add('selection-made');
-    const titleContainer = document.getElementById('animated-title-container');
-    titleContainer.innerHTML = `<div class="animated-title">${activeBubbleText}</div>`;
+    // --- END NEW ---
+
+  } else {
+    // It's a PERFORMANCE REPORT
+    // Show MGA, hide Custom Instructions
+    if (mgaGroup) mgaGroup.classList.remove('hidden');
+    if (customAwardGroup) customAwardGroup.classList.add('hidden');
+
+    // --- NEW: Hide info panel ---
+    if (infoPanel) {
+        infoPanel.classList.add('hidden');
+    }
+    // --- END NEW ---
   }
+
+  document.body.classList.add('selection-made');
+  const titleContainer = document.getElementById('animated-title-container');
+  titleContainer.innerHTML = `<div class="animated-title">${activeBubbleText}</div>`;
+}
 
   document.getElementById('select-report')?.addEventListener('click', function() {
     userChoice = this.dataset.choice;
@@ -1129,7 +1243,8 @@ console.log('Prompt data loaded successfully (inline).');
       majcom: getElValue('majcom'),
       mga: getElValue('mga'),
       userChoice: userChoice,
-      accomplishment: accomplishment
+      accomplishment: accomplishment,
+	  customAwardInstructions: document.getElementById('customAwardInstructions')?.value.trim()
     };
     
     const prompt = assembleInteractivePrompt(promptInputs);
@@ -1163,6 +1278,12 @@ console.log('Prompt data loaded successfully (inline).');
     document.getElementById('otherJobTitle').value = '';
     document.getElementById('accomplishment').value = '';
     
+	document.getElementById('custom-award-instructions-form-group')?.classList.add('hidden'); // Hide custom box
+    document.getElementById('customAwardInstructions').value = ''; // Clear its text
+    document.getElementById('mga-form-group')?.classList.remove('hidden'); // Re-show MGA box
+	
+	document.getElementById('award-info-panel')?.classList.add('hidden'); // Hide the info panel
+	
     const jobTitle = document.getElementById('jobTitle');
     const rank = document.getElementById('rank');
     const majcom = document.getElementById('majcom');
