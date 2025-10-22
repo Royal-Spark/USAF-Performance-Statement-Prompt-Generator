@@ -308,8 +308,26 @@
         html[data-theme='light'] .floating-dropdown-options {
              background-color: #ffffff;
         }
-        .floating-dropdown-option {
+        .floating-dropdown-header {
             padding: 0.5rem 0.75rem;
+            font-weight: 700;
+            color: var(--primary-purple);
+            margin-top: 0.5rem;
+            cursor: pointer;
+            border-radius: 0.25rem;
+        }
+        .floating-dropdown-subheader {
+            padding: 0.4rem 0.75rem 0.4rem 1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: 0.25rem;
+        }
+        .floating-dropdown-header:hover, .floating-dropdown-subheader:hover {
+            background-color: rgba(168, 85, 247, 0.1);
+        }
+        .floating-dropdown-option {
+            padding: 0.5rem 0.75rem 0.5rem 1.75rem; /* Indented */
             cursor: pointer;
             transition: background-color 0.2s;
         }
@@ -410,6 +428,16 @@
         .picker-header {
             padding: 1rem 1.5rem;
             border-bottom: 1px solid var(--border-color);
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        #picker-back-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
         }
         #picker-search-input {
             width: 100%;
@@ -429,8 +457,26 @@
             margin: 0;
             overflow-y: auto;
         }
-        .picker-option-item {
+        .picker-option-header {
             padding: 0.75rem 1rem;
+            font-weight: 700;
+            color: var(--primary-purple);
+            margin-top: 0.5rem;
+            cursor: pointer;
+            border-radius: 0.5rem;
+        }
+        .picker-option-subheader {
+            padding: 0.6rem 1rem 0.6rem 1.25rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: 0.5rem;
+        }
+        .picker-option-header:hover, .picker-option-subheader:hover {
+            background-color: rgba(168, 85, 247, 0.1);
+        }
+        .picker-option-item {
+            padding: 0.75rem 1rem 0.75rem 2rem; /* Indented */
             cursor: pointer;
             border-radius: 0.5rem;
             transition: background-color 0.2s;
@@ -666,7 +712,10 @@
     
    <div id="picker-overlay" class="picker-overlay">
         <div class="picker-modal">
-            <div class="picker-header"><input type="text" id="picker-search-input" placeholder="Type to search..."></div>
+            <div class="picker-header">
+                <button id="picker-back-btn" class="hidden">←</button>
+                <input type="text" id="picker-search-input" placeholder="Type to search...">
+            </div>
             <ul id="picker-options-list" class="picker-options-list"></ul>
         </div>
     </div>
@@ -698,20 +747,118 @@
 
       // Data arrays for dropdowns...
       const afscOptions = [
-        { text: '-- Select Your AFSC/Job Title --', value: '' },
-        { text: 'DOD Government Civilian', value: 'DOD Government Civilian' },
+        { text: '-- Select Your AFSC/Career Field --', value: '' },
+        
+        // --- OFFICER ---
+        { text: 'Officer', type: 'header' },
+        { text: '1X: Operations & Support', type: 'subheader' },
+        { text: '10C - Operations Commander', value: '10C - Operations Commander' },
+        { text: '11E - Experimental Test Pilot', value: '11E - Experimental Test Pilot' },
+        { text: '11F - Fighter Pilot', value: '11F - Fighter Pilot' },
+        { text: '11G - Generalist Pilot', value: '11G - Generalist Pilot' },
+        { text: '11H - Helicopter Pilot', value: '11H - Helicopter Pilot' },
+        { text: '11K - Trainer Pilot', value: '11K - Trainer Pilot' },
+        { text: '11M - Mobility Pilot', value: '11M - Mobility Pilot' },
+        { text: '11R - Reconnaissance/Surveillance/Electronic Warfare Pilot', value: '11R - Reconnaissance/Surveillance/Electronic Warfare Pilot' },
         { text: '11S - Special Operations Pilot', value: '11S - Special Operations Pilot' },
+        { text: '12X - Combat Systems Officer (CSO)', value: '12X - Combat Systems Officer (CSO)' },
+        { text: '13B - Air Battle Manager', value: '13B - Air Battle Manager' },
+        { text: '13D - Combat Rescue Officer', value: '13D - Combat Rescue Officer' },
+        { text: '13M - Airfield Operations Officer', value: '13M - Airfield Operations Officer' },
+        { text: '13S - Space Operations Officer', value: '13S - Space Operations Officer' },
         { text: '14F - Information Operations Officer', value: '14F - Information Operations Officer' },
         { text: '14N - Intelligence Officer', value: '14N - Intelligence Officer' },
-        { text: '17S - Cyberspace Operations Officer', value: '17S - Cyberspace Operations Officer' },
-        { text: '1D7 - Cyber Defense Operations', value: '1D7 - Cyber Defense Operations' },
+        { text: '15W - Weather Officer', value: '15W - Weather Officer' },
+        { text: '16G - Air Force Operations Staff Officer', value: '16G - Air Force Operations Staff Officer' },
+        { text: '16R - Planning/Programming Officer', value: '16R - Planning/Programming Officer' },
+        { text: '17X - Cyberspace Operations Officer', value: '17X - Cyberspace Operations Officer' },
+        { text: '18X - Remotely Piloted Aircraft (RPA) Pilot', value: '18X - Remotely Piloted Aircraft (RPA) Pilot' },
+        
+        { text: '2X: Logistics & Maintenance', type: 'subheader' },
+        { text: '21A - Aircraft Maintenance Officer', value: '21A - Aircraft Maintenance Officer' },
+        { text: '21M - Munitions and Missile Maintenance Officer', value: '21M - Munitions and Missile Maintenance Officer' },
+        { text: '21R - Logistics Readiness Officer', value: '21R - Logistics Readiness Officer' },
+
+        { text: '3X: Mission Support', type: 'subheader' },
+        { text: '31P - Security Forces Officer', value: '31P - Security Forces Officer' },
+        { text: '32E - Civil Engineer Officer', value: '32E - Civil Engineer Officer' },
+        { text: '35P - Public Affairs Officer', value: '35P - Public Affairs Officer' },
+        { text: '38F - Force Support Officer', value: '38F - Force Support Officer' },
+
+        { text: '4X: Medical', type: 'subheader' },
+        { text: '4XX - Medical / Healthcare (All Officer Specialties)', value: '4XX - Medical / Healthcare (All Officer Specialties)' },
+
+        { text: '5X: Professional', type: 'subheader' },
+        { text: '51J - Judge Advocate (JAG)', value: '51J - Judge Advocate (JAG)' },
+        { text: '52R - Chaplain', value: '52R - Chaplain' },
+
+        { text: '6X: Acquisition & Financial', type: 'subheader' },
+        { text: '61X - Scientist / Researcher', value: '61X - Scientist / Researcher' },
+        { text: '62E - Developmental Engineer', value: '62E - Developmental Engineer' },
+        { text: '63A - Acquisition Manager', value: '63A - Acquisition Manager' },
+        { text: '64P - Contracting Officer', value: '64P - Contracting Officer' },
+        { text: '65F - Financial Management Officer', value: '65F - Financial Management Officer' },
+
+        // --- ENLISTED ---
+        { text: 'Enlisted', type: 'header' },
+        { text: '1X: Operations', type: 'subheader' },
+        { text: '1A - Aircrew Operations (Boom, Loadmaster, Flight Engineer, etc.)', value: '1A - Aircrew Operations' },
+        { text: '1B4 - Cyber Warfare Operations', value: '1B4 - Cyber Warfare Operations' },
+        { text: '1C - Command & Control (C2) / Air Traffic Control (ATC)', value: '1C - Command & Control / Air Traffic Control' },
+        { text: '1D7 - Cyber Defense Operations / Client Systems / Spectrum Ops', value: '1D7 - Cyber Defense Operations' },
         { text: '1N0 - All-Source Intelligence Analyst', value: '1N0 - All-Source Intelligence Analyst' },
-        { text: '2A6 - Aircraft Maintenance', value: '2A6 - Aircraft Maintenance' },
-        { text: '3F0 - Personnel', value: '3F0 - Personnel' },
+        { text: '1N1 - Geospatial Intelligence (GEOINT)', value: '1N1 - Geospatial Intelligence (GEOINT)' },
+        { text: '1N2 - Signals Intelligence (SIGINT)', value: '1N2 - Signals Intelligence (SIGINT)' },
+        { text: '1N3/1A8 - Cryptologic Language Analyst / Airborne Linguist', value: '1N3/1A8 - Cryptologic Language Analyst / Airborne Linguist' },
+        { text: '1N4 - Fusion Analyst / Network Intelligence', value: '1N4 - Fusion Analyst / Network Intelligence' },
+        { text: '1P0 - Aircrew Flight Equipment', value: '1P0 - Aircrew Flight Equipment' },
+        { text: '1S0 - Safety', value: '1S0 - Safety' },
+        { text: '1T - Tactical Air Control Party (TACP) / Special Warfare', value: '1T - TACP / Special Warfare' },
+        { text: '1U - Remotely Piloted Aircraft (RPA) Sensor Operator', value: '1U - RPA Sensor Operator' },
+        { text: '1W0 - Weather', value: '1W0 - Weather' },
+        { text: '1Z - Special Warfare (PJ, CCT, SR, TACP)', value: '1Z - Special Warfare' },
+
+        { text: '2X: Logistics & Maintenance', type: 'subheader' },
+        { text: '2A - Aerospace Maintenance (Crew Chief, Avionics, Engines, etc.)', value: '2A - Aerospace Maintenance' },
+        { text: '2F0 - Fuels', value: '2F0 - Fuels' },
+        { text: '2G0 - Logistics Plans', value: '2G0 - Logistics Plans' },
+        { text: '2M0 - Missile Maintenance', value: '2M0 - Missile Maintenance' },
+        { text: '2R - Maintenance Management', value: '2R - Maintenance Management' },
+        { text: '2S0 - Materiel Management / Supply', value: '2S0 - Materiel Management / Supply' },
+        { text: '2T - Transportation & Vehicle Management', value: '2T - Transportation & Vehicle Management' },
+        { text: '2W - Munitions & Weapons', value: '2W - Munitions & Weapons' },
+        
+        { text: '3X: Mission Support', type: 'subheader' },
+        { text: '3D0 - Knowledge Management', value: '3D0 - Knowledge Management (Superseded by 1D7)' },
+        { text: '3E - Civil Engineering (All Specialties)', value: '3E - Civil Engineering' },
+        { text: '3F - Personnel / Force Support', value: '3F - Personnel / Force Support' },
+        { text: '3N0 - Public Affairs', value: '3N0 - Public Affairs' },
         { text: '3P0 - Security Forces', value: '3P0 - Security Forces' },
-        { text: '6F0 - Financial Management and Comptroller', value: '6F0 - Financial Management and Comptroller' },
+        
+        { text: '4X: Medical', type: 'subheader' },
+        { text: '4A/4N/4X - Medical & Dental Services (All Specialties)', value: '4A/4N/4X - Medical & Dental Services' },
+
+        { text: '5X: Professional', type: 'subheader' },
+        { text: '5J0 - Paralegal', value: '5J0 - Paralegal' },
+        { text: '5R0 - Chaplain Assistant', value: '5R0 - Chaplain Assistant' },
+        
+        { text: '6X: Acquisition & Finance', type: 'subheader' },
+        { text: '6C0 - Contracting', value: '6C0 - Contracting' },
+        { text: '6F0 - Financial Management & Comptroller', value: '6F0 - Financial Management and Comptroller' },
+
+        { text: '7X: Special Investigations', type: 'subheader' },
+        { text: '7S0 - Special Investigations (OSI)', value: '7S0 - Special Investigations (OSI)' },
+
+        { text: '8X-9X: Special Duty & Reporting', type: 'subheader' },
+        { text: '8X - Special Duty (MTL, MTI, Recruiter, First Sergeant, etc.)', value: '8X - Special Duty' },
+        { text: '9X - Reporting Identifier (Student, Trainee, etc.)', value: '9X - Reporting Identifier' },
+
+        // --- OTHER ---
+        { text: 'Other', type: 'header' },
+        { text: 'DOD Government Civilian', value: 'DOD Government Civilian' },
+        { text: 'U.S. Space Force Guardian', value: 'U.S. Space Force Guardian' },
         { text: 'Other (Specify Below)', value: 'other' }
-      ];
+    ];
       const rankOptions = [
         { text: '-- Select Rank --', value: '' },
         { text: 'E-1 Airman Basic', value: 'E-1 Airman Basic' },
@@ -752,258 +899,174 @@
 
       // Placeholder content for info panels
       const awardInfoContent = {
-  sijanLeadership: `
-    <h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Lance P. Sijan Leadership Award</h3>
-    
-    <p style="margin-bottom: 1rem;"><strong>Goal:</strong> The Sijan Award recognizes individuals who have demonstrated the highest qualities of leadership in their jobs and in their lives. Created in 1981 and named after Captain Lance P. Sijan (Medal of Honor recipient), this is one of the Air Force's most prestigious awards.</p>
-    
-    <p style="margin-bottom: 0.5rem;"><strong>Key Criteria:</strong></p>
-    <ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;">
-      <li><strong>Leadership Excellence:</strong> Must demonstrate outstanding leadership abilities in both professional duties and personal conduct</li>
-      <li><strong>Character:</strong> Emphasizes moral courage, integrity, and leading by example - not just job performance</li>
-      <li><strong>Whole Person:</strong> Considers leadership in the performance of duties AND the conduct of their lives</li>
-      <li><strong>Impact:</strong> Should show how leadership positively affected the mission, unit, and people</li>
-      <li><strong>Categories:</strong> Junior Officer, Senior Officer, Junior Enlisted, Senior Enlisted</li>
-    </ul>
-    
-    <p style="margin-bottom: 0.5rem;"><strong>Writing Tips:</strong></p>
-    <ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
-      <li>Focus on leadership actions that inspired others and improved the unit</li>
-      <li>Highlight moral courage, ethical decision-making, and mentorship</li>
-      <li>Include examples of leading through adversity or complex situations</li>
-      <li>Show impact on mission readiness AND people development</li>
-      <li>Emphasize character traits that align with Sijan's legacy (courage, perseverance, selflessness)</li>
-      <li>Use specific examples of how the nominee's leadership stands out from peers</li>
-    </ul>
-  `,
+          sijanLeadership: `<h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Lance P. Sijan Leadership Award</h3><p style="margin-bottom: 1rem;"><strong>Goal:</strong> The Sijan Award recognizes individuals who have demonstrated the highest qualities of leadership in their jobs and in their lives. Created in 1981 and named after Captain Lance P. Sijan (Medal of Honor recipient), this is one of the Air Force's most prestigious awards.</p><p style="margin-bottom: 0.5rem;"><strong>Key Criteria:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;"><li><strong>Leadership Excellence:</strong> Must demonstrate outstanding leadership abilities in both professional duties and personal conduct</li><li><strong>Character:</strong> Emphasizes moral courage, integrity, and leading by example - not just job performance</li><li><strong>Whole Person:</strong> Considers leadership in the performance of duties AND the conduct of their lives</li><li><strong>Impact:</strong> Should show how leadership positively affected the mission, unit, and people</li><li><strong>Categories:</strong> Junior Officer, Senior Officer, Junior Enlisted, Senior Enlisted</li></ul><p style="margin-bottom: 0.5rem;"><strong>Writing Tips:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;"><li>Focus on leadership actions that inspired others and improved the unit</li><li>Highlight moral courage, ethical decision-making, and mentorship</li><li>Include examples of leading through adversity or complex situations</li><li>Show impact on mission readiness AND people development</li><li>Emphasize character traits that align with Sijan's legacy (courage, perseverance, selflessness)</li><li>Use specific examples of how the nominee's leadership stands out from peers</li></ul>`,
+          leoMarquez: `<h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Lt. Gen. Leo Marquez Award</h3><p style="margin-bottom: 1rem;"><strong>Goal:</strong> Named after the "Godfather of Air Force Maintenance," this award recognizes military and civilian aircraft, munitions, missile, and communications-electronics maintenance personnel who perform hands-on maintenance or manage a maintenance function with exceptional excellence.</p><p style="margin-bottom: 0.5rem;"><strong>Key Criteria:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;"><li><strong>Job Performance:</strong> Outstanding performance in maintenance duties - must exceed the standard</li><li><strong>Job Knowledge:</strong> Deep technical expertise and application of maintenance principles</li><li><strong>Sortie Generation:</strong> Direct involvement in generating aircraft sorties and mission readiness</li><li><strong>Efficiency & Results:</strong> Quantifiable improvements in mission capability rates, cost savings, or innovation</li><li><strong>Categories:</strong> Aircraft Maintenance, Munitions/Missile Maintenance, Communications-Electronics Maintenance (Officer, NCO, Airman, Civilian categories within each)</li></ul><p style="margin-bottom: 0.5rem;"><strong>Writing Tips:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;"><li>Lead with quantifiable metrics: MC rates, sortie generation, cost savings, downtime reduction</li><li>Highlight technical innovation or process improvements that had lasting impact</li><li>Emphasize hands-on work and direct contribution to mission readiness</li><li>Include examples of working under pressure, combat operations, or austere conditions</li><li>Show how the nominee went beyond normal duties to solve critical problems</li><li>Focus on sustained excellence, not just single achievements</li><li>Use maintenance-specific language: sorties generated, FMC rates, code-3 repairs, phase inspections</li></ul>`,
+          quarterlyAnnual: `<h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Quarterly / Annual Awards</h3><p style="margin-bottom: 1rem;"><strong>Goal:</strong> Recognize sustained superior performance over the award period (quarter or year). These awards identify top performers in categories like Airman, NCO, SNCO, CGO, FGO, and Civilian, fostering morale and highlighting exceptional contributions.</p><p style="margin-bottom: 0.5rem;"><strong>Key Criteria:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;"><li><strong>Performance in Primary Duty:</strong> Must show exceptional job performance with quantifiable impact</li><li><strong>Leadership:</strong> Demonstrate leadership abilities appropriate to rank/position</li><li><strong>Whole Airman Concept:</strong> Self-improvement (education, training) and base/community involvement</li><li><strong>Time-Bound:</strong> All accomplishments must occur within the award period</li><li><strong>Sustained Excellence:</strong> Consistency throughout the period, not just one-time achievements</li></ul><p style="margin-bottom: 0.5rem;"><strong>AF Form 1206 Format (Common):</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;"><li><strong>Quarterly (Typical):</strong> 9 lines total including headers<ul style="margin-left: 1.5rem; margin-top: 0.25rem;"><li>Job Performance: 4-5 bullets</li><li>Leadership: 1-2 bullets</li><li>Whole Airman Concept: 1-2 bullets</li></ul></li><li><strong>Annual (Typical):</strong> 18 lines total including headers<ul style="margin-left: 1.5rem; margin-top: 0.25rem;"><li>Leadership & Job Performance: 12 bullets</li><li>Whole Airman Concept: 5 bullets</li></ul></li><li><em>Note: Specific line counts vary by unit/MAJCOM - always check local guidance</em></li></ul><p style="margin-bottom: 0.5rem;"><strong>Writing Tips:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;"><li><strong>Use Performance Statements:</strong> Action + Impact/Result format</li><li><strong>Quantify Everything:</strong> Numbers, percentages, dollar amounts, time saved</li><li><strong>Show Impact:</strong> How did actions improve the mission, unit, or people?</li><li><strong>Be Specific:</strong> Avoid vague statements; include concrete details</li><li><strong>Balance:</strong> Address all categories (job performance, leadership, whole person)</li><li><strong>Front-Load Impact:</strong> Put the most impressive result first in each bullet</li><li><strong>Vary Sentence Structure:</strong> Avoid repetitive phrasing</li><li><strong>Stay in Period:</strong> Only include accomplishments from the award quarter/year</li><li><strong>Compare to Peers:</strong> Show how performance exceeds others at same rank/position</li><li><strong>Use Strong Action Verbs:</strong> Led, implemented, streamlined, achieved, generated</li></ul><p style="margin-top: 1rem; margin-bottom: 0.5rem;"><strong>Example Bullet Structure:</strong></p><p style="margin-left: 1.5rem; font-style: italic;">- Managed 500 vouchers worth $2M--maintained 99% accuracy rate; ensured zero mission delays during critical exercises</p>`,
+          msm: `<h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Meritorious Service Medal (MSM)</h3><p style="margin-bottom: 1rem;"><strong>Goal:</strong> The MSM recognizes outstanding meritorious achievement or service over an extended period (typically end-of-tour or retirement). It's awarded for acts comparable to the Legion of Merit but at a lesser level of responsibility.</p><p style="margin-bottom: 0.5rem;"><strong>Key Criteria:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;"><li><strong>Extended Service:</strong> Typically covers 2-4 years of service at one assignment</li><li><strong>Career Impact:</strong> Focus on tour-level achievements with lasting impact</li><li><strong>Sustained Excellence:</strong> Consistent superior performance throughout the period</li><li><strong>Significant Contribution:</strong> Must show major contributions to mission success</li><li><strong>Typical Recipients:</strong> Field grade officers (O-4 to O-6) and senior NCOs (E-7 to E-9)</li><li><strong>Authority:</strong> Typically approved by O-6 (Colonel) or higher</li></ul><p style="margin-bottom: 0.5rem;"><strong>Writing Tips:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;"><li><strong>Narrative Format:</strong> Citations are written in paragraph form (not bullets)</li><li><strong>Character Limit:</strong> Maximum 1,350 characters for citation body</li><li><strong>Opening Sentence:</strong> Use proper format - "distinguished himself/herself by meritorious service as [duty title]"</li><li><strong>Highlight Major Accomplishments:</strong> Focus on 3-5 most significant achievements</li><li><strong>Show Strategic Impact:</strong> Emphasize wing/base/MAJCOM-level effects</li><li><strong>Include Career Development:</strong> Mention significant training, certifications, or education completed</li><li><strong>Use Active Voice:</strong> Strong verbs that show leadership and initiative</li><li><strong>Quantify Impact:</strong> Dollar amounts, percentages, people managed, assets controlled</li><li><strong>Professional Tone:</strong> Formal military writing - avoid casual language</li><li><strong>Closing Sentence:</strong> "The distinctive accomplishments of [rank/name] reflect credit upon himself/herself and the United States Air Force"</li></ul><p style="margin-top: 1rem; margin-bottom: 0.5rem;"><strong>Common MSM Scenarios:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;"><li>End of 3-4 year assignment for outstanding performance</li><li>Retirement decoration for career-level achievements</li><li>Completion of significant project with major impact</li><li>Can be awarded for combat zone service (since 2003)</li></ul>`,
+          afcm: `<h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Air Force Commendation Medal (AFCM)</h3><p style="margin-bottom: 1rem;"><strong>Goal:</strong> The AFCM recognizes outstanding achievement or meritorious service that is distinctive but not sufficient for a higher award. It's a mid-level decoration for specific accomplishments or sustained performance over a shorter period than the MSM.</p><p style="margin-bottom: 0.5rem;"><strong>Key Criteria:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;"><li><strong>Meritorious Achievement:</strong> Distinctive accomplishment or single outstanding act</li><li><strong>Meritorious Service:</strong> Exemplary service over 1-2 years (shorter than MSM)</li><li><strong>Acts of Courage:</strong> Non-combat acts not meeting Airman's Medal criteria</li><li><strong>Above and Beyond:</strong> Performance clearly exceeds normal duty expectations</li><li><strong>Typical Recipients:</strong> Company grade officers and junior NCOs (but any rank below O-7)</li><li><strong>Authority:</strong> Must be approved by O-6 (Colonel) or higher</li><li><strong>Devices:</strong> "V" for Valor, "C" for Combat, "R" for Remote operations</li></ul><p style="margin-bottom: 0.5rem;"><strong>Writing Tips:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;"><li><strong>Narrative Format:</strong> Paragraph style, maximum 1,350 characters</li><li><strong>Opening Sentence:</strong> "distinguished himself/herself by outstanding achievement" OR "by meritorious service as [duty title]"</li><li><strong>Focus on Specifics:</strong> Clearly articulate what makes this achievement distinctive</li><li><strong>Show Direct Impact:</strong> Emphasize immediate mission effects and tangible results</li><li><strong>Achievement vs Service:</strong><ul style="margin-left: 1.5rem; margin-top: 0.25rem;"><li><em>Achievement:</em> Single act or specific accomplishment (deployment, project, event)</li><li><em>Service:</em> Sustained performance over 1-2 years showing consistent excellence</li></ul></li><li><strong>Quantify Results:</strong> Numbers demonstrate impact - cost savings, efficiency gains, mission success</li><li><strong>Appropriate Scope:</strong> Squadron/group level impact is suitable (not necessarily wing-level)</li><li><strong>Use Strong Action Words:</strong> Managed, executed, coordinated, achieved, implemented</li></ul><p style="margin-top: 1rem; margin-bottom: 0.5rem;"><strong>Common AFCM Scenarios:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;"><li>Successful completion of deployment (4-6 months)</li><li>Outstanding performance during TDY or exercise</li><li>Leading a significant project to successful completion</li><li>Mid-tour recognition (18-24 months into assignment)</li><li>End-of-tour for junior personnel (1-2 years)</li><li>One-time extraordinary achievement deserving special recognition</li></ul>`,
+          custom: `<h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Custom Award</h3><p style="margin-bottom: 1rem;"><strong>Goal:</strong> This option is for non-standard awards such as unit-level recognition, functional awards, special trophies, or organization-specific awards not covered by the standard categories.</p><p style="margin-bottom: 1rem;"><strong>Instructions:</strong> Use the <strong>"Custom Award Instructions"</strong> field below to provide specific information about your custom award. This helps the AI understand what criteria and format to use.</p><p style="margin-bottom: 0.5rem;"><strong>What to Include in Custom Instructions:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;"><li><strong>Award Name:</strong> Full title of the award (e.g., "John L. Hennessy Award" or "Squadron Maintainer of the Quarter")</li><li><strong>Award Purpose:</strong> What this award recognizes (innovation, safety, specific job function, etc.)</li><li><strong>Key Criteria:</strong> What qualities or achievements are being evaluated?</li><li><strong>Format Requirements:</strong> Bullet format or narrative? Line limits? Character limits?</li><li><strong>Evaluation Categories:</strong> Are there specific sections (e.g., Job Performance, Innovation, Safety Record)?</li><li><strong>Target Recipients:</strong> Who typically receives this award? (specific AFSCs, positions, ranks)</li><li><strong>Approval Authority:</strong> Who approves this award?</li><li><strong>Unique Emphasis:</strong> Any special focus areas or metrics specific to this award?</li></ul><p style="margin-bottom: 0.5rem;"><strong>Example Custom Instructions:</strong></p><div style="background-color: rgba(128, 128, 128, 0.1); padding: 0.75rem; border-radius: 0.25rem; margin-bottom: 1rem; font-size: 0.9rem;"><p style="margin-bottom: 0.5rem;"><em>"This is the Squadron Dorm Manager of the Quarter award. It recognizes Airmen who demonstrate exceptional dormitory management and care for dorm residents. Criteria include:</em></p><ul style="list-style-type: disc; margin-left: 1.5rem;"><li><em>Quality of Life improvements for residents</em></li><li><em>Facility management and maintenance coordination</em></li><li><em>Mentorship and support provided to dorm residents</em></li><li><em>Community building activities</em></li><li><em>Format: AF Form 1206, 9 lines total including headers"</em></li></ul></div><p style="margin-bottom: 0.5rem;"><strong>Tips for Custom Awards:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;"><li>Be as specific as possible about unique criteria and expectations</li><li>If the award has an AFI or local instruction, mention it</li><li>Include examples if you have successful past submissions</li><li>Note any unconventional aspects that differ from standard awards</li><li>Specify if there are specific buzzwords or terminology that should be included</li><li>Clarify whether quantitative or qualitative emphasis is more important</li></ul>`
+      };
 
-  leoMarquez: `
-    <h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Lt. Gen. Leo Marquez Award</h3>
-    
-    <p style="margin-bottom: 1rem;"><strong>Goal:</strong> Named after the "Godfather of Air Force Maintenance," this award recognizes military and civilian aircraft, munitions, missile, and communications-electronics maintenance personnel who perform hands-on maintenance or manage a maintenance function with exceptional excellence.</p>
-    
-    <p style="margin-bottom: 0.5rem;"><strong>Key Criteria:</strong></p>
-    <ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;">
-      <li><strong>Job Performance:</strong> Outstanding performance in maintenance duties - must exceed the standard</li>
-      <li><strong>Job Knowledge:</strong> Deep technical expertise and application of maintenance principles</li>
-      <li><strong>Sortie Generation:</strong> Direct involvement in generating aircraft sorties and mission readiness</li>
-      <li><strong>Efficiency & Results:</strong> Quantifiable improvements in mission capability rates, cost savings, or innovation</li>
-      <li><strong>Categories:</strong> Aircraft Maintenance, Munitions/Missile Maintenance, Communications-Electronics Maintenance (Officer, NCO, Airman, Civilian categories within each)</li>
-    </ul>
-    
-    <p style="margin-bottom: 0.5rem;"><strong>Writing Tips:</strong></p>
-    <ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
-      <li>Lead with quantifiable metrics: MC rates, sortie generation, cost savings, downtime reduction</li>
-      <li>Highlight technical innovation or process improvements that had lasting impact</li>
-      <li>Emphasize hands-on work and direct contribution to mission readiness</li>
-      <li>Include examples of working under pressure, combat operations, or austere conditions</li>
-      <li>Show how the nominee went beyond normal duties to solve critical problems</li>
-      <li>Focus on sustained excellence, not just single achievements</li>
-      <li>Use maintenance-specific language: sorties generated, FMC rates, code-3 repairs, phase inspections</li>
-    </ul>
-  `,
+      // --- START: DYNAMIC AFSC DROPDOWN LOGIC ---
+      let afscPickerPath = [];
 
-  quarterlyAnnual: `
-    <h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Quarterly / Annual Awards</h3>
-    
-    <p style="margin-bottom: 1rem;"><strong>Goal:</strong> Recognize sustained superior performance over the award period (quarter or year). These awards identify top performers in categories like Airman, NCO, SNCO, CGO, FGO, and Civilian, fostering morale and highlighting exceptional contributions.</p>
-    
-    <p style="margin-bottom: 0.5rem;"><strong>Key Criteria:</strong></p>
-    <ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;">
-      <li><strong>Performance in Primary Duty:</strong> Must show exceptional job performance with quantifiable impact</li>
-      <li><strong>Leadership:</strong> Demonstrate leadership abilities appropriate to rank/position</li>
-      <li><strong>Whole Airman Concept:</strong> Self-improvement (education, training) and base/community involvement</li>
-      <li><strong>Time-Bound:</strong> All accomplishments must occur within the award period</li>
-      <li><strong>Sustained Excellence:</strong> Consistency throughout the period, not just one-time achievements</li>
-    </ul>
-    
-    <p style="margin-bottom: 0.5rem;"><strong>AF Form 1206 Format (Common):</strong></p>
-    <ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;">
-      <li><strong>Quarterly (Typical):</strong> 9 lines total including headers
-        <ul style="margin-left: 1.5rem; margin-top: 0.25rem;">
-          <li>Job Performance: 4-5 bullets</li>
-          <li>Leadership: 1-2 bullets</li>
-          <li>Whole Airman Concept: 1-2 bullets</li>
-        </ul>
-      </li>
-      <li><strong>Annual (Typical):</strong> 18 lines total including headers
-        <ul style="margin-left: 1.5rem; margin-top: 0.25rem;">
-          <li>Leadership & Job Performance: 12 bullets</li>
-          <li>Whole Airman Concept: 5 bullets</li>
-        </ul>
-      </li>
-      <li><em>Note: Specific line counts vary by unit/MAJCOM - always check local guidance</em></li>
-    </ul>
-    
-    <p style="margin-bottom: 0.5rem;"><strong>Writing Tips:</strong></p>
-    <ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
-      <li><strong>Use Performance Statements:</strong> Action + Impact/Result format</li>
-      <li><strong>Quantify Everything:</strong> Numbers, percentages, dollar amounts, time saved</li>
-      <li><strong>Show Impact:</strong> How did actions improve the mission, unit, or people?</li>
-      <li><strong>Be Specific:</strong> Avoid vague statements; include concrete details</li>
-      <li><strong>Balance:</strong> Address all categories (job performance, leadership, whole person)</li>
-      <li><strong>Front-Load Impact:</strong> Put the most impressive result first in each bullet</li>
-      <li><strong>Vary Sentence Structure:</strong> Avoid repetitive phrasing</li>
-      <li><strong>Stay in Period:</strong> Only include accomplishments from the award quarter/year</li>
-      <li><strong>Compare to Peers:</strong> Show how performance exceeds others at same rank/position</li>
-      <li><strong>Use Strong Action Verbs:</strong> Led, implemented, streamlined, achieved, generated</li>
-    </ul>
-    
-    <p style="margin-top: 1rem; margin-bottom: 0.5rem;"><strong>Example Bullet Structure:</strong></p>
-    <p style="margin-left: 1.5rem; font-style: italic;">- Managed 500 vouchers worth $2M--maintained 99% accuracy rate; ensured zero mission delays during critical exercises</p>
-  `,
+      function getAfscPickerItems(path) {
+          if (!path) path = [];
 
-  msm: `
-    <h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Meritorious Service Medal (MSM)</h3>
-    
-    <p style="margin-bottom: 1rem;"><strong>Goal:</strong> The MSM recognizes outstanding meritorious achievement or service over an extended period (typically end-of-tour or retirement). It's awarded for acts comparable to the Legion of Merit but at a lesser level of responsibility.</p>
-    
-    <p style="margin-bottom: 0.5rem;"><strong>Key Criteria:</strong></p>
-    <ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;">
-      <li><strong>Extended Service:</strong> Typically covers 2-4 years of service at one assignment</li>
-      <li><strong>Career Impact:</strong> Focus on tour-level achievements with lasting impact</li>
-      <li><strong>Sustained Excellence:</strong> Consistent superior performance throughout the period</li>
-      <li><strong>Significant Contribution:</strong> Must show major contributions to mission success</li>
-      <li><strong>Typical Recipients:</strong> Field grade officers (O-4 to O-6) and senior NCOs (E-7 to E-9)</li>
-      <li><strong>Authority:</strong> Typically approved by O-6 (Colonel) or higher</li>
-    </ul>
-    
-    <p style="margin-bottom: 0.5rem;"><strong>Writing Tips:</strong></p>
-    <ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
-      <li><strong>Narrative Format:</strong> Citations are written in paragraph form (not bullets)</li>
-      <li><strong>Character Limit:</strong> Maximum 1,350 characters for citation body</li>
-      <li><strong>Opening Sentence:</strong> Use proper format - "distinguished himself/herself by meritorious service as [duty title]"</li>
-      <li><strong>Highlight Major Accomplishments:</strong> Focus on 3-5 most significant achievements</li>
-      <li><strong>Show Strategic Impact:</strong> Emphasize wing/base/MAJCOM-level effects</li>
-      <li><strong>Include Career Development:</strong> Mention significant training, certifications, or education completed</li>
-      <li><strong>Use Active Voice:</strong> Strong verbs that show leadership and initiative</li>
-      <li><strong>Quantify Impact:</strong> Dollar amounts, percentages, people managed, assets controlled</li>
-      <li><strong>Professional Tone:</strong> Formal military writing - avoid casual language</li>
-      <li><strong>Closing Sentence:</strong> "The distinctive accomplishments of [rank/name] reflect credit upon himself/herself and the United States Air Force"</li>
-    </ul>
-    
-    <p style="margin-top: 1rem; margin-bottom: 0.5rem;"><strong>Common MSM Scenarios:</strong></p>
-    <ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
-      <li>End of 3-4 year assignment for outstanding performance</li>
-      <li>Retirement decoration for career-level achievements</li>
-      <li>Completion of significant project with major impact</li>
-      <li>Can be awarded for combat zone service (since 2003)</li>
-    </ul>
-  `,
+          if (path.length === 0) {
+              // Level 0: Show only default and top-level headers
+              return [
+                  afscOptions[0], // '-- Select...'
+                  ...afscOptions.filter(opt => opt.type === 'header')
+              ];
+          }
 
-  afcm: `
-    <h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Air Force Commendation Medal (AFCM)</h3>
-    
-    <p style="margin-bottom: 1rem;"><strong>Goal:</strong> The AFCM recognizes outstanding achievement or meritorious service that is distinctive but not sufficient for a higher award. It's a mid-level decoration for specific accomplishments or sustained performance over a shorter period than the MSM.</p>
-    
-    <p style="margin-bottom: 0.5rem;"><strong>Key Criteria:</strong></p>
-    <ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;">
-      <li><strong>Meritorious Achievement:</strong> Distinctive accomplishment or single outstanding act</li>
-      <li><strong>Meritorious Service:</strong> Exemplary service over 1-2 years (shorter than MSM)</li>
-      <li><strong>Acts of Courage:</strong> Non-combat acts not meeting Airman's Medal criteria</li>
-      <li><strong>Above and Beyond:</strong> Performance clearly exceeds normal duty expectations</li>
-      <li><strong>Typical Recipients:</strong> Company grade officers and junior NCOs (but any rank below O-7)</li>
-      <li><strong>Authority:</strong> Must be approved by O-6 (Colonel) or higher</li>
-      <li><strong>Devices:</strong> "V" for Valor, "C" for Combat, "R" for Remote operations</li>
-    </ul>
-    
-    <p style="margin-bottom: 0.5rem;"><strong>Writing Tips:</strong></p>
-    <ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
-      <li><strong>Narrative Format:</strong> Paragraph style, maximum 1,350 characters</li>
-      <li><strong>Opening Sentence:</strong> "distinguished himself/herself by outstanding achievement" OR "by meritorious service as [duty title]"</li>
-      <li><strong>Focus on Specifics:</strong> Clearly articulate what makes this achievement distinctive</li>
-      <li><strong>Show Direct Impact:</strong> Emphasize immediate mission effects and tangible results</li>
-      <li><strong>Achievement vs Service:</strong>
-        <ul style="margin-left: 1.5rem; margin-top: 0.25rem;">
-          <li><em>Achievement:</em> Single act or specific accomplishment (deployment, project, event)</li>
-          <li><em>Service:</em> Sustained performance over 1-2 years showing consistent excellence</li>
-        </ul>
-      </li>
-      <li><strong>Quantify Results:</strong> Numbers demonstrate impact - cost savings, efficiency gains, mission success</li>
-      <li><strong>Appropriate Scope:</strong> Squadron/group level impact is suitable (not necessarily wing-level)</li>
-      <li><strong>Use Strong Action Words:</strong> Managed, executed, coordinated, achieved, implemented</li>
-    </ul>
-    
-    <p style="margin-top: 1rem; margin-bottom: 0.5rem;"><strong>Common AFCM Scenarios:</strong></p>
-    <ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
-      <li>Successful completion of deployment (4-6 months)</li>
-      <li>Outstanding performance during TDY or exercise</li>
-      <li>Leading a significant project to successful completion</li>
-      <li>Mid-tour recognition (18-24 months into assignment)</li>
-      <li>End-of-tour for junior personnel (1-2 years)</li>
-      <li>One-time extraordinary achievement deserving special recognition</li>
-    </ul>
-  `,
+          if (path.length === 1) {
+              // Level 1: Check if the selected header has subheaders.
+              const headerText = path[0];
+              const items = [];
+              let inSection = false;
+              let sectionHasSubheaders = false;
 
-  custom: `
-    <h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Custom Award</h3>
-    
-    <p style="margin-bottom: 1rem;"><strong>Goal:</strong> This option is for non-standard awards such as unit-level recognition, functional awards, special trophies, or organization-specific awards not covered by the standard categories.</p>
-    
-    <p style="margin-bottom: 1rem;"><strong>Instructions:</strong> Use the <strong>"Custom Award Instructions"</strong> field below to provide specific information about your custom award. This helps the AI understand what criteria and format to use.</p>
-    
-    <p style="margin-bottom: 0.5rem;"><strong>What to Include in Custom Instructions:</strong></p>
-    <ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;">
-      <li><strong>Award Name:</strong> Full title of the award (e.g., "John L. Hennessy Award" or "Squadron Maintainer of the Quarter")</li>
-      <li><strong>Award Purpose:</strong> What this award recognizes (innovation, safety, specific job function, etc.)</li>
-      <li><strong>Key Criteria:</strong> What qualities or achievements are being evaluated?</li>
-      <li><strong>Format Requirements:</strong> Bullet format or narrative? Line limits? Character limits?</li>
-      <li><strong>Evaluation Categories:</strong> Are there specific sections (e.g., Job Performance, Innovation, Safety Record)?</li>
-      <li><strong>Target Recipients:</strong> Who typically receives this award? (specific AFSCs, positions, ranks)</li>
-      <li><strong>Approval Authority:</strong> Who approves this award?</li>
-      <li><strong>Unique Emphasis:</strong> Any special focus areas or metrics specific to this award?</li>
-    </ul>
-    
-    <p style="margin-bottom: 0.5rem;"><strong>Example Custom Instructions:</strong></p>
-    <div style="background-color: rgba(128, 128, 128, 0.1); padding: 0.75rem; border-radius: 0.25rem; margin-bottom: 1rem; font-size: 0.9rem;">
-      <p style="margin-bottom: 0.5rem;"><em>"This is the Squadron Dorm Manager of the Quarter award. It recognizes Airmen who demonstrate exceptional dormitory management and care for dorm residents. Criteria include:</em></p>
-      <ul style="list-style-type: disc; margin-left: 1.5rem;">
-        <li><em>Quality of Life improvements for residents</em></li>
-        <li><em>Facility management and maintenance coordination</em></li>
-        <li><em>Mentorship and support provided to dorm residents</em></li>
-        <li><em>Community building activities</em></li>
-        <li><em>Format: AF Form 1206, 9 lines total including headers"</em></li>
-      </ul>
-    </div>
-    
-    <p style="margin-bottom: 0.5rem;"><strong>Tips for Custom Awards:</strong></p>
-    <ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
-      <li>Be as specific as possible about unique criteria and expectations</li>
-      <li>If the award has an AFI or local instruction, mention it</li>
-      <li>Include examples if you have successful past submissions</li>
-      <li>Note any unconventional aspects that differ from standard awards</li>
-      <li>Specify if there are specific buzzwords or terminology that should be included</li>
-      <li>Clarify whether quantitative or qualitative emphasis is more important</li>
-    </ul>
-  `
-};
+              // First pass: Check for any subheaders within this header's section
+              for (const opt of afscOptions) {
+                  if (opt.type === 'header' && opt.text === headerText) {
+                      inSection = true;
+                      continue;
+                  }
+                  if (inSection && opt.type === 'header') break; // End of section
+                  if (inSection && opt.type === 'subheader') {
+                      sectionHasSubheaders = true;
+                      break;
+                  }
+              }
 
-      // Picker/Dropdown System (No changes needed here)
+              // Second pass: Collect the appropriate items
+              inSection = false;
+              for (const opt of afscOptions) {
+                  if (opt.type === 'header' && opt.text === headerText) {
+                      inSection = true;
+                      continue;
+                  }
+                  if (inSection && opt.type === 'header') break;
+                  
+                  if (inSection) {
+                      if (sectionHasSubheaders) {
+                          // If subheaders exist, only show those
+                          if (opt.type === 'subheader') {
+                              items.push(opt);
+                          }
+                      } else {
+                          // If no subheaders, show the final items directly
+                          if (!opt.type) {
+                              items.push(opt);
+                          }
+                      }
+                  }
+              }
+              return items;
+          }
+
+          if (path.length === 2) {
+              // Level 2: Show final AFSCs under a subheader
+              const headerText = path[0];
+              const subheaderText = path[1];
+              const items = [];
+              let inHeaderSection = false;
+              let inSubheaderSection = false;
+              for (const opt of afscOptions) {
+                  if (opt.type === 'header' && opt.text === headerText) {
+                      inHeaderSection = true;
+                      continue;
+                  }
+                  if (inHeaderSection && opt.type === 'header') break;
+
+                  if (inHeaderSection) {
+                      if (opt.type === 'subheader' && opt.text === subheaderText) {
+                          inSubheaderSection = true;
+                          continue;
+                      }
+                      if (inSubheaderSection && (opt.type === 'subheader' || opt.type === 'header')) break;
+
+                      if (inSubheaderSection && !opt.type) {
+                          items.push(opt);
+                      }
+                  }
+              }
+              return items;
+          }
+          return [];
+      }
+      
       const pickerOverlay = document.getElementById('picker-overlay');
       const pickerSearchInput = document.getElementById('picker-search-input');
       const pickerOptionsList = document.getElementById('picker-options-list');
+      const pickerBackBtn = document.getElementById('picker-back-btn');
       let currentPickerField = null;
       let currentPickerOptions = [];
+      
       function openPicker(fieldId, options) {
-        currentPickerField = fieldId; currentPickerOptions = options;
-        pickerSearchInput.value = ''; renderPickerOptions(options);
-        pickerOverlay.classList.add('visible'); pickerSearchInput.focus();
+        currentPickerField = fieldId;
+        pickerSearchInput.value = '';
+        if (fieldId === 'jobTitle') {
+            afscPickerPath = [];
+            renderAfscPickerOptions();
+        } else {
+            currentPickerOptions = options;
+            renderGenericPickerOptions(options);
+            pickerBackBtn.classList.add('hidden');
+        }
+        pickerOverlay.classList.add('visible');
+        pickerSearchInput.focus();
       }
+
       function closePicker() { pickerOverlay.classList.remove('visible'); }
-      function renderPickerOptions(options) {
+
+      function renderAfscPickerOptions() {
+          pickerOptionsList.innerHTML = '';
+          const items = getAfscPickerItems(afscPickerPath);
+          pickerBackBtn.classList.toggle('hidden', afscPickerPath.length === 0);
+
+          items.forEach(opt => {
+              const li = document.createElement('li');
+              const isCategory = opt.type === 'header' || opt.type === 'subheader';
+
+              if (opt.type === 'header') li.className = 'picker-option-header';
+              else if (opt.type === 'subheader') li.className = 'picker-option-subheader';
+              else li.className = 'picker-option-item';
+              li.textContent = opt.text;
+
+              if (isCategory) {
+                  li.addEventListener('click', () => {
+                      afscPickerPath.push(opt.text);
+                      renderAfscPickerOptions();
+                  });
+              } else {
+                  li.dataset.value = opt.value;
+                  li.addEventListener('click', () => selectPickerOption(opt));
+              }
+              pickerOptionsList.appendChild(li);
+          });
+      }
+
+      function renderGenericPickerOptions(options) {
         pickerOptionsList.innerHTML = '';
         options.forEach(opt => {
             const li = document.createElement('li');
-            li.className = 'picker-option-item'; li.textContent = opt.text; li.dataset.value = opt.value;
+            li.className = 'picker-option-item';
+            li.textContent = opt.text;
+            li.dataset.value = opt.value;
             li.addEventListener('click', () => selectPickerOption(opt));
             pickerOptionsList.appendChild(li);
         });
       }
+
       function selectPickerOption(option) {
         if (!currentPickerField) return;
         const field = document.getElementById(currentPickerField);
         if (field) {
-            field.textContent = option.text; field.dataset.value = option.value;
+            field.textContent = option.text;
+            field.dataset.value = option.value;
             if (currentPickerField === 'jobTitle' && option.value === 'other') {
                 document.getElementById('otherJobField').classList.remove('hidden');
             } else if (currentPickerField === 'jobTitle') {
@@ -1012,57 +1075,167 @@
         }
         closePicker();
       }
+
+      pickerBackBtn.addEventListener('click', () => {
+          if (currentPickerField === 'jobTitle' && afscPickerPath.length > 0) {
+              afscPickerPath.pop();
+              renderAfscPickerOptions();
+          }
+      });
       pickerSearchInput.addEventListener('input', (e) => {
         const query = e.target.value.toLowerCase();
-        const filtered = currentPickerOptions.filter(opt => opt.text.toLowerCase().includes(query));
-        renderPickerOptions(filtered);
+        if (currentPickerField !== 'jobTitle') {
+             const filtered = currentPickerOptions.filter(opt => opt.text.toLowerCase().includes(query));
+             renderGenericPickerOptions(filtered);
+        } else {
+            // Search is complex for tree view, so we disable it for simplicity. 
+            // A full implementation would search the final nodes and show their paths.
+        }
       });
       pickerOverlay.addEventListener('click', (e) => { if (e.target === pickerOverlay) closePicker(); });
+      
       let activeDropdown = null;
-      function createDropdown(containerId, options, fieldId) {
+
+      function renderAfscDropdownContent(dropdownEl, selectedEl) {
+          dropdownEl.innerHTML = '';
+          const items = getAfscPickerItems(afscPickerPath);
+
+          if (afscPickerPath.length > 0) {
+              const backBtn = document.createElement('div');
+              backBtn.className = 'floating-dropdown-option';
+              backBtn.innerHTML = '<strong>← Back</strong>';
+              backBtn.addEventListener('click', (e) => {
+                  e.stopPropagation();
+                  afscPickerPath.pop();
+                  renderAfscDropdownContent(dropdownEl, selectedEl);
+              });
+              dropdownEl.appendChild(backBtn);
+          }
+
+          items.forEach(opt => {
+              const optDiv = document.createElement('div');
+              const isCategory = opt.type === 'header' || opt.type === 'subheader';
+
+              if (isCategory) {
+                  optDiv.className = opt.type === 'header' ? 'floating-dropdown-header' : 'floating-dropdown-subheader';
+                  optDiv.textContent = opt.text;
+                  optDiv.addEventListener('click', (e) => {
+                      e.stopPropagation();
+                      afscPickerPath.push(opt.text);
+                      renderAfscDropdownContent(dropdownEl, selectedEl);
+                  });
+              } else {
+                  optDiv.className = 'floating-dropdown-option';
+                  optDiv.textContent = opt.text;
+                  if (opt.value === selectedEl.dataset.value) optDiv.classList.add('selected');
+                  optDiv.addEventListener('click', () => {
+                      selectedEl.textContent = opt.text;
+                      selectedEl.dataset.value = opt.value;
+                      if (opt.value === 'other') {
+                          document.getElementById('otherJobField').classList.remove('hidden');
+                      } else {
+                          document.getElementById('otherJobField').classList.add('hidden');
+                      }
+                      closeAllDropdowns();
+                  });
+              }
+              dropdownEl.appendChild(optDiv);
+          });
+      }
+
+      function createAfscDropdown(containerId, fieldId) {
         const container = document.getElementById(containerId);
         if (!container) return;
         const selected = document.createElement('div');
-        selected.className = 'custom-dropdown-selected'; selected.id = fieldId;
-        selected.textContent = options[0].text; selected.dataset.value = options[0].value;
+        selected.className = 'custom-dropdown-selected';
+        selected.id = fieldId;
+        selected.textContent = afscOptions[0].text;
+        selected.dataset.value = afscOptions[0].value;
+        container.innerHTML = ''; // Clear container
+        container.appendChild(selected);
+
         selected.addEventListener('click', (e) => {
-            e.stopPropagation(); closeAllDropdowns();
+            e.stopPropagation();
+            closeAllDropdowns();
+            afscPickerPath = [];
+            const rect = selected.getBoundingClientRect();
+            const dropdown = document.createElement('div');
+            dropdown.className = 'floating-dropdown-options';
+            dropdown.style.cssText = `position: absolute; top: ${rect.bottom + window.scrollY + 5}px; left: ${rect.left + window.scrollX}px; width: ${rect.width}px;`;
+            
+            renderAfscDropdownContent(dropdown, selected);
+            
+            document.body.appendChild(dropdown);
+            activeDropdown = dropdown;
+        });
+      }
+
+      function createSimpleDropdown(containerId, options, fieldId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        const selected = document.createElement('div');
+        selected.className = 'custom-dropdown-selected';
+        selected.id = fieldId;
+        selected.textContent = options[0].text;
+        selected.dataset.value = options[0].value;
+        container.innerHTML = ''; // Clear container
+        container.appendChild(selected);
+
+        selected.addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeAllDropdowns();
             const rect = selected.getBoundingClientRect();
             const dropdown = document.createElement('div');
             dropdown.className = 'floating-dropdown-options';
             dropdown.style.cssText = `position: absolute; top: ${rect.bottom + window.scrollY + 5}px; left: ${rect.left + window.scrollX}px; width: ${rect.width}px;`;
             options.forEach(opt => {
                 const optDiv = document.createElement('div');
-                optDiv.className = 'floating-dropdown-option'; optDiv.textContent = opt.text;
+                optDiv.className = 'floating-dropdown-option';
+                optDiv.textContent = opt.text;
                 if (opt.value === selected.dataset.value) optDiv.classList.add('selected');
                 optDiv.addEventListener('click', () => {
-                    selected.textContent = opt.text; selected.dataset.value = opt.value;
-                    if (fieldId === 'jobTitle' && opt.value === 'other') {
-                        document.getElementById('otherJobField').classList.remove('hidden');
-                    } else if (fieldId === 'jobTitle') {
-                        document.getElementById('otherJobField').classList.add('hidden');
-                    }
+                    selected.textContent = opt.text;
+                    selected.dataset.value = opt.value;
                     closeAllDropdowns();
                 });
                 dropdown.appendChild(optDiv);
             });
-            document.body.appendChild(dropdown); activeDropdown = dropdown;
+            document.body.appendChild(dropdown);
+            activeDropdown = dropdown;
         });
-        container.appendChild(selected);
       }
-      function closeAllDropdowns() { if (activeDropdown) { activeDropdown.remove(); activeDropdown = null; } }
+
       function createResponsiveSelect(containerId, options, fieldId) {
         const container = document.getElementById(containerId);
         if (!container) return;
-        if (isTouchDevice) {
-            const picker = document.createElement('div');
-            picker.className = 'custom-picker-input'; picker.id = fieldId;
-            picker.textContent = options[0].text; picker.dataset.value = options[0].value;
-            picker.addEventListener('click', () => openPicker(fieldId, options));
-            container.appendChild(picker);
-        } else { createDropdown(containerId, options, fieldId); }
+        container.innerHTML = ''; // Clear previous content
+
+        if (fieldId === 'jobTitle') {
+             if (isTouchDevice) {
+                const picker = document.createElement('div');
+                picker.className = 'custom-picker-input'; picker.id = fieldId;
+                picker.textContent = options[0].text; picker.dataset.value = options[0].value;
+                picker.addEventListener('click', () => openPicker(fieldId, options));
+                container.appendChild(picker);
+            } else {
+                createAfscDropdown(containerId, fieldId);
+            }
+        } else {
+            if (isTouchDevice) {
+                const picker = document.createElement('div');
+                picker.className = 'custom-picker-input'; picker.id = fieldId;
+                picker.textContent = options[0].text; picker.dataset.value = options[0].value;
+                picker.addEventListener('click', () => openPicker(fieldId, options));
+                container.appendChild(picker);
+            } else {
+                createSimpleDropdown(containerId, options, fieldId);
+            }
+        }
       }
 
+      function closeAllDropdowns() { if (activeDropdown) { activeDropdown.remove(); activeDropdown = null; } }
+      // --- END: DYNAMIC AFSC DROPDOWN LOGIC ---
+      
       // Helper Functions
       function showModal(id) { document.getElementById(id)?.classList.add('visible'); }
       function hideModal(id) { document.getElementById(id)?.classList.remove('visible'); }
@@ -1081,7 +1254,6 @@
         if (jobTitle) promptParts.push((promptData.contextAddons?.jobTitle || "// JOB TITLE CONTEXT PLACEHOLDER").replace('{jobTitle}', jobTitle));
         if (majcom) promptParts.push((promptData.contextAddons?.majcom || "// MAJCOM CONTEXT PLACEHOLDER").replace('{majcom}', majcom));
         
-        // --- ADD THIS LINE ---
         if (rank) promptParts.push((promptData.contextAddons?.rank || "CONTEXT: The user's rank is {rank}").replace('{rank}', rank));
         
         if (userChoice === 'performance-report') {
@@ -1100,19 +1272,14 @@
       }
 
       function assembleDecorationPrompt(inputs) {
-          const { userChoice } = inputs;
+          const { userChoice, achievements } = inputs;
           let promptParts = [];
-
-          // Get the specific decoration addon
-          const decorationKey = userChoice.replace('decoration-', '');
+          const decorationKey = userChoice.replace('decoration-', '');
   	      if (promptData.decorationAddons?.[decorationKey]) {
           	  promptParts.push(promptData.decorationAddons[decorationKey]);
           }
-
-          // Add the final instructions
           promptParts.push(promptData.finalInstructions || "// FINAL INSTRUCTIONS PLACEHOLDER");
-
-          // Join the parts
+          promptParts.push(`\n**MEMBER'S ACHIEVEMENTS:**\n${achievements.map((a,i) => `${i+1}. ${a}`).join('\n')}`);
           return promptParts.join('\n\n');
       }
 
@@ -1122,24 +1289,20 @@
         // --- PROMPT DATA PLACEHOLDERS ---
 			promptData = {
 			"base": "You are to assume the persona of a seasoned USAF Chief Master Sergeant, serving as a \"Royal Spark Performance Statement Expert.\" Your reputation is built on decades of experience reviewing records and writing performance reports. Your primary mission is to assist the user in crafting a powerful performance statement. \n\n## Core Directives & Rules of Engagement\n\n1.  **Strict Statement Construction Guidelines:**\n    * **Format:** Adhere to the modern narrative format (a single, complete sentence).\n    * **Model:** Follow the \"Action, Impact, Result\" (AIR) model.\n    * **Pronouns:** Do not use personal pronouns (He/She).\n    * **Language:** Use clear, concise language. Avoid jargon and unapproved acronyms.\n    * **Focus:** Emphasize leadership, mentorship, and tangible, measurable outcomes (e.g., dollars saved, hours reduced, personnel trained, percentage increased).\n\n2.  **Acronym Discipline:** You will *only* use acronyms from the approved list below. Do not introduce any others.\n    * **Common:** Ranks (SrA, Maj), offices (CC, JA), orgs (CPTS, AFGSC, DoD), platforms (F-16, HH-60), measurements (lbs, MPH, $25B, 5%, hrs, FY23).\n    * **List:**\n        \"ABM\": \"AIR BATTLE MANAGER\", \"ACE\": \"AGILE COMBAT EMPLOYMENT\", \"AD\": \"ACTIVE DUTY\", \"ADCON\": \"ADMINISTRATIVE CONTROL\", \"AFE\": \"AIRCREW FLIGHT EQUIPMENT\", \"AFFORGEN\": \"AIR FORCE FORCE GENERATION\", \"AFI\": \"AIR FORCE INSTRUCTION\", \"AFMAN\": \"AIR FORCE MANUAL\", \"AFSC\": \"AIR FORCE SPECIALTY CODE\", \"AFSO21\": \"AIR FORCE SMART OPERATIONS FOR THE 21ST CENTURY\", \"AGE\": \"AEROSPACE GROUND EQUIPMENT\", \"AGR\": \"ACTIVE GUARD RESERVE\", \"AI\": \"ARTIFICIAL INTELLIGENCE\", \"ALQ\": \"AIRMAN LEADERSHIP QUALITY\", \"ALS\": \"AIRMAN LEADERSHIP SCHOOL\", \"AOC\": \"AIR OPERATIONS CENTER\", \"AOR\": \"AREA OF RESPONSIBILITY\", \"APF\": \"APPROPRIATED FUNDS\", \"ART\": \"AIR RESERVE TECHNICIAN\", \"AT\": \"ANNUAL TOUR\", \"ATC\": \"AIR TRAFFIC CONTROL\", \"ATO\": \"AIR TASKING ORDER\", \"BMT\": \"BASIC MILITARY TRAINING\", \"BNR\": \"BY NAME REQUEST\", \"BTZ\": \"BELOW-THE-ZONE\", \"C2\": \"COMMAND AND CONTROL\", \"C4ISR\": \"COMMAND, CONTROL, COMMUNICATIONS, COMPUTERS, INTELLIGENCE, SURVEILLANCE AND RECONNAISSANCE\", \"CAOC\": \"COMBINED AIR OPERATIONS CENTER\", \"CAS\": \"CLOSE AIR SUPPORT\", \"CAT\": \"CRISIS ACTION TEAM\", \"CATM\": \"COMBAT ARMS TRAINING AND MAINTENANCE\", \"CBRN\": \"CHEMICAL, BIOLOGICAL, RADIOLOGICAL, NUCLEAR\", \"CBT\": \"COMPUTER BASED TRAINING\", \"CCAF\": \"COMMUNITY COLLEGE OF THE AIR FORCE\", \"CCIP\": \"COMMANDER'S INSPECTION PROGRAM\", \"CDI\": \"COMMANDER DIRECTED INVESTIGATION\", \"CFETP\": \"CAREER FIELD EDUCATION AND TRAINING PLAN\", \"CFM\": \"CAREER FIELD MANAGER\", \"CLA\": \"CHIEF MASTER SERGEANT LEADERSHIP ACADEMY\", \"CLC\": \"CHIEF MASTER SERGEANT LEADERSHIP COURSE\", \"COA\": \"COURSE OF ACTION\", \"CODEL\": \"CONGRESSIONAL DELEGATION\", \"CONOPS\": \"CONCEPT OF OPERATIONS\", \"CONUS\": \"CONTINENTAL UNITED STATES\", \"COOP\": \"CONTINUITY OF OPERATIONS\", \"CPI\": \"CONTINUOUS PROCESS IMPROVEMENT\", \"CPR\": \"CARDIOPULMONARY RESUSCITATION\", \"CSAR\": \"COMBAT SEARCH AND RESCUE\", \"CUI\": \"CONTROLLED UNCLASSIFIED INFORMATION\", \"DAFI\": \"DEPARTMENT OF THE AIR FORCE INSTRUCTION\", \"DAFMAN\": \"DEPARTMENT OF THE AIR FORCE MANUAL\", \"DEOCS\": \"DEFENSE EQUAL OPPORTUNITY CLIMATE SURVEY\", \"DG\": \"DISTINGUISHED GRADUATE\", \"DHA\": \"DEFENSE HEALTH AGENCY\", \"DSG\": \"DRILL STATUS GUARDSMAN\", \"DV\": \"DISTINGUISHED VISITOR\", \"EKIA\": \"ENEMY KILLED IN ACTION\", \"EOC\": \"EMERGENCY OPERATIONS CENTER\", \"EOD\": \"EXPLOSIVE ORDNANCE DISPOSAL\", \"EOY\": \"END OF YEAR\", \"EPB\": \"ENLISTED PERFORMANCE BRIEF\", \"EW\": \"ELECTRONIC WARFARE\", \"FAM\": \"FUNCTIONAL AREA MANAGER\", \"FHP\": \"FLYING HOUR PROGRAM\", \"FMC\": \"FULLY MISSION CAPABLE\", \"FOB\": \"FORWARD OPERATING BASE\", \"FOC\": \"FULL OPERATIONAL CAPABILITY\", \"FOL\": \"FORWARD OPERATING LOCATION\", \"FPCON\": \"FORCE PROTECTION CONDITIONS\", \"FTEC\": \"FIRST TERM ENLISTED COURSE\", \"FTU\": \"FORMAL TRAINING UNIT\", \"GPA\": \"GRADE POINT AVERAGE\", \"GPS\": \"GLOBAL POSITIONING SYSTEM\", \"GSU\": \"GEOGRAPHICALLY SEPARATED UNIT\", \"GTC\": \"GOVERNMENT TRAVEL CARD\", \"IDT\": \"INACTIVE DUTY TRAINING\", \"IDE\": \"INTERMEDIATE DEVELOPMENTAL EDUCATION\", \"IED\": \"IMPROVISED EXPLOSIVE DEVICE\", \"IMA\": \"INDIVIDUAL MOBILIZATION AUGMENTEE\", \"IOC\": \"INITIAL OPERATIONAL CAPABILITY\", \"IP\": \"INSTRUCTOR PILOT\", \"ISR\": \"INTELLIGENCE, SURVEILLANCE, AND RECONNAISSANCE\", \"IT\": \"INFORMATION TECHNOLOGY\", \"JADC2\": \"JOINT ALL DOMAIN COMMAND AND CONTROL\", \"JROTC\": \"JUNIOR RESERVE OFFICER TRAINING CORPS\", \"KIA\": \"KILLED IN ACTION\", \"LOE\": \"LINE OF EFFORT\", \"MCA\": \"MULTI-CAPABLE AIRMEN\", \"MDS\": \"MISSION DESIGN SERIES\", \"MILCON\": \"MILITARY CONSTRUCTION\", \"MILPDS\": \"MILITARY PERSONNEL DATA SYSTEM\", \"MOA\": \"MEMORANDUM OF AGREEMENT\", \"MOU\": \"MEMORANDUM OF UNDERSTANDING\", \"MTF\": \"MEDICAL TREATMENT FACILITY\", \"MWR\": \"MORALE, WELFARE, AND RECONNAISANCE\", \"MX\": \"MAINTENANCE\", \"NC3\": \"NUCLEAR COMMAND, CONTROL, AND COMMUNICATIONS\", \"NCOA\": \"NONCOMMISSIONED OFFICER ACADEMY\", \"NCR\": \"NATIONAL CAPITAL REGION\", \"NDAA\": \"NATIONAL DEFENSE AUTHORIZATION ACT\", \"NDS\": \"NATIONAL DEFENSE STRATEGY\", \"NEO\": \"NONCOMBATANT EVACUATION OPERATION\", \"NIPR\": \"NON-SECURE INTERNET PROTOCOL ROUTER\", \"NMC\": \"NON MISSION CAPABLE\", \"O&M\": \"OPERATIONS AND MAINTENANCE\", \"OCO\": \"OVERSEAS CONTINGENCY OPERATIONS\", \"OCONUS\": \"OUTSIDE CONTINENTAL UNITED STATES\", \"OJT\": \"ON THE JOB TRAINING\", \"OPLAN\": \"OPERATIONS PLAN\", \"OPSEC\": \"OPERATIONAL SECURITY\", \"OTS\": \"OFFICER TRAINING SCHOOL\", \"PCS\": \"PERMANENT CHANGE OF STATION\", \"PDE\": \"PRIMARY DEVELOPMENTAL EDUCATION\", \"PFA\": \"PHYSICAL FITNESS ASSESSMENT\", \"PME\": \"PROFESSIONAL MILITARY EDUCATION\", \"POC\": \"POINT OF CONTACT\", \"PT\": \"PHYSICAL TRAINING\", \"QA\": \"QUALITY ASSURANCE\", \"QoL\": \"QUALITY OF LIFE\", \"ROE\": \"RULES OF ENGAGEMENT\", \"ROTC\": \"RESERVE OFFICER TRAINING CORPS\", \"RPA\": \"REMOTELY PILOTED AIRCRAFT\", \"SAPR\": \"SEXUAL ASSAULT PREVENTION AND RESPONSE\", \"SCIF\": \"SENSITIVE COMPARTMENTED INFORMATION FACILITY\", \"SDE\": \"SENIOR DEVELOPMENTAL EDUCATION\", \"SERE\": \"SURVIVAL, EVASION, RESISTANCE, ESCAPE\", \"SIPR\": \"SECRET INTERNET PROTOCOL ROUTER\", \"SME\": \"SUBJECT MATTER EXPERT\", \"SNCOA\": \"SENIOR NONCOMMISSIONED OFFICER ACADEMY\", \"SOF\": \"SPECIAL OPERATIONS FORCES\", \"SOP\": \"STANDARD OPERATING PROCEDURES\", \"SOS\": \"SQUADRON OFFICER SCHOOL\", \"STEM\": \"SCIENCE, TECHNOLOGY, ENGINEERING, AND MATHEMATICS\", \"TACP\": \"TACTICAL AIR CONTROL PARTY\", \"TCCC\": \"TACTICAL COMBAT CASUALTY CARE\", \"TDY\": \"TEMPORARY DUTY\", \"TFI\": \"TOTAL FORCE INTEGRATION\", \"TR\": \"TRADITIONAL RESERVIST\", \"TS\": \"TOP SECRET\", \"TTP\": \"TACTICS, TECHNIQUES, AND PROCEDURES\", \"UCI\": \"UNIT COMPLIANCE INSPECTION\", \"UCMJ\": \"UNIFORM CODE OF MILITARY JUSTICE\", \"UEI\": \"UNIT EFFECTIVENESS INSPECTION\", \"UTA\": \"UNIT TRAINING ASSEMBLY\", \"UTC\": \"UNIT TYPE CODE\", \"UXO\": \"UNEXPLODED ORDNANCE\", \"WRM\": \"WAR RESERVE MATERIEL\", \"XAB\": \"EXPEDITIONARY AIRBASE\"\n\n3.  **Your Step-by-Step Process:** You will follow this structured process methodically.\n    **Step 1: Introduction & Draft:** Greet me as the 'Royal Spark Performance Statement Expert.' Provide ONE initial DRAFT statement based on my raw accomplishment details. State clearly that this is a first pass, then immediately proceed to Step 2.\n    **Step 2: Gather Details:** Present a numbered list of 3-6 short, one-sentence questions to extract the specific ACTION, quantifiable IMPACT, SCOPE, LEADERSHIP, and link to the strategic MISSION. These questions should seek to elevate the impact to be commensurate with the next rank (e.g., push an E-6 to sound like an E-7). Wait for my consolidated response.\n    **Step 3: Draft & Refine:** Using my answers, provide at least two new, well-formed draft statements. Ask for my feedback for further refinement (e.g., \"Which MGA does this best align with?\", \"Does this impact feel strong enough?\"). Continue the conversation; do not just output statements and stop.\n    **Step 4: Final Variations:** Once we have refined a statement, your final output will be a numbered list of 3-5 distinct variations of the finalized statement, using different powerful action verbs and sentence structures.",
-
 			"rankAddons": {
 			"e1_e4": "INTERNAL TONE DIRECTIVE (DO NOT ANNOUNCE): Adopt a firm, direct, \"teaching mode\" persona. You are a mentor shaping a future NCO. Feedback must be direct, bordering on mean or 'salty tech sgt' style. If a statement is weak (e.g., 'processed paperwork'), respond firmly: \"Okay, Airman, let's pause. As written, this just lists a task... A promotion board is looking for impact, not just duty performance. Let's find the 'so what?'... Did you fix any problems? How many people? Was there a deadline?\"\nIMPACT FOCUS: Guide the user to focus on gaining job knowledge and local-level (shop/flight/squadron/base) impact.",
 			"e6_plus": "INTERNAL TONE DIRECTIVE (DO NOT ANNOUNCE): Shift to a collaborative, peer-to-peer tone. You are a trusted sounding board for a seasoned NCO/SNCO/Officer. Our interaction is focused on professional refinement. Be respectful, but still challenge me to find the strategic link. If the user says something ridiculous, fluffy, or not strong enough you will still redirect that with firm but gentle force. \nIMPACT FOCUS: Guide the user to focus on regional/mission impact (E5-E6) or MAJCOM/DoD strategic impact (E7+). Push them to articulate their impact at the level of the *next* rank."
 			},
-
 			"contextAddons": {
 			"jobTitle": "CONTEXT: The user's job is {jobTitle}.",
 			"majcom": "CONTEXT: The user is in {majcom}.",
 			"mga": "CONTEXT: This statement is for the Major Graded Area (MGA) of '{mga}'. Ensure the statement's 'Action' and 'Impact' align with this MGA. If their achievement does not align well, you will suggest to either reframe the narrative to align with that silo, or suggest moving to a different area.",
 			"rank": "CONTEXT: The user's rank is {rank}."
 			},
-
 			"typeAddons": {
 			"performanceReport": "TASK: This is for a standard performance report (EPB/OPR). Your goal is to follow your 4-step process to create statements. It is imperative that all final statements adhere to a strict character limit of 175-200 characters.",
 			"awardPackage": "TASK: This is for a competitive award package. The standard is much higher. Follow your 4-step process, but be even more critical in your coaching. You will ensure the final narrative statements are no more than 400 characters."
 			},
-
 			"awardAddons": {
 			"sijanLeadership": "AWARD-SPECIFIC CRITERIA: This is the Lance P. Sijan Leadership Award. Focus 90% on LEADERSHIP and CHARACTER. Technical skill is secondary. Ask for examples of moral courage, mentoring, and leading people through adversity.",
 			"leoMarquez": "AWARD-SPECIFIC CRIA: This is the Leo Marquez Award. Focus 90% on hands-on MAINTENANCE/LOGISTICS INNOVATION. Ask for specific technical problems solved, process improvements, and quantifiable impacts on sortie generation, MC rates, or cost savings.",
@@ -1150,9 +1313,7 @@
 			},
             decorationAddons: {
 				pcs: "DECORATION TYPE: PCS/PCA (Permanent Change of Station/Assignment) Decoration\n\nYou are now writing a formal military decoration citation. This is NOT a performance statement or award package—it is a narrative paragraph that will be read aloud during a ceremony and displayed on an official certificate.\n\n## CRITICAL CITATION REQUIREMENTS:\n\n**FORMAT & LENGTH:**\n- Maximum 1,350 characters for entire citation body (excluding opening/closing sentences)\n- Courier New font, size 11\n- Written in narrative paragraph format—NO bullets, NO line breaks within the body\n- Typically 2-4 sentences describing accomplishments between opening and closing\n\n**OPENING SENTENCE (Meritorious Service):**\n- Format: \"[Full Rank] [First] [Middle Initial] [Last] distinguished himself/herself by meritorious service as [duty title], [unit], [location], from [start date] to [end date].\"\n- Use complete rank title in opening (Master Sergeant, not MSgt; Technical Sergeant, not TSgt)\n- Include full name with middle initial\n\n**NARRATIVE BODY:**\n- Use THIRD PERSON, ACTIVE VOICE, PAST TENSE throughout\n- First mention: Use short oral address (\"Sergeant Smith\", \"Captain Jones\", \"Airman Brown\")\n- Subsequent mentions: Use pronouns (he/she/his/her) - alternate between name and pronouns\n- NO personal pronouns (I, we, you)\n- Focus on 3-5 major accomplishments that show sustained excellence and lasting organizational impact\n- Emphasize mission contribution, leadership, and strategic results\n- Use powerful action verbs: led, directed, managed, orchestrated, spearheaded, executed, implemented\n- Include quantifiable metrics: dollars saved/managed, percentages improved, people led, assets controlled\n- During this period, [member's] outstanding professional skill, leadership, and ceaseless efforts resulted in...\n- Avoid passive constructions: \"was responsible for\" → \"directed\"; \"was instrumental in\" → \"led\"\n\n**WRITING STYLE:**\n- NO abbreviations except Jr., Sr., II, III (spell out: United States Air Force, Air Force Base, Department of Defense, etc.)\n- NO acronyms unless on approved DAF abbreviations list (see your approved list)\n- Numbers nine and below: spell out (\"three,\" \"five\")\n- Numbers 10 and above: use numerals (\"10,\" \"250,\" \"1,000\")\n- Dollar amounts: \"$2 million\" or \"two million dollars\" (both acceptable)\n- NO special characters, symbols (except $), or superscripts\n- NO classified information\n- NO organizational designators (e.g., \"SCOO\")\n- Avoid jargon or \"geek-speak\" not understood by general public\n- Avoid exaggerated superlatives (\"unprecedented,\" \"unparalleled,\" \"unequaled\")\n\n**CLOSING SENTENCE (Standard):**\n- \"The distinctive accomplishments of [Rank] [Last Name] reflect credit upon himself/herself and the United States Air Force.\"\n\n**FOR RETIREMENT:**\n- \"The distinctive accomplishments of [Rank] [Last Name] culminate a long and distinguished career in the service of his/her country and reflect credit upon himself/herself and the United States Air Force.\"\n\n**FOR SEPARATION:**\n- \"The distinctive accomplishments of [Rank] [Last Name] while serving his/her country reflect credit upon himself/herself and the United States Air Force.\"\n\n## YOUR PROCESS:\n1. Confirm you have: rank, full name, duty title, unit, location, start/end dates\n2. Review the member's accomplishments from their entire tour\n3. Select 3-5 most significant achievements that show strategic, lasting impact\n4. Synthesize these into a flowing narrative paragraph (not individual bullets)\n5. Use transitions to connect achievements smoothly\n6. Ensure proper voice (third person, active, past tense) and formatting\n7. Count characters to ensure ≤1,350 in the body\n8. Apply correct opening and closing sentences\n\nThis citation must capture the substance of the decoration with dignity and clarity. Write with the formality befitting a ceremony where this will be read aloud.",
-
 				msm: "DECORATION TYPE: Meritorious Service Medal (MSM)\n\nYou are now writing a formal military decoration citation. This is NOT a performance statement or award package—it is a narrative paragraph that will be read aloud during a ceremony and displayed on an official certificate.\n\n## CRITICAL CITATION REQUIREMENTS:\n\n**FORMAT & LENGTH:**\n- Maximum 1,350 characters for entire citation body (excluding opening/closing sentences)\n- Courier New font, size 11\n- Written in narrative paragraph format—NO bullets, NO line breaks within the body\n- Typically 2-4 sentences describing accomplishments between opening and closing\n\n**OPENING SENTENCE:**\nFor period of service (most common for MSM):\n- Format 1: \"[Full Rank] [First] [Middle Initial] [Last] distinguished himself/herself in the performance of outstanding service to the United States as [duty title], [unit], [location], from [start date] to [end date].\"\n\nFor specific achievement (less common for MSM):\n- Format 2: \"[Full Rank] [First] [Middle Initial] [Last] distinguished himself/herself by outstanding achievement as [duty title], [unit], [location], on [date] OR from [start date] to [end date].\"\n\n- Use complete rank title in opening (Master Sergeant, not MSgt; Major, not Maj)\n- Include full name with middle initial\n\n**NARRATIVE BODY:**\n- Use THIRD PERSON, ACTIVE VOICE, PAST TENSE throughout\n- First mention: Use short oral address (\"Sergeant Smith\", \"Major Jones\", \"Airman Brown\")\n- Subsequent mentions: Use pronouns (he/she/his/her) - alternate between name and pronouns\n- NO personal pronouns (I, we, you)\n- MSM-SPECIFIC FOCUS: Tour-level or career-culminating achievements showing sustained excellence\n- Emphasize: Strategic impact, organizational transformation, significant lasting contributions\n- \"During this period, the outstanding professional skill, leadership, and ceaseless efforts of [rank last name] resulted in major contributions to the effectiveness and success of...\"\n- Use powerful action verbs: transformed, revolutionized, orchestrated, spearheaded, directed, championed\n- Include quantifiable metrics at wing/MAJCOM/DoD level when possible\n- Avoid passive constructions: \"was instrumental in\" → \"led\"; \"was responsible for\" → \"directed\"\n\n**WRITING STYLE:**\n- NO abbreviations except Jr., Sr., II, III (spell out: United States Air Force, Air Force Base, Department of Defense)\n- NO acronyms unless on approved DAF abbreviations list\n- Numbers nine and below: spell out; numbers 10 and above: use numerals\n- Dollar amounts: \"$5 million\" or \"five million dollars\"\n- NO special characters (except $), symbols, or superscripts\n- NO classified information or organizational designators\n- Avoid jargon not understood by general public\n- Avoid exaggerated superlatives\n\n**CLOSING SENTENCE:**\n\nStandard:\n- \"The distinctive accomplishments of [Rank] [Last Name] reflect credit upon himself/herself and the United States Air Force.\"\n\nRetirement:\n- \"The distinctive accomplishments of [Rank] [Last Name] culminate a long and distinguished career in the service of his/her country and reflect credit upon himself/herself and the United States Air Force.\"\n\nSeparation:\n- \"The distinctive accomplishments of [Rank] [Last Name] while serving his/her country reflect credit upon himself/herself and the United States Air Force.\"\n\n## MSM STANDARDS:\n- Typically awarded to field grade officers (O-4 to O-6) and senior NCOs (E-7 to E-9)\n- Recognizes 2-4 years of sustained superior performance OR significant career-level achievement\n- Impact should be at wing/base/MAJCOM level\n- Shows lasting organizational improvements and strategic mission contributions\n\n## YOUR PROCESS:\n1. Confirm all required information (rank, name, duty title, unit, location, dates)\n2. Identify 3-5 tour-defining accomplishments with strategic impact\n3. Synthesize into flowing narrative showing sustained excellence\n4. Ensure proper voice, tone, and formatting\n5. Verify character count ≤1,350 in body\n6. Apply correct opening/closing sentences\n\nWrite with the formality and dignity appropriate for this mid-level decoration.",
-
 				afcm: "DECORATION TYPE: Air Force Commendation Medal (AFCM) / Air Force Achievement Medal (AFAM)\n\nYou are now writing a formal military decoration citation. This is NOT a performance statement or award package—it is a narrative paragraph that will be read aloud during a ceremony and displayed on an official certificate.\n\n## CRITICAL CITATION REQUIREMENTS:\n\n**FORMAT & LENGTH:**\n- Maximum 1,350 characters for entire citation body (excluding opening/closing sentences)\n- Courier New font, size 11\n- Written in narrative paragraph format—NO bullets, NO line breaks within the body\n- AFCM: Typically 2-3 sentences; AFAM: Typically 1-2 sentences\n\n**OPENING SENTENCE:**\n\nFor AFCM/AFAM - Meritorious Service:\n- \"[Full Rank] [First] [Middle Initial] [Last] distinguished himself/herself by meritorious service as [duty title], [unit], [location], from [start date] to [end date].\"\n\nFor AFCM/AFAM - Outstanding Achievement:\n- \"[Full Rank] [First] [Middle Initial] [Last] distinguished himself/herself by outstanding achievement as [duty title], [unit], [location], from [start date] to [end date].\"\n\nFor one-time accomplishment:\n- \"[Full Rank] [First] [Middle Initial] [Last] distinguished himself/herself by outstanding achievement (at or near [location]) on [date].\"\n\nFor Act of Courage (rare):\n- \"[Full Rank] [First] [Middle Initial] [Last] distinguished himself/herself by an act of courage as [duty title] OR while assigned to [unit], [location], on [date].\"\n\n- Use complete rank title in opening (Staff Sergeant, not SSgt; Captain, not Capt)\n- Include full name with middle initial\n\n**NARRATIVE BODY:**\n- Use THIRD PERSON, ACTIVE VOICE, PAST TENSE throughout\n- First mention: Use short oral address (\"Sergeant Smith\", \"Captain Jones\", \"Airman Brown\")\n- Subsequent mentions: Use pronouns (he/she/his/her) - alternate between name and pronouns\n- NO personal pronouns (I, we, you)\n\n**AFCM FOCUS (1-2 years or specific achievement):**\n- \"During this period, the professional skill, leadership, and ceaseless efforts of [rank last name] contributed to the effectiveness and success of...\"\n- Emphasize: Squadron/group-level impact, distinctive performance, mission success\n- Show what makes this achievement stand out above normal duty expectations\n- Typical scenarios: 18-24 month tour, deployment (4-6 months), major project completion, mid-tour recognition\n\n**AFAM FOCUS (shorter period or single achievement):**\n- Emphasize: Specific outstanding accomplishment or meritorious service rendered on behalf of the Air Force\n- Typical scenarios: 1 year of service, completion of significant project, support during contingency, exceptional act\n- Flight/squadron-level impact is appropriate\n\n**For Acts of Courage:**\n- Describe the specific act, circumstances, and outcome\n- Example: \"On that date, [rank last name] arrived at the scene of an automobile accident which seriously injured the driver of the vehicle. Without regard for his/her personal safety, [he/she]...\"\n\n**ACTION VERBS & STYLE:**\n- Use strong verbs: led, managed, coordinated, executed, implemented, streamlined\n- Include quantifiable results: efficiency gains, cost savings, mission improvements\n- Avoid passive voice: \"was responsible for\" → \"managed\"; \"was key to\" → \"ensured\"\n\n**WRITING STYLE:**\n- NO abbreviations except Jr., Sr., II, III (spell out: United States Air Force, Air Force Base, Department of Defense)\n- NO acronyms unless on approved DAF abbreviations list\n- Numbers nine and below: spell out; numbers 10 and above: use numerals\n- Dollar amounts: \"$1 million\" or \"one million dollars\"\n- NO special characters (except $), symbols, or superscripts\n- NO classified information or organizational designators\n- Avoid jargon not understood by general public\n- Avoid exaggerated superlatives\n\n**CLOSING SENTENCE:**\n\nStandard (Service or Achievement):\n- \"The distinctive accomplishments of [Rank] [Last Name] reflect credit upon himself/herself and the United States Air Force.\"\n\nAct of Courage:\n- \"By his/her prompt action and humanitarian regard for his/her fellowman, [Rank] [Last Name] has reflected credit upon himself/herself and the United States Air Force.\"\n\nAFAM Alternative (sometimes used):\n- \"The professional abilities and outstanding accomplishments of [Rank] [Last Name] reflect great credit upon himself/herself and the United States Air Force.\"\n\nRetirement (rare for AFCM/AFAM):\n- \"The distinctive accomplishments of [Rank] [Last Name] culminate a distinguished career in the service of his/her country and reflect credit upon himself/herself and the United States Air Force.\"\n\n## DECORATION STANDARDS:\n\n**AFCM:**\n- Mid-level decoration for distinctive achievement or meritorious service\n- Typically: Company grade officers (O-1 to O-3), NCOs (E-5 to E-6)\n- Period: 1-2 years of service OR specific outstanding achievement\n- Impact: Squadron/group-level, clearly above normal duty\n- Approval: Colonel (O-6) or higher\n\n**AFAM:**\n- Recognition for outstanding achievement or meritorious service rendered specifically on behalf of AF\n- Typically: Junior officers, junior NCOs, airmen\n- Period: 1 year OR specific achievement\n- Impact: Flight/squadron-level\n- Approval: Squadron Commander or higher (varies by unit)\n\n## YOUR PROCESS:\n1. Determine if this is AFCM or AFAM level\n2. Confirm: rank, name, duty title, unit, location, dates, type (service vs achievement vs courage)\n3. Identify 1-3 most distinctive accomplishments\n4. Write flowing narrative showing clear mission impact\n5. Ensure proper voice, tone, and formatting\n6. Verify character count ≤1,350 in body\n7. Apply correct opening/closing sentences for decoration type and reason\n\nWrite with appropriate formality while keeping the narrative crisp and focused on what makes this recognition deserved."
 			},
             finalInstructions: "Begin by giving the user a short introduction, a draft of your example, and questions to guide them to a final product."
@@ -1342,8 +1503,15 @@
             
             ['jobTitle', 'rank', 'majcom', 'mga'].forEach(id => {
                 const el = document.getElementById(id);
-                const options = (id === 'jobTitle') ? afscOptions : (id === 'rank') ? rankOptions : (id === 'majcom') ? majcomOptions : mgaOptions;
-                if (el) {
+                if (!el) return;
+                let options;
+                switch (id) {
+                    case 'jobTitle': options = afscOptions; break;
+                    case 'rank': options = rankOptions; break;
+                    case 'majcom': options = majcomOptions; break;
+                    case 'mga': options = mgaOptions; break;
+                }
+                if (options) {
                     el.textContent = options[0].text;
                     el.dataset.value = options[0].value;
                 }
