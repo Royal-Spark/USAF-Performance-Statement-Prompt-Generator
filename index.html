@@ -48,6 +48,14 @@
             background-image: radial-gradient(ellipse at top, rgba(168, 85, 247, 0.1), transparent 60%);
             color: var(--text-primary);
             transition: background-color 0.3s, color 0.3s;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex-grow: 1;
+            position: relative;
         }
 
         /* --- Selection Screen Styles --- */
@@ -59,16 +67,15 @@
             min-height: 80vh;
             text-align: center;
             transition: opacity 0.5s ease-out;
-            position: relative; 
+            position: absolute;
+            width: 100%;
+            left: 0;
+            top: 0;
         }
-
-        #award-selection-screen, #decoration-selection-screen {
+        
+        .selection-container.hidden {
             opacity: 0;
             pointer-events: none;
-            position: absolute; 
-            top: 0;
-            left: 0;
-            width: 100%;
         }
 
         .selection-title {
@@ -135,9 +142,13 @@
             opacity: 1;
         }
 
-        body.selection-made .selection-container {
-            display: none;
+        body.selection-made #initial-selection-screen,
+        body.selection-made #award-selection-screen,
+        body.selection-made #decoration-selection-screen,
+        body.selection-made #decoration-reason-screen {
+             display: none;
         }
+
         .animated-title {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -151,19 +162,6 @@
             text-align: center;
             margin: 0 auto 2rem auto;
             animation: fadeIn 0.8s ease-out forwards;
-        }
-
-        /* Sub-selection screen animations */
-        body.award-step-1 #initial-selection-screen,
-        body.decoration-step-1 #initial-selection-screen {
-            opacity: 0;
-            pointer-events: none;
-        }
-        body.award-step-1 #award-selection-screen,
-        body.decoration-step-1 #decoration-selection-screen {
-            opacity: 1;
-            pointer-events: all;
-            transition: opacity 0.5s ease-out 0.4s;
         }
         
         /* --- Sticky Header --- */
@@ -552,7 +550,7 @@
         </div>
     </header>
 
-	<main class="max-w-7xl mx-auto px-4 sm:px-6 pb-6 pt-8">
+	<main class="w-full max-w-7xl mx-auto px-4 sm:px-6 pb-6 pt-8">
         
         <div id="initial-selection-screen" class="selection-container">
             <h2 class="selection-title">What would you like to create?</h2>
@@ -563,22 +561,31 @@
             </div>
         </div>
 
-        <div id="award-selection-screen" class="selection-container">
-             <h2 class="selection-title" style="animation: none;">Which Award Package?</h2>
+        <div id="award-selection-screen" class="selection-container hidden">
+             <h2 class="selection-title">Which Award Package?</h2>
              <div class="bubble-container">
-                <button class="selection-bubble award-bubble" data-choice="award-sijanLeadership">Sijan</button>
-                <button class="selection-bubble award-bubble" data-choice="award-leoMarquez">Leo Marquez</button>
-                <button class="selection-bubble award-bubble" data-choice="award-quarterlyAnnual">Annual / Quarterly Award</button>
-                <button class="selection-bubble award-bubble" data-choice="award-custom">Custom</button>
+                <button class="selection-bubble award-bubble" data-award-type="sijanLeadership">Sijan</button>
+                <button class="selection-bubble award-bubble" data-award-type="leoMarquez">Leo Marquez</button>
+                <button class="selection-bubble award-bubble" data-award-type="quarterlyAnnual">Annual / Quarterly</button>
+                <button class="selection-bubble award-bubble" data-award-type="custom">Custom</button>
              </div>
         </div>
         
-        <div id="decoration-selection-screen" class="selection-container">
-             <h2 class="selection-title" style="animation: none;">Which Decoration?</h2>
+        <div id="decoration-selection-screen" class="selection-container hidden">
+             <h2 class="selection-title">Which Decoration?</h2>
              <div class="bubble-container">
-                <button class="selection-bubble award-bubble" data-choice="decoration-pcs">PCS / PCA Decoration</button>
-                <button class="selection-bubble award-bubble" data-choice="decoration-msm">MSM</button>
-                <button class="selection-bubble award-bubble" data-choice="decoration-afcm">AFCM / AFAM</button>
+                <button class="selection-bubble award-bubble" data-decoration-type="afam">Achievement Medal</button>
+                <button class="selection-bubble award-bubble" data-decoration-type="afcm">Commendation Medal</button>
+                <button class="selection-bubble award-bubble" data-decoration-type="msm">Meritorious Service</button>
+             </div>
+        </div>
+
+        <div id="decoration-reason-screen" class="selection-container hidden">
+             <h2 class="selection-title">What is the Occasion?</h2>
+             <div class="bubble-container">
+                <button class="selection-bubble award-bubble" data-decoration-reason="single">Single Achievement</button>
+                <button class="selection-bubble award-bubble" data-decoration-reason="pca">PCS / PCA</button>
+                <button class="selection-bubble award-bubble" data-decoration-reason="custom">Custom</button>
              </div>
         </div>
 
@@ -641,31 +648,51 @@
                         <button id="resetBtn2" class="btn btn-danger">Start Over</button>
                     </div>
                     <div class="card-body">
-                        <p class="text-sm text-center mb-6" style="color: var(--text-secondary);">
-                            Paste your top 3-5 performance statements from your tour into the blocks below. The AI will assemble them into a cohesive decoration narrative.
-                        </p>
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <div class="form-group">
-                                <label for="dec-achievement-1">Achievement 1</label>
-                                <textarea id="dec-achievement-1" placeholder="Paste your strongest performance statement here..."></textarea>
-                            </div>
-                             <div class="form-group">
-                                <label for="dec-achievement-2">Achievement 2</label>
-                                <textarea id="dec-achievement-2" placeholder="Paste your next strongest performance statement..."></textarea>
-                            </div>
-                             <div class="form-group">
-                                <label for="dec-achievement-3">Achievement 3</label>
-                                <textarea id="dec-achievement-3" placeholder="...and another one."></textarea>
-                            </div>
-                             <div class="form-group">
-                                <label for="dec-achievement-4">Achievement 4</label>
-                                <textarea id="dec-achievement-4" placeholder="...and another one."></textarea>
-                            </div>
-                             <div class="form-group lg:col-span-2">
-                                <label for="dec-achievement-5">Achievement 5</label>
-                                <textarea id="dec-achievement-5" placeholder="...and another one."></textarea>
+                        
+                        <div id="dec-single-achievement-section" class="form-group hidden">
+                             <p class="text-sm text-center mb-6" style="color: var(--text-secondary);">Describe the single outstanding achievement for this decoration.</p>
+                            <label for="dec-single-achievement">Achievement Details</label>
+                            <textarea id="dec-single-achievement" placeholder="Describe the achievement with metrics..."></textarea>
+                        </div>
+
+                        <div id="dec-pca-section" class="hidden">
+                            <p class="text-sm text-center mb-6" style="color: var(--text-secondary);">Paste your top 3-5 performance statements from your tour into the blocks below. The AI will assemble them into a cohesive decoration narrative.</p>
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <div class="form-group">
+                                    <label for="dec-achievement-1">Achievement 1</label>
+                                    <textarea id="dec-achievement-1" placeholder="Paste your strongest performance statement here..."></textarea>
+                                </div>
+                                 <div class="form-group">
+                                    <label for="dec-achievement-2">Achievement 2</label>
+                                    <textarea id="dec-achievement-2" placeholder="Paste your next strongest performance statement..."></textarea>
+                                </div>
+                                 <div class="form-group">
+                                    <label for="dec-achievement-3">Achievement 3</label>
+                                    <textarea id="dec-achievement-3" placeholder="...and another one."></textarea>
+                                </div>
+                                 <div class="form-group">
+                                    <label for="dec-achievement-4">Achievement 4</label>
+                                    <textarea id="dec-achievement-4" placeholder="...and another one."></textarea>
+                                </div>
+                                 <div class="form-group lg:col-span-2">
+                                    <label for="dec-achievement-5">Achievement 5</label>
+                                    <textarea id="dec-achievement-5" placeholder="...and another one."></textarea>
+                                </div>
                             </div>
                         </div>
+
+                        <div id="dec-custom-section" class="hidden">
+                             <p class="text-sm text-center mb-6" style="color: var(--text-secondary);">Provide the specific instructions for this custom decoration and describe the key achievement.</p>
+                             <div class="form-group">
+                                <label for="dec-custom-instructions">Custom Decoration Instructions</label>
+                                <textarea id="dec-custom-instructions" placeholder="e.g., 'Focus on heroism during the event...' or 'This is for the Wing Innovator of the Year award...'"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="dec-custom-achievement">Achievement Details</label>
+                                <textarea id="dec-custom-achievement" placeholder="Describe the achievement this custom decoration is for..."></textarea>
+                            </div>
+                        </div>
+
                         <div class="flex flex-col items-center gap-4 mt-4">
                              <button id="generateButtonDec" class="btn btn-primary w-full text-lg">Generate & Copy Prompt</button>
                              <a href="https://niprgpt.mil/" target="_blank" rel="noopener noreferrer" id="nipr-link-btn-dec" class="btn btn-ghost w-full hidden">
@@ -740,7 +767,12 @@
     </div>
 
     <script>
-      let userChoice = '';
+      let userChoice = {
+          main: '',
+          awardType: '',
+          decorationType: '',
+          decorationReason: ''
+      };
       let activeBubbleText = '';
       let promptData = {};
       const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
@@ -904,6 +936,7 @@
           quarterlyAnnual: `<h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Quarterly / Annual Awards</h3><p style="margin-bottom: 1rem;"><strong>Goal:</strong> Recognize sustained superior performance over the award period (quarter or year). These awards identify top performers in categories like Airman, NCO, SNCO, CGO, FGO, and Civilian, fostering morale and highlighting exceptional contributions.</p><p style="margin-bottom: 0.5rem;"><strong>Key Criteria:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;"><li><strong>Performance in Primary Duty:</strong> Must show exceptional job performance with quantifiable impact</li><li><strong>Leadership:</strong> Demonstrate leadership abilities appropriate to rank/position</li><li><strong>Whole Airman Concept:</strong> Self-improvement (education, training) and base/community involvement</li><li><strong>Time-Bound:</strong> All accomplishments must occur within the award period</li><li><strong>Sustained Excellence:</strong> Consistency throughout the period, not just one-time achievements</li></ul><p style="margin-bottom: 0.5rem;"><strong>AF Form 1206 Format (Common):</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;"><li><strong>Quarterly (Typical):</strong> 9 lines total including headers<ul style="margin-left: 1.5rem; margin-top: 0.25rem;"><li>Job Performance: 4-5 bullets</li><li>Leadership: 1-2 bullets</li><li>Whole Airman Concept: 1-2 bullets</li></ul></li><li><strong>Annual (Typical):</strong> 18 lines total including headers<ul style="margin-left: 1.5rem; margin-top: 0.25rem;"><li>Leadership & Job Performance: 12 bullets</li><li>Whole Airman Concept: 5 bullets</li></ul></li><li><em>Note: Specific line counts vary by unit/MAJCOM - always check local guidance</em></li></ul><p style="margin-bottom: 0.5rem;"><strong>Writing Tips:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;"><li><strong>Use Performance Statements:</strong> Action + Impact/Result format</li><li><strong>Quantify Everything:</strong> Numbers, percentages, dollar amounts, time saved</li><li><strong>Show Impact:</strong> How did actions improve the mission, unit, or people?</li><li><strong>Be Specific:</strong> Avoid vague statements; include concrete details</li><li><strong>Balance:</strong> Address all categories (job performance, leadership, whole person)</li><li><strong>Front-Load Impact:</strong> Put the most impressive result first in each bullet</li><li><strong>Vary Sentence Structure:</strong> Avoid repetitive phrasing</li><li><strong>Stay in Period:</strong> Only include accomplishments from the award quarter/year</li><li><strong>Compare to Peers:</strong> Show how performance exceeds others at same rank/position</li><li><strong>Use Strong Action Verbs:</strong> Led, implemented, streamlined, achieved, generated</li></ul><p style="margin-top: 1rem; margin-bottom: 0.5rem;"><strong>Example Bullet Structure:</strong></p><p style="margin-left: 1.5rem; font-style: italic;">- Managed 500 vouchers worth $2M--maintained 99% accuracy rate; ensured zero mission delays during critical exercises</p>`,
           msm: `<h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Meritorious Service Medal (MSM)</h3><p style="margin-bottom: 1rem;"><strong>Goal:</strong> The MSM recognizes outstanding meritorious achievement or service over an extended period (typically end-of-tour or retirement). It's awarded for acts comparable to the Legion of Merit but at a lesser level of responsibility.</p><p style="margin-bottom: 0.5rem;"><strong>Key Criteria:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;"><li><strong>Extended Service:</strong> Typically covers 2-4 years of service at one assignment</li><li><strong>Career Impact:</strong> Focus on tour-level achievements with lasting impact</li><li><strong>Sustained Excellence:</strong> Consistent superior performance throughout the period</li><li><strong>Significant Contribution:</strong> Must show major contributions to mission success</li><li><strong>Typical Recipients:</strong> Field grade officers (O-4 to O-6) and senior NCOs (E-7 to E-9)</li><li><strong>Authority:</strong> Typically approved by O-6 (Colonel) or higher</li></ul><p style="margin-bottom: 0.5rem;"><strong>Writing Tips:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;"><li><strong>Narrative Format:</strong> Citations are written in paragraph form (not bullets)</li><li><strong>Character Limit:</strong> Maximum 1,350 characters for citation body</li><li><strong>Opening Sentence:</strong> Use proper format - "distinguished himself/herself by meritorious service as [duty title]"</li><li><strong>Highlight Major Accomplishments:</strong> Focus on 3-5 most significant achievements</li><li><strong>Show Strategic Impact:</strong> Emphasize wing/base/MAJCOM-level effects</li><li><strong>Include Career Development:</strong> Mention significant training, certifications, or education completed</li><li><strong>Use Active Voice:</strong> Strong verbs that show leadership and initiative</li><li><strong>Quantify Impact:</strong> Dollar amounts, percentages, people managed, assets controlled</li><li><strong>Professional Tone:</strong> Formal military writing - avoid casual language</li><li><strong>Closing Sentence:</strong> "The distinctive accomplishments of [rank/name] reflect credit upon himself/herself and the United States Air Force"</li></ul><p style="margin-top: 1rem; margin-bottom: 0.5rem;"><strong>Common MSM Scenarios:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;"><li>End of 3-4 year assignment for outstanding performance</li><li>Retirement decoration for career-level achievements</li><li>Completion of significant project with major impact</li><li>Can be awarded for combat zone service (since 2003)</li></ul>`,
           afcm: `<h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Air Force Commendation Medal (AFCM)</h3><p style="margin-bottom: 1rem;"><strong>Goal:</strong> The AFCM recognizes outstanding achievement or meritorious service that is distinctive but not sufficient for a higher award. It's a mid-level decoration for specific accomplishments or sustained performance over a shorter period than the MSM.</p><p style="margin-bottom: 0.5rem;"><strong>Key Criteria:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;"><li><strong>Meritorious Achievement:</strong> Distinctive accomplishment or single outstanding act</li><li><strong>Meritorious Service:</strong> Exemplary service over 1-2 years (shorter than MSM)</li><li><strong>Acts of Courage:</strong> Non-combat acts not meeting Airman's Medal criteria</li><li><strong>Above and Beyond:</strong> Performance clearly exceeds normal duty expectations</li><li><strong>Typical Recipients:</strong> Company grade officers and junior NCOs (but any rank below O-7)</li><li><strong>Authority:</strong> Must be approved by O-6 (Colonel) or higher</li><li><strong>Devices:</strong> "V" for Valor, "C" for Combat, "R" for Remote operations</li></ul><p style="margin-bottom: 0.5rem;"><strong>Writing Tips:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;"><li><strong>Narrative Format:</strong> Paragraph style, maximum 1,350 characters</li><li><strong>Opening Sentence:</strong> "distinguished himself/herself by outstanding achievement" OR "by meritorious service as [duty title]"</li><li><strong>Focus on Specifics:</strong> Clearly articulate what makes this achievement distinctive</li><li><strong>Show Direct Impact:</strong> Emphasize immediate mission effects and tangible results</li><li><strong>Achievement vs Service:</strong><ul style="margin-left: 1.5rem; margin-top: 0.25rem;"><li><em>Achievement:</em> Single act or specific accomplishment (deployment, project, event)</li><li><em>Service:</em> Sustained performance over 1-2 years showing consistent excellence</li></ul></li><li><strong>Quantify Results:</strong> Numbers demonstrate impact - cost savings, efficiency gains, mission success</li><li><strong>Appropriate Scope:</strong> Squadron/group level impact is suitable (not necessarily wing-level)</li><li><strong>Use Strong Action Words:</strong> Managed, executed, coordinated, achieved, implemented</li></ul><p style="margin-top: 1rem; margin-bottom: 0.5rem;"><strong>Common AFCM Scenarios:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;"><li>Successful completion of deployment (4-6 months)</li><li>Outstanding performance during TDY or exercise</li><li>Leading a significant project to successful completion</li><li>Mid-tour recognition (18-24 months into assignment)</li><li>End-of-tour for junior personnel (1-2 years)</li><li>One-time extraordinary achievement deserving special recognition</li></ul>`,
+          afam: `<h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Air Force Achievement Medal (AFAM)</h3><p style="margin-bottom: 1rem;"><strong>Goal:</strong> The AFAM recognizes outstanding achievement or meritorious service rendered specifically on behalf of the Air Force. It is a junior-level decoration for a single specific act or for a shorter period of service than the AFCM.</p><p style="margin-bottom: 0.5rem;"><strong>Key Criteria:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;"><li><strong>Specific Achievement:</strong> A single, noteworthy act or accomplishment.</li><li><strong>Meritorious Service:</strong> Sustained, excellent performance over a shorter period (e.g., 1 year).</li><li><strong>Impact:</strong> The impact is typically at the flight or squadron level.</li><li><strong>Typical Recipients:</strong> Primarily awarded to junior officers and enlisted personnel.</li></ul><p style="margin-bottom: 0.5rem;"><strong>Writing Tips:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;"><li>Be concise and focus on the single most important achievement.</li><li>Clearly state the action taken and the direct, measurable result.</li><li>Keep the narrative to 1-2 sentences in the citation body.</li><li>Use strong, active verbs to describe the accomplishment.</li></ul>`,
           custom: `<h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Custom Award</h3><p style="margin-bottom: 1rem;"><strong>Goal:</strong> This option is for non-standard awards such as unit-level recognition, functional awards, special trophies, or organization-specific awards not covered by the standard categories.</p><p style="margin-bottom: 1rem;"><strong>Instructions:</strong> Use the <strong>"Custom Award Instructions"</strong> field below to provide specific information about your custom award. This helps the AI understand what criteria and format to use.</p><p style="margin-bottom: 0.5rem;"><strong>What to Include in Custom Instructions:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;"><li><strong>Award Name:</strong> Full title of the award (e.g., "John L. Hennessy Award" or "Squadron Maintainer of the Quarter")</li><li><strong>Award Purpose:</strong> What this award recognizes (innovation, safety, specific job function, etc.)</li><li><strong>Key Criteria:</strong> What qualities or achievements are being evaluated?</li><li><strong>Format Requirements:</strong> Bullet format or narrative? Line limits? Character limits?</li><li><strong>Evaluation Categories:</strong> Are there specific sections (e.g., Job Performance, Innovation, Safety Record)?</li><li><strong>Target Recipients:</strong> Who typically receives this award? (specific AFSCs, positions, ranks)</li><li><strong>Approval Authority:</strong> Who approves this award?</li><li><strong>Unique Emphasis:</strong> Any special focus areas or metrics specific to this award?</li></ul><p style="margin-bottom: 0.5rem;"><strong>Example Custom Instructions:</strong></p><div style="background-color: rgba(128, 128, 128, 0.1); padding: 0.75rem; border-radius: 0.25rem; margin-bottom: 1rem; font-size: 0.9rem;"><p style="margin-bottom: 0.5rem;"><em>"This is the Squadron Dorm Manager of the Quarter award. It recognizes Airmen who demonstrate exceptional dormitory management and care for dorm residents. Criteria include:</em></p><ul style="list-style-type: disc; margin-left: 1.5rem;"><li><em>Quality of Life improvements for residents</em></li><li><em>Facility management and maintenance coordination</em></li><li><em>Mentorship and support provided to dorm residents</em></li><li><em>Community building activities</em></li><li><em>Format: AF Form 1206, 9 lines total including headers"</em></li></ul></div><p style="margin-bottom: 0.5rem;"><strong>Tips for Custom Awards:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;"><li>Be as specific as possible about unique criteria and expectations</li><li>If the award has an AFI or local instruction, mention it</li><li>Include examples if you have successful past submissions</li><li>Note any unconventional aspects that differ from standard awards</li><li>Specify if there are specific buzzwords or terminology that should be included</li><li>Clarify whether quantitative or qualitative emphasis is more important</li></ul>`
       };
 
@@ -1239,6 +1272,10 @@
       // Helper Functions
       function showModal(id) { document.getElementById(id)?.classList.add('visible'); }
       function hideModal(id) { document.getElementById(id)?.classList.remove('visible'); }
+      function switchScreen(hideId, showId) {
+          document.getElementById(hideId)?.classList.add('hidden');
+          document.getElementById(showId)?.classList.remove('hidden');
+      }
 
      // PROMPT ASSEMBLY LOGIC
       function assembleInteractivePrompt(inputs) {
@@ -1256,13 +1293,14 @@
         
         if (rank) promptParts.push((promptData.contextAddons?.rank || "CONTEXT: The user's rank is {rank}").replace('{rank}', rank));
         
-        if (userChoice === 'performance-report') {
+        if (userChoice.main === 'performance-report') {
             if (mga) promptParts.push((promptData.contextAddons?.mga || "// MGA CONTEXT PLACEHOLDER").replace('{mga}', mga));
             promptParts.push(promptData.typeAddons?.performanceReport || "// PERFORMANCE REPORT TASK PLACEHOLDER");
-        } else if (userChoice.startsWith('award-')) {
+        } else if (userChoice.main === 'award-package') {
             promptParts.push(promptData.typeAddons?.awardPackage || "// AWARD PACKAGE TASK PLACEHOLDER");
-            const awardKey = userChoice.replace('award-', '');
-            if (promptData.awardAddons?.[awardKey]) promptParts.push(promptData.awardAddons[awardKey]);
+            if (promptData.awardAddons?.[userChoice.awardType]) {
+                promptParts.push(promptData.awardAddons[userChoice.awardType]);
+            }
             if (customAwardInstructions) promptParts.push(`USER'S CUSTOM INSTRUCTIONS: ${customAwardInstructions}`);
         }
         
@@ -1272,14 +1310,31 @@
       }
 
       function assembleDecorationPrompt(inputs) {
-          const { userChoice, achievements } = inputs;
+          const { userChoice, single, pca, custom } = inputs;
           let promptParts = [];
-          const decorationKey = userChoice.replace('decoration-', '');
-  	      if (promptData.decorationAddons?.[decorationKey]) {
-          	  promptParts.push(promptData.decorationAddons[decorationKey]);
+          
+  	      if (promptData.decorationAddons?.[userChoice.decorationType]) {
+          	  promptParts.push(promptData.decorationAddons[userChoice.decorationType]);
           }
+
+          let reasonText = '';
+          let achievementText = '';
+
+          if (userChoice.decorationReason === 'single') {
+              reasonText = "This decoration is for a single, outstanding achievement.";
+              achievementText = single;
+          } else if (userChoice.decorationReason === 'pca') {
+              reasonText = "This is an end-of-tour PCS/PCA decoration summarizing multiple achievements.";
+              achievementText = pca.map((a, i) => `${i+1}. ${a}`).join('\n');
+          } else if (userChoice.decorationReason === 'custom') {
+              reasonText = `This is a custom decoration. User Instructions: ${custom.instructions}`;
+              achievementText = custom.achievement;
+          }
+          
+          promptParts.push(`DECORATION CONTEXT: ${reasonText}`);
           promptParts.push(promptData.finalInstructions || "// FINAL INSTRUCTIONS PLACEHOLDER");
-          promptParts.push(`\n**MEMBER'S ACHIEVEMENTS:**\n${achievements.map((a,i) => `${i+1}. ${a}`).join('\n')}`);
+          promptParts.push(`\n**MEMBER'S ACHIEVEMENTS:**\n${achievementText}`);
+
           return promptParts.join('\n\n');
       }
 
@@ -1309,12 +1364,14 @@
 			"quarterlyAnnual": "AWARD-SPECIFIC CRITERIA: This is a Quarterly/Annual (12 OAY) award. Focus on sustained, superior performance and achievements that clearly place this member above all peers *during this specific period*.",
 			"msm": "AWARD-SPECIFIC CRITERIA: This is for a Meritorious Service Medal (MSM). The focus is on a career's or tour's *culminating* achievements. We must show significant, lasting impact on the organization.",
 			"afcm": "AWARD-SPECIFIC CRITERIA: This is for an AF Commendation Medal (AFCM). We must highlight a specific, outstanding achievement or act of service that goes above and beyond normal duty.",
+            "afam": "AWARD-SPECIFIC CRITERIA: This is for an AF Achievement Medal (AFAM). We must highlight a specific, outstanding achievement or a short period of meritorious service.",
 			"custom": "AWARD-SPECIFIC CRITERIA: This is a custom award. I will define the criteria in my accomplishment details. Please pay close attention to the specific goals of this award."
 			},
             decorationAddons: {
 				pcs: "DECORATION TYPE: PCS/PCA (Permanent Change of Station/Assignment) Decoration\n\nYou are now writing a formal military decoration citation. This is NOT a performance statement or award package—it is a narrative paragraph that will be read aloud during a ceremony and displayed on an official certificate.\n\n## CRITICAL CITATION REQUIREMENTS:\n\n**FORMAT & LENGTH:**\n- Maximum 1,350 characters for entire citation body (excluding opening/closing sentences)\n- Courier New font, size 11\n- Written in narrative paragraph format—NO bullets, NO line breaks within the body\n- Typically 2-4 sentences describing accomplishments between opening and closing\n\n**OPENING SENTENCE (Meritorious Service):**\n- Format: \"[Full Rank] [First] [Middle Initial] [Last] distinguished himself/herself by meritorious service as [duty title], [unit], [location], from [start date] to [end date].\"\n- Use complete rank title in opening (Master Sergeant, not MSgt; Technical Sergeant, not TSgt)\n- Include full name with middle initial\n\n**NARRATIVE BODY:**\n- Use THIRD PERSON, ACTIVE VOICE, PAST TENSE throughout\n- First mention: Use short oral address (\"Sergeant Smith\", \"Captain Jones\", \"Airman Brown\")\n- Subsequent mentions: Use pronouns (he/she/his/her) - alternate between name and pronouns\n- NO personal pronouns (I, we, you)\n- Focus on 3-5 major accomplishments that show sustained excellence and lasting organizational impact\n- Emphasize mission contribution, leadership, and strategic results\n- Use powerful action verbs: led, directed, managed, orchestrated, spearheaded, executed, implemented\n- Include quantifiable metrics: dollars saved/managed, percentages improved, people led, assets controlled\n- During this period, [member's] outstanding professional skill, leadership, and ceaseless efforts resulted in...\n- Avoid passive constructions: \"was responsible for\" → \"directed\"; \"was instrumental in\" → \"led\"\n\n**WRITING STYLE:**\n- NO abbreviations except Jr., Sr., II, III (spell out: United States Air Force, Air Force Base, Department of Defense, etc.)\n- NO acronyms unless on approved DAF abbreviations list (see your approved list)\n- Numbers nine and below: spell out (\"three,\" \"five\")\n- Numbers 10 and above: use numerals (\"10,\" \"250,\" \"1,000\")\n- Dollar amounts: \"$2 million\" or \"two million dollars\" (both acceptable)\n- NO special characters, symbols (except $), or superscripts\n- NO classified information\n- NO organizational designators (e.g., \"SCOO\")\n- Avoid jargon or \"geek-speak\" not understood by general public\n- Avoid exaggerated superlatives (\"unprecedented,\" \"unparalleled,\" \"unequaled\")\n\n**CLOSING SENTENCE (Standard):**\n- \"The distinctive accomplishments of [Rank] [Last Name] reflect credit upon himself/herself and the United States Air Force.\"\n\n**FOR RETIREMENT:**\n- \"The distinctive accomplishments of [Rank] [Last Name] culminate a long and distinguished career in the service of his/her country and reflect credit upon himself/herself and the United States Air Force.\"\n\n**FOR SEPARATION:**\n- \"The distinctive accomplishments of [Rank] [Last Name] while serving his/her country reflect credit upon himself/herself and the United States Air Force.\"\n\n## YOUR PROCESS:\n1. Confirm you have: rank, full name, duty title, unit, location, start/end dates\n2. Review the member's accomplishments from their entire tour\n3. Select 3-5 most significant achievements that show strategic, lasting impact\n4. Synthesize these into a flowing narrative paragraph (not individual bullets)\n5. Use transitions to connect achievements smoothly\n6. Ensure proper voice (third person, active, past tense) and formatting\n7. Count characters to ensure ≤1,350 in the body\n8. Apply correct opening and closing sentences\n\nThis citation must capture the substance of the decoration with dignity and clarity. Write with the formality befitting a ceremony where this will be read aloud.",
 				msm: "DECORATION TYPE: Meritorious Service Medal (MSM)\n\nYou are now writing a formal military decoration citation. This is NOT a performance statement or award package—it is a narrative paragraph that will be read aloud during a ceremony and displayed on an official certificate.\n\n## CRITICAL CITATION REQUIREMENTS:\n\n**FORMAT & LENGTH:**\n- Maximum 1,350 characters for entire citation body (excluding opening/closing sentences)\n- Courier New font, size 11\n- Written in narrative paragraph format—NO bullets, NO line breaks within the body\n- Typically 2-4 sentences describing accomplishments between opening and closing\n\n**OPENING SENTENCE:**\nFor period of service (most common for MSM):\n- Format 1: \"[Full Rank] [First] [Middle Initial] [Last] distinguished himself/herself in the performance of outstanding service to the United States as [duty title], [unit], [location], from [start date] to [end date].\"\n\nFor specific achievement (less common for MSM):\n- Format 2: \"[Full Rank] [First] [Middle Initial] [Last] distinguished himself/herself by outstanding achievement as [duty title], [unit], [location], on [date] OR from [start date] to [end date].\"\n\n- Use complete rank title in opening (Master Sergeant, not MSgt; Major, not Maj)\n- Include full name with middle initial\n\n**NARRATIVE BODY:**\n- Use THIRD PERSON, ACTIVE VOICE, PAST TENSE throughout\n- First mention: Use short oral address (\"Sergeant Smith\", \"Major Jones\", \"Airman Brown\")\n- Subsequent mentions: Use pronouns (he/she/his/her) - alternate between name and pronouns\n- NO personal pronouns (I, we, you)\n- MSM-SPECIFIC FOCUS: Tour-level or career-culminating achievements showing sustained excellence\n- Emphasize: Strategic impact, organizational transformation, significant lasting contributions\n- \"During this period, the outstanding professional skill, leadership, and ceaseless efforts of [rank last name] resulted in major contributions to the effectiveness and success of...\"\n- Use powerful action verbs: transformed, revolutionized, orchestrated, spearheaded, directed, championed\n- Include quantifiable metrics at wing/MAJCOM/DoD level when possible\n- Avoid passive constructions: \"was instrumental in\" → \"led\"; \"was responsible for\" → \"directed\"\n\n**WRITING STYLE:**\n- NO abbreviations except Jr., Sr., II, III (spell out: United States Air Force, Air Force Base, Department of Defense)\n- NO acronyms unless on approved DAF abbreviations list\n- Numbers nine and below: spell out; numbers 10 and above: use numerals\n- Dollar amounts: \"$5 million\" or \"five million dollars\"\n- NO special characters (except $), symbols, or superscripts\n- NO classified information or organizational designators\n- Avoid jargon not understood by general public\n- Avoid exaggerated superlatives\n\n**CLOSING SENTENCE:**\n\nStandard:\n- \"The distinctive accomplishments of [Rank] [Last Name] reflect credit upon himself/herself and the United States Air Force.\"\n\nRetirement:\n- \"The distinctive accomplishments of [Rank] [Last Name] culminate a long and distinguished career in the service of his/her country and reflect credit upon himself/herself and the United States Air Force.\"\n\nSeparation:\n- \"The distinctive accomplishments of [Rank] [Last Name] while serving his/her country reflect credit upon himself/herself and the United States Air Force.\"\n\n## MSM STANDARDS:\n- Typically awarded to field grade officers (O-4 to O-6) and senior NCOs (E-7 to E-9)\n- Recognizes 2-4 years of sustained superior performance OR significant career-level achievement\n- Impact should be at wing/base/MAJCOM level\n- Shows lasting organizational improvements and strategic mission contributions\n\n## YOUR PROCESS:\n1. Confirm all required information (rank, name, duty title, unit, location, dates)\n2. Identify 3-5 tour-defining accomplishments with strategic impact\n3. Synthesize into flowing narrative showing sustained excellence\n4. Ensure proper voice, tone, and formatting\n5. Verify character count ≤1,350 in body\n6. Apply correct opening/closing sentences\n\nWrite with the formality and dignity appropriate for this mid-level decoration.",
-				afcm: "DECORATION TYPE: Air Force Commendation Medal (AFCM) / Air Force Achievement Medal (AFAM)\n\nYou are now writing a formal military decoration citation. This is NOT a performance statement or award package—it is a narrative paragraph that will be read aloud during a ceremony and displayed on an official certificate.\n\n## CRITICAL CITATION REQUIREMENTS:\n\n**FORMAT & LENGTH:**\n- Maximum 1,350 characters for entire citation body (excluding opening/closing sentences)\n- Courier New font, size 11\n- Written in narrative paragraph format—NO bullets, NO line breaks within the body\n- AFCM: Typically 2-3 sentences; AFAM: Typically 1-2 sentences\n\n**OPENING SENTENCE:**\n\nFor AFCM/AFAM - Meritorious Service:\n- \"[Full Rank] [First] [Middle Initial] [Last] distinguished himself/herself by meritorious service as [duty title], [unit], [location], from [start date] to [end date].\"\n\nFor AFCM/AFAM - Outstanding Achievement:\n- \"[Full Rank] [First] [Middle Initial] [Last] distinguished himself/herself by outstanding achievement as [duty title], [unit], [location], from [start date] to [end date].\"\n\nFor one-time accomplishment:\n- \"[Full Rank] [First] [Middle Initial] [Last] distinguished himself/herself by outstanding achievement (at or near [location]) on [date].\"\n\nFor Act of Courage (rare):\n- \"[Full Rank] [First] [Middle Initial] [Last] distinguished himself/herself by an act of courage as [duty title] OR while assigned to [unit], [location], on [date].\"\n\n- Use complete rank title in opening (Staff Sergeant, not SSgt; Captain, not Capt)\n- Include full name with middle initial\n\n**NARRATIVE BODY:**\n- Use THIRD PERSON, ACTIVE VOICE, PAST TENSE throughout\n- First mention: Use short oral address (\"Sergeant Smith\", \"Captain Jones\", \"Airman Brown\")\n- Subsequent mentions: Use pronouns (he/she/his/her) - alternate between name and pronouns\n- NO personal pronouns (I, we, you)\n\n**AFCM FOCUS (1-2 years or specific achievement):**\n- \"During this period, the professional skill, leadership, and ceaseless efforts of [rank last name] contributed to the effectiveness and success of...\"\n- Emphasize: Squadron/group-level impact, distinctive performance, mission success\n- Show what makes this achievement stand out above normal duty expectations\n- Typical scenarios: 18-24 month tour, deployment (4-6 months), major project completion, mid-tour recognition\n\n**AFAM FOCUS (shorter period or single achievement):**\n- Emphasize: Specific outstanding accomplishment or meritorious service rendered on behalf of the Air Force\n- Typical scenarios: 1 year of service, completion of significant project, support during contingency, exceptional act\n- Flight/squadron-level impact is appropriate\n\n**For Acts of Courage:**\n- Describe the specific act, circumstances, and outcome\n- Example: \"On that date, [rank last name] arrived at the scene of an automobile accident which seriously injured the driver of the vehicle. Without regard for his/her personal safety, [he/she]...\"\n\n**ACTION VERBS & STYLE:**\n- Use strong verbs: led, managed, coordinated, executed, implemented, streamlined\n- Include quantifiable results: efficiency gains, cost savings, mission improvements\n- Avoid passive voice: \"was responsible for\" → \"managed\"; \"was key to\" → \"ensured\"\n\n**WRITING STYLE:**\n- NO abbreviations except Jr., Sr., II, III (spell out: United States Air Force, Air Force Base, Department of Defense)\n- NO acronyms unless on approved DAF abbreviations list\n- Numbers nine and below: spell out; numbers 10 and above: use numerals\n- Dollar amounts: \"$1 million\" or \"one million dollars\"\n- NO special characters (except $), symbols, or superscripts\n- NO classified information or organizational designators\n- Avoid jargon not understood by general public\n- Avoid exaggerated superlatives\n\n**CLOSING SENTENCE:**\n\nStandard (Service or Achievement):\n- \"The distinctive accomplishments of [Rank] [Last Name] reflect credit upon himself/herself and the United States Air Force.\"\n\nAct of Courage:\n- \"By his/her prompt action and humanitarian regard for his/her fellowman, [Rank] [Last Name] has reflected credit upon himself/herself and the United States Air Force.\"\n\nAFAM Alternative (sometimes used):\n- \"The professional abilities and outstanding accomplishments of [Rank] [Last Name] reflect great credit upon himself/herself and the United States Air Force.\"\n\nRetirement (rare for AFCM/AFAM):\n- \"The distinctive accomplishments of [Rank] [Last Name] culminate a distinguished career in the service of his/her country and reflect credit upon himself/herself and the United States Air Force.\"\n\n## DECORATION STANDARDS:\n\n**AFCM:**\n- Mid-level decoration for distinctive achievement or meritorious service\n- Typically: Company grade officers (O-1 to O-3), NCOs (E-5 to E-6)\n- Period: 1-2 years of service OR specific outstanding achievement\n- Impact: Squadron/group-level, clearly above normal duty\n- Approval: Colonel (O-6) or higher\n\n**AFAM:**\n- Recognition for outstanding achievement or meritorious service rendered specifically on behalf of AF\n- Typically: Junior officers, junior NCOs, airmen\n- Period: 1 year OR specific achievement\n- Impact: Flight/squadron-level\n- Approval: Squadron Commander or higher (varies by unit)\n\n## YOUR PROCESS:\n1. Determine if this is AFCM or AFAM level\n2. Confirm: rank, name, duty title, unit, location, dates, type (service vs achievement vs courage)\n3. Identify 1-3 most distinctive accomplishments\n4. Write flowing narrative showing clear mission impact\n5. Ensure proper voice, tone, and formatting\n6. Verify character count ≤1,350 in body\n7. Apply correct opening/closing sentences for decoration type and reason\n\nWrite with appropriate formality while keeping the narrative crisp and focused on what makes this recognition deserved."
+				afcm: "DECORATION TYPE: Air Force Commendation Medal (AFCM)\n\nYou are now writing a formal military decoration citation. This is NOT a performance statement or award package—it is a narrative paragraph that will be read aloud during a ceremony and displayed on an official certificate.\n\n## CRITICAL CITATION REQUIREMENTS:\n\n**FORMAT & LENGTH:**\n- Maximum 1,350 characters for entire citation body (excluding opening/closing sentences)\n- Courier New font, size 11\n- Written in narrative paragraph format—NO bullets, NO line breaks within the body\n- AFCM: Typically 2-3 sentences\n\n**OPENING SENTENCE:**\n\nFor Meritorious Service:\n- \"[Full Rank] [First] [Middle Initial] [Last] distinguished himself/herself by meritorious service as [duty title], [unit], [location], from [start date] to [end date].\"\n\nFor Outstanding Achievement:\n- \"[Full Rank] [First] [Middle Initial] [Last] distinguished himself/herself by outstanding achievement as [duty title], [unit], [location], from [start date] to [end date].\"\n\n- Use complete rank title in opening (Staff Sergeant, not SSgt; Captain, not Capt)\n- Include full name with middle initial\n\n**NARRATIVE BODY:**\n- Use THIRD PERSON, ACTIVE VOICE, PAST TENSE throughout\n- \"During this period, the professional skill, leadership, and ceaseless efforts of [rank last name] contributed to the effectiveness and success of...\"\n- Emphasize: Squadron/group-level impact, distinctive performance, mission success\n- Show what makes this achievement stand out above normal duty expectations\n\n**ACTION VERBS & STYLE:**\n- Use strong verbs: led, managed, coordinated, executed, implemented, streamlined\n- Include quantifiable results: efficiency gains, cost savings, mission improvements\n- Avoid passive voice: \"was responsible for\" → \"managed\"; \"was key to\" → \"ensured\"\n\n**WRITING STYLE:**\n- NO abbreviations except Jr., Sr., II, III (spell out: United States Air Force, Air Force Base, Department of Defense)\n- NO acronyms unless on approved DAF abbreviations list\n- Numbers nine and below: spell out; numbers 10 and above: use numerals\n- NO special characters (except $), symbols, or superscripts\n\n**CLOSING SENTENCE:**\n- \"The distinctive accomplishments of [Rank] [Last Name] reflect credit upon himself/herself and the United States Air Force.\"\n\n## DECORATION STANDARDS:\n\n**AFCM:**\n- Mid-level decoration for distinctive achievement or meritorious service\n- Typically: Company grade officers (O-1 to O-3), NCOs (E-5 to E-6)\n- Period: 1-2 years of service OR specific outstanding achievement\n- Impact: Squadron/group-level, clearly above normal duty",
+                afam: "DECORATION TYPE: Air Force Achievement Medal (AFAM)\n\nYou are now writing a formal military decoration citation. This is NOT a performance statement or award package—it is a narrative paragraph.\n\n## CRITICAL CITATION REQUIREMENTS:\n\n**FORMAT & LENGTH:**\n- Maximum 1,350 characters for citation body.\n- Written in narrative paragraph format—NO bullets.\n- AFAM: Typically 1-2 sentences.\n\n**OPENING SENTENCE:**\n\nFor Meritorious Service:\n- \"[Full Rank] [First] [Middle Initial] [Last] distinguished himself/herself by meritorious service as [duty title], [unit], [location], from [start date] to [end date].\"\n\nFor Outstanding Achievement:\n- \"[Full Rank] [First] [Middle Initial] [Last] distinguished himself/herself by outstanding achievement as [duty title], [unit], [location], from [start date] to [end date].\"\n\n**NARRATIVE BODY:**\n- Use THIRD PERSON, ACTIVE VOICE, PAST TENSE.\n- Emphasize: A specific outstanding accomplishment or meritorious service.\n- Typical scenarios: 1 year of service, completion of a significant project, support during a contingency.\n- Flight/squadron-level impact is appropriate.\n\n**CLOSING SENTENCE:**\n- \"The professional abilities and outstanding accomplishments of [Rank] [Last Name] reflect great credit upon himself/herself and the United States Air Force.\"\n\n## DECORATION STANDARDS:\n\n**AFAM:**\n- Recognition for outstanding achievement or meritorious service rendered specifically on behalf of the AF.\n- Typically: Junior officers, junior NCOs, airmen.\n- Period: 1 year OR a specific achievement."
 			},
             finalInstructions: "Begin by giving the user a short introduction, a draft of your example, and questions to guide them to a final product."
         };
@@ -1351,77 +1408,92 @@
         });
 
         // Main UI controller function
-        function showTool(bubble) {
-            activeBubbleText = bubble.textContent;
-            const titleContainer = document.getElementById('animated-title-container');
+        function showTool() {
+            let titleText = '';
             const mainTool = document.getElementById('main-tool-container');
             const decTool = document.getElementById('decoration-tool-container');
-            const mgaGroup = document.getElementById('mga-form-group');
-            const customAwardGroup = document.getElementById('custom-award-instructions-form-group');
-            const infoPanelWrapper = document.getElementById('info-panel-wrapper');
-            const infoPanel = document.getElementById('award-info-panel');
-            const infoContent = document.getElementById('award-info-content');
             
-            // Hide/reset everything by default
+            // Hide all tools by default
             mainTool.style.display = 'none';
             decTool.style.display = 'none';
-            infoPanelWrapper.style.display = 'none';
-            infoPanel.classList.add('hidden');
 
-            if (userChoice.startsWith('award-')) {
+            if (userChoice.main === 'performance-report') {
+                titleText = 'Performance Report';
                 mainTool.style.display = '';
-                mainTool.classList.remove('lg:col-span-3');
-                mainTool.classList.add('lg:col-span-2');
-                infoPanelWrapper.style.display = '';
-
-                const awardKey = userChoice.replace('award-','');
-                activeBubbleText = `Award Package: ${bubble.textContent}`;
-                mgaGroup.classList.add('hidden');
-                customAwardGroup.classList.remove('hidden');
-                if (infoPanel && infoContent && awardInfoContent[awardKey]) {
-                    infoPanel.classList.remove('hidden');
-                    infoContent.innerHTML = awardInfoContent[awardKey];
-                }
-            } else if (userChoice === 'performance-report') {
-                mainTool.style.display = '';
+                document.getElementById('mga-form-group').classList.remove('hidden');
+                document.getElementById('custom-award-instructions-form-group').classList.add('hidden');
+                document.getElementById('info-panel-wrapper').style.display = 'none';
                 mainTool.classList.remove('lg:col-span-2');
                 mainTool.classList.add('lg:col-span-3');
-                infoPanelWrapper.style.display = 'none';
 
-                activeBubbleText = `Performance Report`;
-                mgaGroup.classList.remove('hidden');
-                customAwardGroup.classList.add('hidden');
-            } else if (userChoice.startsWith('decoration-')) {
+            } else if (userChoice.main === 'award-package') {
+                const awardName = document.querySelector(`#award-selection-screen [data-award-type="${userChoice.awardType}"]`).textContent;
+                titleText = `Award Package: ${awardName}`;
+                mainTool.style.display = '';
+                document.getElementById('mga-form-group').classList.add('hidden');
+                document.getElementById('custom-award-instructions-form-group').classList.toggle('hidden', userChoice.awardType !== 'custom');
+                document.getElementById('info-panel-wrapper').style.display = '';
+                mainTool.classList.remove('lg:col-span-3');
+                mainTool.classList.add('lg:col-span-2');
+                const infoPanel = document.getElementById('award-info-panel');
+                const infoContent = document.getElementById('award-info-content');
+                if (infoPanel && infoContent && awardInfoContent[userChoice.awardType]) {
+                    infoPanel.classList.remove('hidden');
+                    infoContent.innerHTML = awardInfoContent[userChoice.awardType];
+                }
+
+            } else if (userChoice.main === 'decoration') {
+                const decName = document.querySelector(`#decoration-selection-screen [data-decoration-type="${userChoice.decorationType}"]`).textContent;
+                const reasonName = document.querySelector(`#decoration-reason-screen [data-decoration-reason="${userChoice.decorationReason}"]`).textContent;
+                titleText = `Decoration: ${decName} (${reasonName})`;
                 decTool.style.display = '';
-                infoPanelWrapper.style.display = 'none';
-                activeBubbleText = `Decoration: ${bubble.textContent}`;
+                
+                // Show correct input section for decoration reason
+                document.getElementById('dec-single-achievement-section').classList.toggle('hidden', userChoice.decorationReason !== 'single');
+                document.getElementById('dec-pca-section').classList.toggle('hidden', userChoice.decorationReason !== 'pca');
+                document.getElementById('dec-custom-section').classList.toggle('hidden', userChoice.decorationReason !== 'custom');
             }
 
             document.body.classList.add('selection-made');
-            titleContainer.innerHTML = `<div class="animated-title">${activeBubbleText}</div>`;
+            document.getElementById('animated-title-container').innerHTML = `<div class="animated-title">${titleText}</div>`;
         }
+
 
         // --- Event Listeners for main selections ---
         document.getElementById('select-report')?.addEventListener('click', function() {
-            userChoice = this.dataset.choice;
-            showTool(this);
+            userChoice.main = 'performance-report';
+            showTool();
         });
-        document.getElementById('select-award')?.addEventListener('click', () => document.body.classList.add('award-step-1'));
-        document.getElementById('select-decoration')?.addEventListener('click', () => document.body.classList.add('decoration-step-1'));
+
+        document.getElementById('select-award')?.addEventListener('click', () => {
+             userChoice.main = 'award-package';
+             switchScreen('initial-selection-screen', 'award-selection-screen');
+        });
+        
+        document.getElementById('select-decoration')?.addEventListener('click', () => {
+            userChoice.main = 'decoration';
+            switchScreen('initial-selection-screen', 'decoration-selection-screen');
+        });
 
         // --- Event Listeners for sub-selections ---
         document.querySelectorAll('#award-selection-screen .selection-bubble').forEach(button => {
             button.addEventListener('click', function() {
-                userChoice = this.dataset.choice;
-                document.body.classList.remove('award-step-1');
-                showTool(this);
+                userChoice.awardType = this.dataset.awardType;
+                showTool();
             });
         });
+
         document.querySelectorAll('#decoration-selection-screen .selection-bubble').forEach(button => {
             button.addEventListener('click', function() {
-                userChoice = this.dataset.choice;
-                document.body.classList.remove('decoration-step-1');
-                showTool(this);
+                userChoice.decorationType = this.dataset.decorationType;
+                switchScreen('decoration-selection-screen', 'decoration-reason-screen');
+            });
+        });
+
+        document.querySelectorAll('#decoration-reason-screen .selection-bubble').forEach(button => {
+            button.addEventListener('click', function() {
+                userChoice.decorationReason = this.dataset.decorationReason;
+                showTool();
             });
         });
 
@@ -1441,25 +1513,44 @@
             let prompt = '';
             let isValid = false;
 
-            if (userChoice.startsWith('decoration-')) {
-                const achievements = [
-                    document.getElementById('dec-achievement-1')?.value.trim(),
-                    document.getElementById('dec-achievement-2')?.value.trim(),
-                    document.getElementById('dec-achievement-3')?.value.trim(),
-                    document.getElementById('dec-achievement-4')?.value.trim(),
-                    document.getElementById('dec-achievement-5')?.value.trim(),
-                ].filter(Boolean);
-
-                if (achievements.length < 3) {
-                     document.getElementById('alert-title').textContent = 'Input Required';
-                     document.getElementById('alert-body').textContent = "Please fill in at least the first three 'Achievement' fields for the decoration.";
-                     showModal('alert-modal');
-                     return;
+            if (userChoice.main === 'decoration') {
+                if (userChoice.decorationReason === 'single') {
+                    const single = document.getElementById('dec-single-achievement').value.trim();
+                    if (!single) { 
+                        showModal('alert-modal'); 
+                        document.getElementById('alert-body').textContent = "Please describe the single achievement.";
+                        return; 
+                    }
+                    prompt = assembleDecorationPrompt({ userChoice, single });
+                } else if (userChoice.decorationReason === 'pca') {
+                    const pca = [
+                        document.getElementById('dec-achievement-1')?.value.trim(),
+                        document.getElementById('dec-achievement-2')?.value.trim(),
+                        document.getElementById('dec-achievement-3')?.value.trim(),
+                    ].filter(Boolean);
+                    if (pca.length < 3) {
+                        showModal('alert-modal');
+                        document.getElementById('alert-body').textContent = "Please provide at least 3 achievement statements for a PCS/PCA decoration.";
+                        return;
+                    }
+                     const optionalPca = [
+                        document.getElementById('dec-achievement-4')?.value.trim(),
+                        document.getElementById('dec-achievement-5')?.value.trim(),
+                    ].filter(Boolean);
+                    prompt = assembleDecorationPrompt({ userChoice, pca: [...pca, ...optionalPca] });
+                } else if (userChoice.decorationReason === 'custom') {
+                    const instructions = document.getElementById('dec-custom-instructions').value.trim();
+                    const achievement = document.getElementById('dec-custom-achievement').value.trim();
+                     if (!instructions || !achievement) { 
+                        showModal('alert-modal');
+                        document.getElementById('alert-body').textContent = "Please provide both custom instructions and achievement details.";
+                        return;
+                    }
+                    prompt = assembleDecorationPrompt({ userChoice, custom: { instructions, achievement } });
                 }
                 isValid = true;
-                prompt = assembleDecorationPrompt({ userChoice, achievements });
 
-            } else {
+            } else { // Performance Report or Award Package
                 const accomplishment = document.getElementById('accomplishment')?.value.trim();
                 if (!accomplishment) {
                     document.getElementById('alert-title').textContent = 'Input Required';
@@ -1496,11 +1587,16 @@
 
         // --- Reset Logic ---
         function handleReset() {
-            ['accomplishment', 'otherJobTitle', 'customAwardInstructions', 'dec-achievement-1', 'dec-achievement-2', 'dec-achievement-3', 'dec-achievement-4', 'dec-achievement-5'].forEach(id => {
+            // Reset text areas
+            const textAreas = ['accomplishment', 'otherJobTitle', 'customAwardInstructions', 
+                               'dec-achievement-1', 'dec-achievement-2', 'dec-achievement-3', 'dec-achievement-4', 'dec-achievement-5',
+                               'dec-single-achievement', 'dec-custom-instructions', 'dec-custom-achievement'];
+            textAreas.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.value = '';
             });
             
+            // Reset dropdowns
             ['jobTitle', 'rank', 'majcom', 'mga'].forEach(id => {
                 const el = document.getElementById(id);
                 if (!el) return;
@@ -1517,19 +1613,34 @@
                 }
             });
 
+            // Reset UI state
             document.body.className = '';
-            userChoice = '';
+            userChoice = { main: '', awardType: '', decorationType: '', decorationReason: '' };
             activeBubbleText = '';
             document.getElementById('animated-title-container').innerHTML = '';
             
-            ['otherJobField', 'custom-award-instructions-form-group', 'award-info-panel', 'final-cards-container', 'nipr-link-btn-main', 'nipr-link-btn-dec'].forEach(id => {
+            // Hide all conditional UI elements
+            const conditionalElements = ['otherJobField', 'custom-award-instructions-form-group', 'award-info-panel', 
+                                       'final-cards-container', 'nipr-link-btn-main', 'nipr-link-btn-dec',
+                                       'dec-single-achievement-section', 'dec-pca-section', 'dec-custom-section'];
+            conditionalElements.forEach(id => {
                  document.getElementById(id)?.classList.add('hidden');
             });
              document.getElementById('info-panel-wrapper').style.display = 'none';
             document.getElementById('mga-form-group')?.classList.remove('hidden');
              document.getElementById('main-tool-container').style.display = 'none';
              document.getElementById('decoration-tool-container').style.display = 'none';
+
+             // Reset selection screens
+             switchScreen('award-selection-screen', 'initial-selection-screen');
+             switchScreen('decoration-selection-screen', 'initial-selection-screen');
+             switchScreen('decoration-reason-screen', 'initial-selection-screen');
+             document.getElementById('initial-selection-screen').classList.remove('hidden');
+             document.getElementById('award-selection-screen').classList.add('hidden');
+             document.getElementById('decoration-selection-screen').classList.add('hidden');
+             document.getElementById('decoration-reason-screen').classList.add('hidden');
             
+            // Reset char counter
             if (charCounterTextBox) charCounterTextBox.value = '';
             if (charCounterCount) {
                 charCounterCount.textContent = '0';
@@ -1542,11 +1653,8 @@
         // Modal closing logic
         function showNiprLink() {
             hideModal('copy-confirmation-modal');
-            if (userChoice.startsWith('decoration-')) {
-                 document.getElementById('nipr-link-btn-dec')?.classList.remove('hidden');
-            } else {
-                 document.getElementById('nipr-link-btn-main')?.classList.remove('hidden');
-            }
+            const linkId = userChoice.main === 'decoration' ? 'nipr-link-btn-dec' : 'nipr-link-btn-main';
+            document.getElementById(linkId)?.classList.remove('hidden');
         }
         alertOkBtn?.addEventListener('click', () => hideModal('alert-modal'));
         alertModal?.addEventListener('click', (e) => { if (e.target === alertModal) hideModal('alert-modal'); });
