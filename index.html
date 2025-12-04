@@ -1279,40 +1279,44 @@
 
      // PROMPT ASSEMBLY LOGIC
       function assembleInteractivePrompt(inputs) {
-        const { rank, jobTitle, majcom, mga, userChoice, accomplishment, customAwardInstructions } = inputs;
-        let promptParts = [promptData.base || "// BASE PROMPT PLACEHOLDER"];
-        
-        const juniorRanks = ['E-1', 'E-2', 'E-3', 'E-4'];
-        const isJuniorEnlisted = rank ? juniorRanks.some(jr => rank.startsWith(jr)) : false;
-        
-        if (isJuniorEnlisted) promptParts.push(promptData.rankAddons?.e1_e4 || "// E1-E4 ADDON PLACEHOLDER");
-        else promptParts.push(promptData.rankAddons?.e6_plus || "// E5+ ADDON PLACEHOLDER");
-        
-        if (jobTitle) promptParts.push((promptData.contextAddons?.jobTitle || "// JOB TITLE CONTEXT PLACEHOLDER").replace('{jobTitle}', jobTitle));
-        if (majcom) promptParts.push((promptData.contextAddons?.majcom || "// MAJCOM CONTEXT PLACEHOLDER").replace('{majcom}', majcom));
-        
-        if (rank) promptParts.push((promptData.contextAddons?.rank || "CONTEXT: The user's rank is {rank}").replace('{rank}', rank));
-        
-        if (userChoice.main === 'performance-report') {
-            if (mga) promptParts.push((promptData.contextAddons?.mga || "// MGA CONTEXT PLACEHOLDER").replace('{mga}', mga));
-            promptParts.push(promptData.typeAddons?.performanceReport || "// PERFORMANCE REPORT TASK PLACEHOLDER");
-        } else if (userChoice.main === 'award-package') {
-            promptParts.push(promptData.typeAddons?.awardPackage || "// AWARD PACKAGE TASK PLACEHOLDER");
-            if (promptData.awardAddons?.[userChoice.awardType]) {
-                promptParts.push(promptData.awardAddons[userChoice.awardType]);
-            }
-            if (customAwardInstructions) promptParts.push(`USER'S CUSTOM INSTRUCTIONS: ${customAwardInstructions}`);
-        }
-        
-        promptParts.push(promptData.finalInstructions || "// FINAL INSTRUCTIONS PLACEHOLDER");
-        promptParts.push(`\n**MY ACCOMPLISHMENT DETAILS:**\n${accomplishment}`);
-		promptParts.push("### REFERENCE EXAMPLES ###");
-		promptParts.push(promptData.examples.narrative);
+    const { rank, jobTitle, majcom, mga, userChoice, accomplishment, customAwardInstructions } = inputs;
+    let promptParts = [];
 
-		promptParts.push("\nIMPORTANT: Your response must be in narrative format (sentences). Do not provide a list of bullet points or -- ,, format.");
-		  
-        return promptParts.join('\n\n');
-      }
+    // 1. SYSTEM ROLE & INSTRUCTIONS
+    promptParts.push(promptData.base);
+    
+    // 2. CONTEXT BLOCK (Use XML tags for clear separation)
+    promptParts.push("<CONTEXT_DATA>");
+    if (rank) promptParts.push(`Rank: ${rank}`);
+    if (jobTitle) promptParts.push(`Job Title: ${jobTitle}`);
+    if (majcom) promptParts.push(`MAJCOM: ${majcom}`);
+    if (mga) promptParts.push(`Target MGA: ${mga}`);
+    promptParts.push("</CONTEXT_DATA>");
+
+    // 3. TASK SPECIFICS
+    if (userChoice.main === 'performance-report') {
+        promptParts.push(promptData.typeAddons?.performanceReport);
+    } else if (userChoice.main === 'award-package') {
+        promptParts.push(promptData.typeAddons?.awardPackage);
+        if (promptData.awardAddons?.[userChoice.awardType]) {
+            promptParts.push(promptData.awardAddons[userChoice.awardType]);
+        }
+    }
+
+    // 4. FEW-SHOT EXAMPLES (New Recommendation)
+    // promptParts.push(promptData.examples.narrative); 
+
+    // 5. USER INPUT (Wrapped in tags to prevent bleeding)
+    promptParts.push("<ACCOMPLISHMENT_DETAILS>");
+    promptParts.push(accomplishment);
+    promptParts.push("</ACCOMPLISHMENT_DETAILS>");
+
+    // 6. FINAL TRIGGER
+    promptParts.push("\nIMPORTANT: Your response must be in narrative format (sentences). Do not provide a list of bullet points or -- ,, format.");
+
+
+    return promptParts.join('\n\n');
+}
 
       function assembleDecorationPrompt(inputs) {
           const { userChoice, single, pca, custom } = inputs;
