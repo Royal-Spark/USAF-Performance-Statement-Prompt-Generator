@@ -26,5 +26,10 @@
     "custom": "CRITERIA: Custom. Follow user instructions explicitly."
   },
 
-  "finalInstructions": "Analyze the 'Accomplishment Details' below. Initiate the coaching process. \n\nREMINDER: NARRATIVE FORMAT ONLY. NO BULLETS."
+  "finalInstructions": "Analyze the 'Accomplishment Details' below. Initiate the coaching process. \n\nREMINDER: NARRATIVE FORMAT ONLY. NO BULLETS.",
+
+  "examples": {
+  "narrative": "EXAMPLE INTERACTION:\nUser Input: 'Fixed the radar. Saved $10k.'\nBad Response: 'Fixed radar and saved money.'\nGood Response: 'Diagnosed intermittent radar failure and replaced faulty capacitor; restored $10M weapon system to fully mission capable status—saved wing $10K in replacement costs.'",
+  "critique": "EXAMPLE CRITIQUE:\nInput: 'I led the team.'\nCritique: 'Weak. 'Led' is vague. Did you organize the schedule? Direct operations? Mentor the airmen? Give me the specific action and the result.'"
+
 }
