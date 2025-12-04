@@ -1306,6 +1306,8 @@
         
         promptParts.push(promptData.finalInstructions || "// FINAL INSTRUCTIONS PLACEHOLDER");
         promptParts.push(`\n**MY ACCOMPLISHMENT DETAILS:**\n${accomplishment}`);
+		promptParts.push("### REFERENCE EXAMPLES ###");
+		promptParts.push(promptData.examples.narrative);
 
 		promptParts.push("\nIMPORTANT: Your response must be in narrative format (sentences). Do not provide a list of bullet points or -- ,, format.");
 		  
