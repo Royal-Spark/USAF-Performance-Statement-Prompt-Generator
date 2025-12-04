@@ -1278,22 +1278,22 @@
       }
 
      // PROMPT ASSEMBLY LOGIC
-      function assembleInteractivePrompt(inputs) {
+     function assembleInteractivePrompt(inputs) {
     const { rank, jobTitle, majcom, mga, userChoice, accomplishment, customAwardInstructions } = inputs;
     let promptParts = [];
 
     // 1. SYSTEM ROLE & INSTRUCTIONS
-    promptParts.push(promptData.base);
+    promptParts.push(promptData.base || "ROLE: You are a USAF Performance Statement Coach.");
     
-    // 2. CONTEXT BLOCK (Use XML tags for clear separation)
-    promptParts.push("<CONTEXT_DATA>");
+    // 2. CONTEXT BLOCK (Using Text Headers)
+    promptParts.push("### CONTEXT DATA ###");
     if (rank) promptParts.push(`Rank: ${rank}`);
     if (jobTitle) promptParts.push(`Job Title: ${jobTitle}`);
     if (majcom) promptParts.push(`MAJCOM: ${majcom}`);
     if (mga) promptParts.push(`Target MGA: ${mga}`);
-    promptParts.push("</CONTEXT_DATA>");
 
     // 3. TASK SPECIFICS
+    promptParts.push("### TASK DEFINITION ###");
     if (userChoice.main === 'performance-report') {
         promptParts.push(promptData.typeAddons?.performanceReport);
     } else if (userChoice.main === 'award-package') {
@@ -1301,19 +1301,34 @@
         if (promptData.awardAddons?.[userChoice.awardType]) {
             promptParts.push(promptData.awardAddons[userChoice.awardType]);
         }
+        if (customAwardInstructions) {
+            promptParts.push(`CUSTOM USER INSTRUCTIONS: ${customAwardInstructions}`);
+        }
+    }
+    
+    // 4. RANK SPECIFIC TONE
+    const juniorRanks = ['E-1', 'E-2', 'E-3', 'E-4'];
+    const isJuniorEnlisted = rank ? juniorRanks.some(jr => rank.startsWith(jr)) : false;
+    
+    if (promptData.rankAddons) {
+         if (isJuniorEnlisted) promptParts.push(promptData.rankAddons.e1_e4);
+         else promptParts.push(promptData.rankAddons.e6_plus);
     }
 
-    // 4. FEW-SHOT EXAMPLES (New Recommendation)
-    // promptParts.push(promptData.examples.narrative); 
+    // 5. FEW-SHOT EXAMPLES (Robustness Booster)
+    if (promptData.examples && promptData.examples.narrative) {
+        promptParts.push("### REFERENCE EXAMPLES ###");
+        promptParts.push("Follow this style exactly:");
+        promptParts.push(promptData.examples.narrative);
+    }
 
-    // 5. USER INPUT (Wrapped in tags to prevent bleeding)
-    promptParts.push("<ACCOMPLISHMENT_DETAILS>");
+    // 6. FINAL INSTRUCTIONS & USER INPUT
+    promptParts.push("### USER ACCOMPLISHMENT INPUT ###");
     promptParts.push(accomplishment);
-    promptParts.push("</ACCOMPLISHMENT_DETAILS>");
-
-    // 6. FINAL TRIGGER
-    promptParts.push("\nIMPORTANT: Your response must be in narrative format (sentences). Do not provide a list of bullet points or -- ,, format.");
-
+    
+    promptParts.push("### FINAL INSTRUCTION ###");
+    promptParts.push(promptData.finalInstructions);
+    promptParts.push("Start your Step 1 Analysis now. Remember: NARRATIVE FORMAT ONLY. NO BULLETS.");
 
     return promptParts.join('\n\n');
 }
