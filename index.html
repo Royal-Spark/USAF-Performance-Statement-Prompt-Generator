@@ -550,96 +550,172 @@
         </div>
     </header>
 
-	<main class="w-full max-w-7xl mx-auto px-4 sm:px-6 pb-6 pt-8">
-        
-        <div id="initial-selection-screen" class="selection-container">
-            <h2 class="selection-title">What would you like to create?</h2>
-            <div class="bubble-container">
-                <button id="select-report" class="selection-bubble" data-choice="performance-report">EPB / OPB</button>
-                <button id="select-award" class="selection-bubble" data-choice="award-package">Award Package</button>
-                <button id="select-decoration" class="selection-bubble" data-choice="decoration">Decoration</button>
+<main class="w-full max-w-7xl mx-auto px-4 sm:px-6 pb-6 pt-8">
+    
+    <!-- Initial Selection Screen -->
+    <div id="initial-selection-screen" class="selection-container">
+        <h2 class="selection-title">What would you like to create?</h2>
+        <div class="bubble-container">
+            <button id="select-report" class="selection-bubble" data-choice="performance-report">EPB / OPB</button>
+            <button id="select-award" class="selection-bubble" data-choice="award-package">Award Package</button>
+            <button id="select-decoration" class="selection-bubble" data-choice="decoration">Decoration</button>
+        </div>
+    </div>
+
+    <!-- NEW Categorized Award Selection Screen -->
+    <div id="award-selection-screen" class="selection-container hidden">
+        <h2 class="selection-title">Which Award Package?</h2>
+
+        <!-- Category buttons -->
+        <div class="category-bar flex flex-wrap gap-2 mb-6 justify-center">
+            <button class="btn category-button px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors active" data-category="af-dod">Air Force & DoD</button>
+            <button class="btn category-button px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors" data-category="majcom">MAJCOM-Level</button>
+            <button class="btn category-button px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors" data-category="functional">Functional & Career</button>
+            <button class="btn category-button px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors" data-category="aviation-innovation">Aviation & Innovation</button>
+            <button class="btn category-button px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors" data-category="other">Other Notable</button>
+        </div>
+
+        <!-- Award groups -->
+        <div class="bubble-container">
+            <!-- Air Force & DoD-Level Awards -->
+            <div class="award-group grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" data-category="af-dod">
+                <button class="selection-bubble award-bubble" data-award-type="outstandingAirman">12 Outstanding Airmen of the Year</button>
+                <button class="selection-bubble award-bubble" data-award-type="sijanAward">Lance P. Sijan Leadership Award</button>
+                <button class="selection-bubble award-bubble" data-award-type="spiritOfHope">Spirit of Hope Award</button>
+                <button class="selection-bubble award-bubble" data-award-type="custom">Custom</button>
+            </div>
+
+            <!-- MAJCOM-Level Awards -->
+            <div class="award-group hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" data-category="majcom">
+                <button class="selection-bubble award-bubble" data-award-type="afsocCommandersLeadership">AFSOC Commander's Leadership Award</button>
+                <button class="selection-bubble award-bubble" data-award-type="afsocOutstandingSoSquadron">AFSOC Outstanding SO Squadron</button>
+                <button class="selection-bubble award-bubble" data-award-type="afspecwarAwards">AFSPECWAR Awards</button>
+                <button class="selection-bubble award-bubble" data-award-type="afsocIndividualAwards">AFSOC Individual Awards</button>
+                <button class="selection-bubble award-bubble" data-award-type="custom">Custom</button>
+            </div>
+
+            <!-- Functional and Career Field Awards -->
+            <div class="award-group hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" data-category="functional">
+                <button class="selection-bubble award-bubble" data-award-type="afmsAnnualAwards">AFMS Annual Awards</button>
+                <button class="selection-bubble award-bubble" data-award-type="haroldGrantAward">Lt Gen Harold W. Grant Award</button>
+                <button class="selection-bubble award-bubble" data-award-type="johnJumperAward">Gen John P. Jumper Award</button>
+                <button class="selection-bubble award-bubble" data-award-type="billyBolesMentorship">Gen Billy J. Boles Mentorship Award</button>
+                <button class="selection-bubble award-bubble" data-award-type="leoMarquezAward">Lt Gen Leo Marquez Award</button>
+                <button class="selection-bubble award-bubble" data-award-type="williamTunnerAward">Lt Gen William H. Tunner Award</button>
+                <button class="selection-bubble award-bubble" data-award-type="maintenanceEffectivenessAward">Maintenance Effectiveness</button>
+                <button class="selection-bubble award-bubble" data-award-type="thomasBarnesAward">CMSAF Thomas N. Barnes Award</button>
+                <button class="selection-bubble award-bubble" data-award-type="redErwinAward">SSgt Henry E. 'Red' Erwin Award</button>
+                <button class="selection-bubble award-bubble" data-award-type="vehicleManagementAwards">Vehicle Management Awards</button>
+                <button class="selection-bubble award-bubble" data-award-type="lewAllenTrophy">Gen Lew Allen, Jr. Trophy</button>
+                <button class="selection-bubble award-bubble" data-award-type="securityForcesAwards">Security Forces Awards</button>
+                <button class="selection-bubble award-bubble" data-award-type="firstSergeantOfTheYear">First Sergeant of the Year</button>
+                <button class="selection-bubble award-bubble" data-award-type="cyberspaceEwAwards">Cyberspace & EW Awards</button>
+                <button class="selection-bubble award-bubble" data-award-type="custom">Custom</button>
+            </div>
+
+            <!-- Aviation & Innovation -->
+            <div class="award-group hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" data-category="aviation-innovation">
+                <button class="selection-bubble award-bubble" data-award-type="mackayTrophy">Mackay Trophy</button>
+                <button class="selection-bubble award-bubble" data-award-type="cheneyAward">Cheney Award</button>
+                <button class="selection-bubble award-bubble" data-award-type="daedalianPilotAward">Daedalian Exceptional Pilot Award</button>
+                <button class="selection-bubble award-bubble" data-award-type="lambertsenAward">Dr. Christian J. Lambertsen Award</button>
+                <button class="selection-bubble award-bubble" data-award-type="custom">Custom</button>
+            </div>
+
+            <!-- Other Notable Awards -->
+            <div class="award-group hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" data-category="other">
+                <button class="selection-bubble award-bubble" data-award-type="verneOrrAward">Verne Orr Award</button>
+                <button class="selection-bubble award-bubble" data-award-type="geicoAward">GEICO Military Service Award</button>
+                <button class="selection-bubble award-bubble" data-award-type="joanOrrAward">Joan Orr Spouse of the Year</button>
+                <button class="selection-bubble award-bubble" data-award-type="pitsenbargerAward">AFSA Pitsenbarger Award</button>
+                <button class="selection-bubble award-bubble" data-award-type="usoServiceMember">USO Service Member of the Year</button>
+                <button class="selection-bubble award-bubble" data-award-type="custom">Custom</button>
             </div>
         </div>
+    </div>
 
-        <div id="award-selection-screen" class="selection-container hidden">
-             <h2 class="selection-title">Which Award Package?</h2>
-             <div class="bubble-container">
-                <button class="selection-bubble award-bubble" data-award-type="sijanLeadership">Sijan</button>
-                <button class="selection-bubble award-bubble" data-award-type="leoMarquez">Leo Marquez</button>
-                <button class="selection-bubble award-bubble" data-award-type="quarterlyAnnual">Annual / Quarterly</button>
-                <button class="selection-bubble award-bubble" data-award-type="custom">Custom</button>
-             </div>
-        </div>
-        
-        <div id="decoration-selection-screen" class="selection-container hidden">
-             <h2 class="selection-title">Which Decoration?</h2>
-             <div class="bubble-container">
-                <button class="selection-bubble award-bubble" data-decoration-type="afam">Achievement Medal</button>
-                <button class="selection-bubble award-bubble" data-decoration-type="afcm">Commendation Medal</button>
-                <button class="selection-bubble award-bubble" data-decoration-type="msm">Meritorious Service</button>
-             </div>
-        </div>
+    <!-- Decoration Selection Screen -->
+    <div id="decoration-selection-screen" class="selection-container hidden">
+         <h2 class="selection-title">Which Decoration?</h2>
+         <div class="bubble-container">
+            <button class="selection-bubble award-bubble" data-decoration-type="afam">Achievement Medal</button>
+            <button class="selection-bubble award-bubble" data-decoration-type="afcm">Commendation Medal</button>
+            <button class="selection-bubble award-bubble" data-decoration-type="msm">Meritorious Service</button>
+         </div>
+    </div>
 
-        <div id="decoration-reason-screen" class="selection-container hidden">
-             <h2 class="selection-title">What is the Occasion?</h2>
-             <div class="bubble-container">
-                <button class="selection-bubble award-bubble" data-decoration-reason="single">Single Achievement</button>
-                <button class="selection-bubble award-bubble" data-decoration-reason="pca">PCS / PCA</button>
-                <button class="selection-bubble award-bubble" data-decoration-reason="custom">Custom</button>
-             </div>
-        </div>
+    <!-- Decoration Reason Screen -->
+    <div id="decoration-reason-screen" class="selection-container hidden">
+         <h2 class="selection-title">What is the Occasion?</h2>
+         <div class="bubble-container">
+            <button class="selection-bubble award-bubble" data-decoration-reason="single">Single Achievement</button>
+            <button class="selection-bubble award-bubble" data-decoration-reason="pca">PCS / PCA</button>
+            <button class="selection-bubble award-bubble" data-decoration-reason="custom">Custom</button>
+         </div>
+    </div>
 
-        <div id="main-content-area" class="lg:grid lg:grid-cols-3 lg:gap-8">
-            <div id="animated-title-container" class="lg:col-span-3"></div>
-
-            <!-- Performance Report & Award Package Tool -->
-            <div id="main-tool-container" class="lg:col-span-2">
-                <div class="card">
-                    <div class="card-header">
-                        <span>Input Information</span>
-                        <button id="resetBtn" class="btn btn-danger">Start Over</button>
-                    </div>
-                    <div class="card-body">
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <div class="form-group">
-                                <label for="jobTitleContainer">Job Title/AFSC: (Optional)</label>
-                                <div id="jobTitleContainer"></div>
-                            </div>
-                            <div class="form-group">
-                                <label for="rankContainer">Rank: (Optional)</label>
-                                <div id="rankContainer"></div>
-                            </div>
-                            <div id="otherJobField" class="form-group hidden md:col-span-2">
-                                <label for="otherJobTitle">Specify Job Title:</label>
-                                <input type="text" id="otherJobTitle" placeholder="e.g., Program Manager">
-                            </div>
-                            <div class="form-group">
-                                <label for="majcomContainer">MAJCOM: (Optional)</label>
-                                <div id="majcomContainer"></div>
-                            </div>
-                            <div id="mga-form-group" class="form-group">
-                                <label for="mgaContainer">Major Graded Area (MGA): (Optional)</label>
-                                <div id="mgaContainer"></div>
-                            </div>
-                            <div id="custom-award-instructions-form-group" class="form-group hidden">
-                                <label for="customAwardInstructions">Custom Award Instructions: (Optional)</label>
-                                <input type="text" id="customAwardInstructions" placeholder="e.g., 'Focus on innovation' or 'Package for wing level'">
-                            </div>
+    <!-- Main Tool Container -->
+    <div id="main-content-area" class="hidden lg:grid lg:grid-cols-3 lg:gap-8 mt-8">
+        <div id="main-tool-container" class="lg:col-span-2">
+            <div class="card bg-white shadow-xl rounded-2xl overflow-hidden border border-slate-200">
+                <div class="card-header bg-slate-50 p-4 border-b border-slate-200 flex justify-between items-center">
+                    <span class="font-bold text-slate-700">Input Information</span>
+                    <button id="resetBtn" class="px-3 py-1 bg-red-50 text-red-600 rounded-md hover:bg-red-100 transition-colors text-sm font-medium">Start Over</button>
+                </div>
+                <div class="card-body p-6">
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div class="form-group">
+                            <label class="block text-sm font-semibold text-slate-600 mb-2">Job Title/AFSC:</label>
+                            <div id="jobTitleContainer"></div>
                         </div>
                         <div class="form-group">
-                            <label for="accomplishment">Accomplishment Details: (Required)</label>
-                            <textarea id="accomplishment" placeholder="Describe what you did with metrics in any format..."></textarea>
+                            <label class="block text-sm font-semibold text-slate-600 mb-2">Rank:</label>
+                            <div id="rankContainer"></div>
                         </div>
-                        <div class="flex flex-col items-center gap-4 mt-4">
-                            <button id="generateButtonMain" class="btn btn-primary w-full text-lg">Generate & Copy Prompt</button>
-                            <a href="https://genai.mil/" target="_blank" rel="noopener noreferrer" id="GenAI-link-btn-main" class="btn btn-ghost w-full hidden">
-                                Go to GenAI.mil
-                            </a>
+                        <div class="form-group">
+                            <label class="block text-sm font-semibold text-slate-600 mb-2">MAJCOM:</label>
+                            <div id="majcomContainer"></div>
+                        </div>
+                        <div id="mga-form-group" class="form-group">
+                            <label class="block text-sm font-semibold text-slate-600 mb-2">MGA:</label>
+                            <div id="mgaContainer"></div>
                         </div>
                     </div>
+                    <div class="form-group mb-6">
+                        <label class="block text-sm font-semibold text-slate-600 mb-2">Accomplishment Details:</label>
+                        <textarea id="accomplishment" class="w-full h-40 p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" placeholder="Describe what you did with metrics..."></textarea>
+                    </div>
+                    <button id="generateButtonMain" class="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg transition-transform active:scale-[0.98]">Generate & Copy Prompt</button>
                 </div>
             </div>
+        </div>
+    </div>
+</main>
 
+<script>
+    // Logic for Category Switching
+    document.querySelectorAll('.category-button').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const category = btn.getAttribute('data-category');
+            
+            // Update button styles
+            document.querySelectorAll('.category-button').forEach(b => b.classList.remove('bg-blue-600', 'text-white'));
+            btn.classList.add('bg-blue-600', 'text-white');
+
+            // Show relevant group
+            document.querySelectorAll('.award-group').forEach(group => {
+                if (group.getAttribute('data-category') === category) {
+                    group.classList.remove('hidden');
+                } else {
+                    group.classList.add('hidden');
+                }
+            });
+        });
+    });
+
+    // Ensure first category is active on load
+    document.querySelector('.category-button[data-category="af-dod"]').click();
+</script>
             <!-- Decoration Tool -->
             <div id="decoration-tool-container" class="lg:col-span-3">
                  <div class="card">
