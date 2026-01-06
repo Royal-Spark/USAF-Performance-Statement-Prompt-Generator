@@ -20,7 +20,6 @@
         /* --- CORE THEME VARIABLES --- */
         :root {
             --bg-dark: #09090b;
-            /* UPDATED: Opacity increased to 0.9 (90% opaque, 10% transparent) */
             --card-bg: rgba(39, 39, 42, 0.9);
             --border-color: rgba(161, 161, 170, 0.2);
             --text-primary: #e4e4e7;
@@ -35,7 +34,6 @@
         
         html[data-theme='light'] {
             --bg-dark: #fafafa;
-            /* UPDATED: Opacity increased to 0.95 for light mode */
             --card-bg: rgba(255, 255, 255, 0.95);
             --border-color: #d4d4d8;
             --text-primary: #18181b;
@@ -92,8 +90,10 @@
         /* --- ANIMATIONS & LAYOUT --- */
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        #main-tool-container, #decoration-tool-container { display: none; opacity: 0; transition: opacity 0.5s ease-in 0.5s; }
+        #main-tool-container, #decoration-tool-container, #criteria-card-container { display: none; opacity: 0; transition: opacity 0.5s ease-in 0.5s; }
         body.selection-made #main-tool-container, body.selection-made #decoration-tool-container { display: block; opacity: 1; }
+        /* Criteria container visibility is handled by JS specifically */
+        
         
         .animated-title {
             background: var(--card-bg); border: 1px solid var(--border-color); width: 90%; max-width: 48rem;
@@ -120,16 +120,9 @@
         input[type="text"]:focus, textarea:focus { outline: none; border-color: var(--primary-purple); box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2); }
         textarea { min-height: 120px; resize: vertical; }
         
-        /* Award Guidance Box */
-        .guidance-box {
-            background: rgba(34, 211, 238, 0.1); 
-            border-left: 4px solid var(--primary-cyan);
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            border-radius: 0.5rem;
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-        }
+        /* Award Criteria List Styles */
+        .criteria-list { list-style-type: disc; padding-left: 1.25rem; margin-top: 0.5rem; color: var(--text-secondary); }
+        .criteria-list li { margin-bottom: 0.25rem; }
 
         /* --- CUSTOM DROPDOWNS --- */
         .custom-picker-input, .custom-dropdown-selected { background-color: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 0.5rem; padding: 0.75rem 1rem; transition: all 0.2s ease; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
@@ -163,10 +156,7 @@
             bottom: 1rem;
             right: 1rem;
             width: min(1000px, 80vw);
-            top: 1rem;
-            bottom: 1rem;
-            height: auto;
-            max-height: 1080px;
+            max-height: calc(100vh - 80px);
             background: var(--card-bg);
             border: 2px solid var(--primary-cyan);
             border-radius: 0.75rem;
@@ -285,8 +275,6 @@
                         <button id="resetBtn" class="btn btn-danger">Start Over</button>
                     </div>
                     <div class="card-body">
-                                <div id="guidance-container" class="hidden"></div>
-
                                 <div class="grid md:grid-cols-2 gap-6">
                                     <div class="form-group">
                                         <label for="jobTitleContainer">Job Title/AFSC: (Optional)</label>
@@ -324,6 +312,16 @@
                             </div>
                         </div>
                     </div>
+
+            <div id="criteria-card-container" class="hidden lg:col-span-1">
+                <div class="card sticky top-24">
+                    <div class="card-header">
+                        <span>Criteria & Information</span>
+                    </div>
+                    <div id="criteria-card-content" class="card-body text-sm space-y-3">
+                        </div>
+                </div>
+            </div>
 
             <div id="decoration-tool-container" class="lg:col-span-3 hidden">
                 <div class="card">
@@ -422,7 +420,7 @@
 
     <script>
       let userChoice = { main: '', awardType: '', decorationType: '', decorationReason: '' };
-      let promptData = {}, afscOptions = [], rankOptions = [], majcomOptions = [], mgaOptions = [], awardsList = [];
+      let promptData = {}, afscOptions = [], rankOptions = [], majcomOptions = [], mgaOptions = [], awardsList = [], awardCriteriaData = {};
       const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
 
       // --- LOGIC: Data Loading ---
@@ -434,9 +432,10 @@
                   fetch('./data/rankOptions.json').then(r => r.json()),
                   fetch('./data/majcomOptions.json').then(r => r.json()),
                   fetch('./data/mgaOptions.json').then(r => r.json()),
-                  fetch('./data/awards.json').then(r => r.json()).catch(() => [])
+                  fetch('./data/awards.json').then(r => r.json()).catch(() => []),
+                  fetch('./data/awardcriteria.json').then(r => r.json()).catch(() => ({})) // Fetch new criteria data
               ]);
-              [promptData, afscOptions, rankOptions, majcomOptions, mgaOptions, awardsList] = res;
+              [promptData, afscOptions, rankOptions, majcomOptions, mgaOptions, awardsList, awardCriteriaData] = res;
               renderAwards(awardsList);
               return true;
           } catch(e) { 
@@ -498,6 +497,27 @@
           });
       }
 
+      // --- LOGIC: Render Criteria Card ---
+      function renderCriteria(key) {
+          const contentDiv = document.getElementById('criteria-card-content');
+          const data = awardCriteriaData[key];
+          
+          if (!data) {
+              contentDiv.innerHTML = `<p class="text-gray-400 italic">No specific criteria information available for this award.</p>`;
+              return;
+          }
+
+          let html = '';
+          if (data.title) html += `<h4 class="text-primary-purple font-bold mb-2 text-lg">${data.title}</h4>`;
+          if (data.content) html += `<p class="text-gray-300 leading-relaxed mb-3">${data.content}</p>`;
+          if (data.bullets && data.bullets.length > 0) {
+              html += `<ul class="criteria-list">`;
+              data.bullets.forEach(b => html += `<li>${b}</li>`);
+              html += `</ul>`;
+          }
+          contentDiv.innerHTML = html;
+      }
+
       // --- LOGIC: UI Switching ---
       function switchScreen(hideId, showId) {
           document.getElementById(hideId).classList.add('hidden');
@@ -508,40 +528,51 @@
           let title = '';
           const mainTool = document.getElementById('main-tool-container');
           const decTool = document.getElementById('decoration-tool-container');
-          const guidanceContainer = document.getElementById('guidance-container');
+          const criteriaContainer = document.getElementById('criteria-card-container');
           
           // Reset displays
           mainTool.style.display = 'none';
           decTool.style.display = 'none';
-          guidanceContainer.classList.add('hidden');
-          guidanceContainer.innerHTML = '';
+          criteriaContainer.style.display = 'none'; // Use display none for clean opacity transition reset if needed, but handled by class logic mostly
+          criteriaContainer.classList.add('hidden');
           
           document.body.classList.add('selection-made');
 
           if (userChoice.main === 'performance-report') {
               title = 'Performance Report Refinery';
               mainTool.style.display = 'block';
+              
+              // Full width for report
+              mainTool.classList.remove('lg:col-span-2');
+              mainTool.classList.add('lg:col-span-3');
+
               document.getElementById('mga-form-group').classList.remove('hidden');
               document.getElementById('custom-award-instructions-form-group').classList.add('hidden');
               
           } else if (userChoice.main === 'award-package') {
               title = `Award Package: ${userChoice.awardType}`;
               mainTool.style.display = 'block';
+              
+              // 2/3 Width for Award to make room for Criteria
+              mainTool.classList.remove('lg:col-span-3');
+              mainTool.classList.add('lg:col-span-2');
+              
               document.getElementById('mga-form-group').classList.add('hidden');
               
               const isCustom = userChoice.awardType === 'custom' || !awardsList.find(a => a.key === userChoice.awardType);
               document.getElementById('custom-award-instructions-form-group').classList.toggle('hidden', !isCustom);
               
-              // Handle Guidance (Now centered in main card)
-              const awardData = awardsList.find(a => a.key === userChoice.awardType);
-              if (awardData && awardData.description) {
-                   guidanceContainer.innerHTML = `<div class="guidance-box"><strong>Guidance:</strong> ${awardData.description}</div>`;
-                   guidanceContainer.classList.remove('hidden');
-              }
+              // Show Criteria Card
+              criteriaContainer.classList.remove('hidden');
+              criteriaContainer.style.display = 'block';
+              setTimeout(() => criteriaContainer.style.opacity = '1', 50); // fade in
+              
+              renderCriteria(userChoice.awardType);
               
           } else if (userChoice.main === 'decoration') {
               title = `Decoration: ${userChoice.decorationType.toUpperCase()} (${userChoice.decorationReason})`;
               decTool.style.display = 'block';
+              
               document.getElementById('dec-single-achievement-section').classList.toggle('hidden', userChoice.decorationReason !== 'single');
               document.getElementById('dec-pca-section').classList.toggle('hidden', userChoice.decorationReason !== 'pca');
               document.getElementById('dec-custom-section').classList.toggle('hidden', userChoice.decorationReason !== 'custom');
@@ -550,7 +581,7 @@
           document.getElementById('animated-title-container').innerHTML = `<div class="animated-title">${title}</div>`;
       }
 
-      // --- LOGIC: Reset ---
+// --- LOGIC: Reset ---
       function handleReset() {
           // Clear Inputs
           document.querySelectorAll('textarea, input[type="text"]').forEach(el => el.value = '');
@@ -567,7 +598,11 @@
           // Hide Tools
           document.getElementById('main-tool-container').style.display = 'none';
           document.getElementById('decoration-tool-container').style.display = 'none';
-          document.getElementById('guidance-container').classList.add('hidden');
+          
+          // Explicitly hide Criteria Card
+          const criteriaContainer = document.getElementById('criteria-card-container');
+          criteriaContainer.classList.add('hidden');
+          criteriaContainer.style.display = 'none';
           
           // Reset Screens
           switchScreen('award-selection-screen', 'initial-selection-screen');
