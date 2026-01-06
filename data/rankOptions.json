@@ -1,0 +1,18 @@
+[
+  { "text": "-- Select Rank --", "value": "" },
+  { "text": "E-1 Airman Basic", "value": "E-1 Airman Basic" },
+  { "text": "E-2 Airman", "value": "E-2 Airman" },
+  { "text": "E-3 Airman First Class", "value": "E-3 Airman First Class" },
+  { "text": "E-4 Senior Airman", "value": "E-4 Senior Airman" },
+  { "text": "E-5 Staff Sergeant", "value": "E-5 Staff Sergeant" },
+  { "text": "E-6 Technical Sergeant", "value": "E-6 Technical Sergeant" },
+  { "text": "E-7 Master Sergeant", "value": "E-7 Master Sergeant" },
+  { "text": "E-8 Senior Master Sergeant", "value": "E-8 Senior Master Sergeant" },
+  { "text": "E-9 Chief Master Sergeant", "value": "E-9 Chief Master Sergeant" },
+  { "text": "O-1 Second Lieutenant", "value": "O-1 Second Lieutenant" },
+  { "text": "O-2 First Lieutenant", "value": "O-2 First Lieutenant" },
+  { "text": "O-3 Captain", "value": "O-3 Captain" },
+  { "text": "O-4 Major", "value": "O-4 Major" },
+  { "text": "O-5 Lieutenant Colonel", "value": "O-5 Lieutenant Colonel" },
+  { "text": "O-6 Colonel", "value": "O-6 Colonel" }
+]

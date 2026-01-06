@@ -1,0 +1,12 @@
+[
+  { "text": "-- Select Your MAJCOM --", "value": "" },
+  { "text": "Air Combat Command (ACC)", "value": "Air Combat Command (ACC)" },
+  { "text": "Air Education and Training Command (AETC)", "value": "Air Education and Training Command (AETC)" },
+  { "text": "Air Force Global Strike Command (AFGSC)", "value": "Air Force Global Strike Command (AFGSC)" },
+  { "text": "Air Force Materiel Command (AFMC)", "value": "Air Force Materiel Command (AFMC)" },
+  { "text": "Air Force Reserve Command (AFRC)", "value": "Air Force Reserve Command (AFRC)" },
+  { "text": "Air Force Special Operations Command (AFSOC)", "value": "Air Force Special Operations Command (AFSOC)" },
+  { "text": "Air Mobility Command (AMC)", "value": "Air Mobility Command (AMC)" },
+  { "text": "Pacific Air Forces (PACAF)", "value": "Pacific Air Forces (PACAF)" },
+  { "text": "U.S. Air Forces in Europe – Air Forces Africa (USAFE-AFAFRICA)", "value": "U.S. Air Forces in Europe – Air Forces Africa (USAFE-AFAFRICA)" }
+]

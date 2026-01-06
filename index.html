@@ -1,0 +1,1788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5M07SFV1BF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5M07SFV1BF');
+</script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USAF AI Performance Statement & Decoration Refinery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Custom Styles for a Sleek, Modern Refresh --- */
+        :root {
+            --bg-dark: #09090b;
+            --card-bg: rgba(39, 39, 42, 0.5);
+            --border-color: rgba(161, 161, 170, 0.2);
+            --text-primary: #e4e4e7;
+            --text-secondary: #a1a1aa;
+            --primary-purple: #a855f7;
+            --primary-cyan: #22d3ee;
+            --accent-purple-muted: #c084fc;
+            --input-bg: rgba(24, 24, 27, 0.7);
+            --success-color: #2ecc71;
+            --danger-color: #ef4444;
+        }
+        
+        html[data-theme='light'] {
+            --bg-dark: #fafafa;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --border-color: #d4d4d8;
+            --text-primary: #18181b;
+            --text-secondary: #71717a;
+            --input-bg: #e4e4e7;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(ellipse at top, rgba(168, 85, 247, 0.1), transparent 60%);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex-grow: 1;
+            position: relative;
+        }
+
+        /* --- Selection Screen Styles --- */
+        .selection-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            text-align: center;
+            transition: opacity 0.5s ease-out;
+            position: absolute;
+            width: 100%;
+            left: 0;
+            top: 0;
+        }
+        
+        .selection-container.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .selection-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        .bubble-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+            animation: fadeIn 0.8s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+        .selection-bubble {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 9999px;
+            width: 150px; 
+            height: 150px;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .selection-bubble:hover {
+            border-color: var(--primary-purple);
+            transform: scale(1.05);
+        }
+        .selection-bubble.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .award-bubble { /* Re-using this for decoration bubbles too */
+            width: auto; 
+            height: auto;
+            padding: 1rem 2rem;
+            border-radius: 9999px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Animation Styles --- */
+        #main-tool-container, #decoration-tool-container {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in 0.5s;
+        }
+        body.selection-made #main-tool-container,
+        body.selection-made #decoration-tool-container {
+            display: block;
+            opacity: 1;
+        }
+
+        body.selection-made #initial-selection-screen,
+        body.selection-made #award-selection-screen,
+        body.selection-made #decoration-selection-screen,
+        body.selection-made #decoration-reason-screen {
+             display: none;
+        }
+
+        .animated-title {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            width: 90%;
+            max-width: 48rem;
+            height: auto;
+            padding: 1rem;
+            border-radius: 1rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+            margin: 0 auto 2rem auto;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        
+        /* --- Sticky Header --- */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            width: 100%;
+            border-bottom: 1px solid var(--border-color);
+            background-color: rgba(9, 9, 11, 0.8);
+            backdrop-filter: blur(8px);
+            padding: 0 1rem;
+        }
+        html[data-theme='light'] .header {
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            height: 4rem;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .logo {
+            height: 2.5rem;
+            width: auto;
+        }
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary-purple), var(--primary-cyan));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .theme-toggle-btn {
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-left: 1rem;
+        }
+        .theme-toggle-btn:hover {
+            border-color: var(--primary-purple);
+            color: var(--text-primary);
+        }
+        .theme-toggle-btn svg { width: 1.25rem; height: 1.25rem; }
+
+        /* --- Card Styles --- */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+        }
+        .card-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 1.125rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        /* --- Form & Input Styles --- */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            transition: all 0.2s ease;
+        }
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-purple);
+            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
+        }
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        textarea:disabled {
+            background-color: rgba(39, 39, 42, 0.8);
+            cursor: not-allowed;
+            opacity: 0.9;
+        }
+        .custom-picker-input, .custom-dropdown-selected {
+             background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .custom-picker-input:hover, .custom-dropdown-selected:hover {
+            border-color: var(--primary-purple);
+        }
+        
+        .custom-picker-input::after, .custom-dropdown-selected::after {
+            content: '▼';
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+        }
+        .floating-dropdown-options {
+            position: absolute;
+            background-color: #18181b;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            max-height: 500px;
+            overflow-y: auto;
+            z-index: 100;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        html[data-theme='light'] .floating-dropdown-options {
+             background-color: #ffffff;
+        }
+        .floating-dropdown-header {
+            padding: 0.5rem 0.75rem;
+            font-weight: 700;
+            color: var(--primary-purple);
+            margin-top: 0.5rem;
+            cursor: pointer;
+            border-radius: 0.25rem;
+        }
+        .floating-dropdown-subheader {
+            padding: 0.4rem 0.75rem 0.4rem 1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: 0.25rem;
+        }
+        .floating-dropdown-header:hover, .floating-dropdown-subheader:hover {
+            background-color: rgba(168, 85, 247, 0.1);
+        }
+        .floating-dropdown-option {
+            padding: 0.5rem 0.75rem 0.5rem 1.75rem; /* Indented */
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .floating-dropdown-option:hover {
+            background-color: rgba(168, 85, 247, 0.1);
+        }
+        .floating-dropdown-option.selected {
+            background-color: rgba(168, 85, 247, 0.2);
+            font-weight: 600;
+        }
+
+        /* --- Button Styles --- */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .btn-primary {
+            background: linear-gradient(to right, var(--primary-purple), var(--primary-cyan));
+            color: white;
+        }
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+        .btn-danger {
+            background: transparent;
+            border: 1px solid var(--danger-color);
+            color: var(--danger-color);
+        }
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+        .btn-ghost:hover {
+            background: var(--input-bg);
+            border-color: var(--text-secondary);
+        }
+        
+        /* --- Other Styles --- */
+        .hidden { display: none; }
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* --- Debug Panel Styles --- */
+        #debug-panel {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            width: 400px;
+            max-height: 500px;
+            background: var(--card-bg);
+            border: 2px solid var(--primary-cyan);
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 40px rgba(34, 211, 238, 0.2);
+            display: flex;
+            flex-direction: column;
+            z-index: 500;
+            transition: all 0.3s ease;
+        }
+        #debug-panel.hidden {
+            display: none;
+        }
+        #debug-panel-header {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(34, 211, 238, 0.1);
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        #debug-panel-header h3 {
+            margin: 0;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary-cyan);
+        }
+        #debug-panel-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+        }
+        #debug-panel-close:hover {
+            color: var(--danger-color);
+        }
+        #debug-output {
+            padding: 1rem;
+            overflow-y: auto;
+            flex: 1;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.75rem;
+            line-height: 1.4;
+            color: var(--primary-cyan);
+            white-space: pre-wrap;
+            word-break: break-word;
+            text-shadow: 0 0 10px rgba(34, 211, 238, 0.3);
+        }
+        #debug-toggle {
+            position: fixed;
+            bottom: 1rem;
+            right: 1.5rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(to right, var(--primary-purple), var(--primary-cyan));
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+            transition: all 0.3s ease;
+            z-index: 501;
+        }
+        #debug-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(168, 85, 247, 0.6);
+        }
+        #debug-toggle.active {
+            background: linear-gradient(to right, var(--primary-cyan), var(--primary-purple));
+        }
+        @media (max-width: 768px) {
+            #debug-panel {
+                width: calc(100vw - 2rem);
+                max-height: 300px;
+            }
+        }
+        
+        /* --- Picker Modal Styles (Mobile) --- */
+        .picker-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            padding: 1rem;
+        }
+        .picker-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .picker-modal {
+            background-color: #18181b;
+            border-radius: 1rem;
+            width: 100%;
+            max-width: 28rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            transform: scale(0.95);
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+            max-height: 90vh;
+        }
+        html[data-theme='light'] .picker-modal {
+            background-color: #ffffff;
+        }
+        .picker-overlay.visible .picker-modal {
+            transform: scale(1);
+        }
+        .picker-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        #picker-back-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        #picker-search-input {
+            width: 100%;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+        }
+        #picker-search-input:focus {
+            outline: none;
+            border-color: var(--primary-purple);
+        }
+        .picker-options-list {
+            list-style: none;
+            padding: 0.5rem;
+            margin: 0;
+            overflow-y: auto;
+        }
+        .picker-option-header {
+            padding: 0.75rem 1rem;
+            font-weight: 700;
+            color: var(--primary-purple);
+            margin-top: 0.5rem;
+            cursor: pointer;
+            border-radius: 0.5rem;
+        }
+        .picker-option-subheader {
+            padding: 0.6rem 1rem 0.6rem 1.25rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: 0.5rem;
+        }
+        .picker-option-header:hover, .picker-option-subheader:hover {
+            background-color: rgba(168, 85, 247, 0.1);
+        }
+        .picker-option-item {
+            padding: 0.75rem 1rem 0.75rem 2rem; /* Indented */
+            cursor: pointer;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s;
+        }
+        .picker-option-item:hover {
+            background-color: rgba(168, 85, 247, 0.1);
+        }
+
+        /* --- Generic Modal Styles --- */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        .modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background: #18181b;
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 2rem;
+            width: 90%;
+            max-width: 450px;
+            transform: scale(0.95);
+            transition: transform 0.3s;
+        }
+        html[data-theme='light'] .modal-content {
+            background-color: #ffffff;
+        }
+        .modal-overlay.visible .modal-content {
+            transform: scale(1);
+        }
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+        .modal-body {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <a href="https://royal-spark.github.io/Landing-Page/" style="text-decoration: none;">
+				<div class="logo-container">
+					<img src="https://raw.githubusercontent.com/Royal-Spark/Landing-Page/main/royal-spark-logo.png" alt="Royal Spark Logo" class="logo">
+					<span class="logo-text">Royal Spark</span>
+				</div>
+			</a>
+            <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle theme">
+                <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM18.894 6.106a.75.75 0 0 1 0 1.06l-1.591 1.59a.75.75 0 1 1-1.06-1.06l1.59-1.59a.75.75 0 0 1 1.06 0ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5h2.25a.75.75 0 0 1 .75.75ZM17.894 17.894a.75.75 0 0 1-1.06 0l-1.59-1.591a.75.75 0 1 1 1.06-1.06l1.59 1.59a.75.75 0 0 1 0 1.061ZM12 18.75a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0v-2.25a.75.75 0 0 1 .75-.75ZM5.106 17.894a.75.75 0 0 1 0-1.06l1.59-1.591a.75.75 0 1 1 1.06 1.06l-1.59 1.59a.75.75 0 0 1-1.06 0ZM4.5 12a.75.75 0 0 1-.75.75H1.5a.75.75 0 0 1 0-1.5h2.25a.75.75 0 0 1 .75.75ZM6.106 5.106a.75.75 0 0 1 1.06 0l1.59 1.591a.75.75 0 0 1-1.06 1.06l-1.59-1.59a.75.75 0 0 1 0-1.061Z" /></svg>
+                <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="display: none;"><path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 0 1 .162.819A8.97 8.97 0 0 0 9 6a9 9 0 0 0 9 9 8.97 8.97 0 0 0 3.463-.69.75.75 0 0 1 .981.981A10.503 10.503 0 0 1 18 19.5a10.5 10.5 0 0 1-10.5-10.5A10.503 10.503 0 0 1 9.528 1.718Z" clip-rule="evenodd" /></svg>
+            </button>
+        </div>
+    </header>
+
+	<main class="w-full max-w-7xl mx-auto px-4 sm:px-6 pb-6 pt-8">
+        
+        <div id="initial-selection-screen" class="selection-container">
+            <h2 class="selection-title">What would you like to create?</h2>
+            <div class="bubble-container">
+                <button id="select-report" class="selection-bubble" data-choice="performance-report">EPB / OPB</button>
+                <button id="select-award" class="selection-bubble" data-choice="award-package">Award Package</button>
+                <button id="select-decoration" class="selection-bubble" data-choice="decoration">Decoration</button>
+            </div>
+        </div>
+
+        <div id="award-selection-screen" class="selection-container hidden">
+             <h2 class="selection-title">Which Award Package?</h2>
+             <div class="bubble-container">
+                <button class="selection-bubble award-bubble" data-award-type="sijanLeadership">Sijan</button>
+                <button class="selection-bubble award-bubble" data-award-type="leoMarquez">Leo Marquez</button>
+                <button class="selection-bubble award-bubble" data-award-type="quarterlyAnnual">Annual / Quarterly</button>
+                <button class="selection-bubble award-bubble" data-award-type="custom">Custom</button>
+             </div>
+        </div>
+        
+        <div id="decoration-selection-screen" class="selection-container hidden">
+             <h2 class="selection-title">Which Decoration?</h2>
+             <div class="bubble-container">
+                <button class="selection-bubble award-bubble" data-decoration-type="afam">Achievement Medal</button>
+                <button class="selection-bubble award-bubble" data-decoration-type="afcm">Commendation Medal</button>
+                <button class="selection-bubble award-bubble" data-decoration-type="msm">Meritorious Service</button>
+             </div>
+        </div>
+
+        <div id="decoration-reason-screen" class="selection-container hidden">
+             <h2 class="selection-title">What is the Occasion?</h2>
+             <div class="bubble-container">
+                <button class="selection-bubble award-bubble" data-decoration-reason="single">Single Achievement</button>
+                <button class="selection-bubble award-bubble" data-decoration-reason="pca">PCS / PCA</button>
+                <button class="selection-bubble award-bubble" data-decoration-reason="custom">Custom</button>
+             </div>
+        </div>
+
+        <div id="main-content-area" class="lg:grid lg:grid-cols-3 lg:gap-8">
+            <div id="animated-title-container" class="lg:col-span-3"></div>
+
+            <!-- Performance Report & Award Package Tool -->
+            <div id="main-tool-container" class="lg:col-span-2">
+                <div class="card">
+                    <div class="card-header">
+                        <span>Input Information</span>
+                        <button id="resetBtn" class="btn btn-danger">Start Over</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="form-group">
+                                <label for="jobTitleContainer">Job Title/AFSC: (Optional)</label>
+                                <div id="jobTitleContainer"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="rankContainer">Rank: (Optional)</label>
+                                <div id="rankContainer"></div>
+                            </div>
+                            <div id="otherJobField" class="form-group hidden md:col-span-2">
+                                <label for="otherJobTitle">Specify Job Title:</label>
+                                <input type="text" id="otherJobTitle" placeholder="e.g., Program Manager">
+                            </div>
+                            <div class="form-group">
+                                <label for="majcomContainer">MAJCOM: (Optional)</label>
+                                <div id="majcomContainer"></div>
+                            </div>
+                            <div id="mga-form-group" class="form-group">
+                                <label for="mgaContainer">Major Graded Area (MGA): (Optional)</label>
+                                <div id="mgaContainer"></div>
+                            </div>
+                            <div id="custom-award-instructions-form-group" class="form-group hidden">
+                                <label for="customAwardInstructions">Custom Award Instructions: (Optional)</label>
+                                <input type="text" id="customAwardInstructions" placeholder="e.g., 'Focus on innovation' or 'Package for wing level'">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="accomplishment">Accomplishment Details: (Required)</label>
+                            <textarea id="accomplishment" placeholder="Describe what you did with metrics in any format..."></textarea>
+                        </div>
+                        <div class="flex flex-col items-center gap-4 mt-4">
+                            <button id="generateButtonMain" class="btn btn-primary w-full text-lg">Generate & Copy Prompt</button>
+                            <a href="https://genai.mil/" target="_blank" rel="noopener noreferrer" id="GenAI-link-btn-main" class="btn btn-ghost w-full hidden">
+                                Go to GenAI.mil
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Decoration Tool -->
+            <div id="decoration-tool-container" class="lg:col-span-3">
+                 <div class="card">
+                    <div class="card-header">
+                        <span>Decoration Achievements</span>
+                        <button id="resetBtn2" class="btn btn-danger">Start Over</button>
+                    </div>
+                    <div class="card-body">
+                        
+                        <div id="dec-single-achievement-section" class="form-group hidden">
+                             <p class="text-sm text-center mb-6" style="color: var(--text-secondary);">Describe the single outstanding achievement for this decoration.</p>
+                            <label for="dec-single-achievement">Achievement Details</label>
+                            <textarea id="dec-single-achievement" placeholder="Describe the achievement with metrics..."></textarea>
+                        </div>
+
+                        <div id="dec-pca-section" class="hidden">
+                            <p class="text-sm text-center mb-6" style="color: var(--text-secondary);">Paste your top 3-5 performance statements from your tour into the blocks below. The AI will assemble them into a cohesive decoration narrative.</p>
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <div class="form-group">
+                                    <label for="dec-achievement-1">Achievement 1</label>
+                                    <textarea id="dec-achievement-1" placeholder="Paste your strongest performance statement here..."></textarea>
+                                </div>
+                                 <div class="form-group">
+                                    <label for="dec-achievement-2">Achievement 2</label>
+                                    <textarea id="dec-achievement-2" placeholder="Paste your next strongest performance statement..."></textarea>
+                                </div>
+                                 <div class="form-group">
+                                    <label for="dec-achievement-3">Achievement 3</label>
+                                    <textarea id="dec-achievement-3" placeholder="...and another one."></textarea>
+                                </div>
+                                 <div class="form-group">
+                                    <label for="dec-achievement-4">Achievement 4</label>
+                                    <textarea id="dec-achievement-4" placeholder="...and another one."></textarea>
+                                </div>
+                                 <div class="form-group lg:col-span-2">
+                                    <label for="dec-achievement-5">Achievement 5</label>
+                                    <textarea id="dec-achievement-5" placeholder="...and another one."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="dec-custom-section" class="hidden">
+                             <p class="text-sm text-center mb-6" style="color: var(--text-secondary);">Provide the specific instructions for this custom decoration and describe the key achievement.</p>
+                             <div class="form-group">
+                                <label for="dec-custom-instructions">Custom Decoration Instructions</label>
+                                <textarea id="dec-custom-instructions" placeholder="e.g., 'Focus on heroism during the event...' or 'This is for the Wing Innovator of the Year award...'"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="dec-custom-achievement">Achievement Details</label>
+                                <textarea id="dec-custom-achievement" placeholder="Describe the achievement this custom decoration is for..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col items-center gap-4 mt-4">
+                             <button id="generateButtonDec" class="btn btn-primary w-full text-lg">Generate & Copy Prompt</button>
+                             <a href="https://genai.mil/" target="_blank" rel="noopener noreferrer" id="genai-link-btn-dec" class="btn btn-ghost w-full hidden">
+                                Go to GenAI.mil
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Panel (Stays on the right) -->
+            <div id="info-panel-wrapper" class="lg:col-start-3 lg:row-start-2">
+                <div id="award-info-panel" class="card hidden">
+                    <div class="card-header">
+                        <span id="award-info-title">Award Information</span>
+                    </div>
+                    <div class="card-body" id="award-info-content" style="color: var(--text-secondary); line-height: 1.6;">
+                        <p>Select an award to see its rules and goals.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Character Counter -->
+            <div id="final-cards-container" class="hidden lg:col-span-3">
+                 <div class="card">
+                    <div class="card-header"><span>Performance Statement Character Count</span></div>
+                    <div class="card-body">
+                        <div class="flex flex-col md:flex-row items-center gap-6">
+                            <textarea id="charCounterTextBox" class="w-full h-32 p-4 rounded-lg text-lg transition duration-300 resize-y" placeholder="Paste text or type here..."></textarea>
+                            <div class="flex flex-col items-center justify-center p-4">
+                                <span id="charCounterCount" class="text-7xl font-bold transition-colors duration-300" style="color: var(--primary-cyan);">0</span>
+                                <span class="text-sm uppercase tracking-wider" style="color: var(--text-secondary);">Characters</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        USAF AI Prompt Generator | For official use only
+    </footer>
+    
+   <div id="picker-overlay" class="picker-overlay">
+        <div class="picker-modal">
+            <div class="picker-header">
+                <button id="picker-back-btn" class="hidden">←</button>
+                <input type="text" id="picker-search-input" placeholder="Type to search...">
+            </div>
+            <ul id="picker-options-list" class="picker-options-list"></ul>
+        </div>
+    </div>
+    
+    <div id="alert-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 id="alert-title" class="modal-title">Input Required</h3>
+            <p id="alert-body" class="modal-body">Please fill in the required fields before generating a prompt.</p>
+            <div class="modal-actions"><button id="alert-ok" class="btn btn-primary">OK</button></div>
+        </div>
+    </div>
+
+    <div id="copy-confirmation-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 class="modal-title">Prompt Copied!</h3>
+            <p class="modal-body">Your prompt has been copied to the clipboard. For best results, Use GenAi.mil.</p>
+            <div class="modal-actions">
+                <button id="close-copy-modal" class="btn btn-ghost">Close</button>
+                <a href="https://genai.mil/" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Go to GenAI.mil</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+      let userChoice = {
+          main: '',
+          awardType: '',
+          decorationType: '',
+          decorationReason: ''
+      };
+      let activeBubbleText = '';
+      let promptData = {};
+      const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
+
+      // Data arrays for dropdowns - loaded dynamically from JSON files
+      let afscOptions = [];
+      let rankOptions = [];
+      let majcomOptions = [];
+      let mgaOptions = [];
+
+      // Placeholder content for info panels
+      const awardInfoContent = {
+          sijanLeadership: `<h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Lance P. Sijan Leadership Award</h3><p style="margin-bottom: 1rem;"><strong>Goal:</strong> The Sijan Award recognizes individuals who have demonstrated the highest qualities of leadership in their jobs and in their lives. Created in 1981 and named after Captain Lance P. Sijan (Medal of Honor recipient), this is one of the Air Force's most prestigious awards.</p><p style="margin-bottom: 0.5rem;"><strong>Key Criteria:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;"><li><strong>Leadership Excellence:</strong> Must demonstrate outstanding leadership abilities in both professional duties and personal conduct</li><li><strong>Character:</strong> Emphasizes moral courage, integrity, and leading by example - not just job performance</li><li><strong>Whole Person:</strong> Considers leadership in the performance of duties AND the conduct of their lives</li><li><strong>Impact:</strong> Should show how leadership positively affected the mission, unit, and people</li><li><strong>Categories:</strong> Junior Officer, Senior Officer, Junior Enlisted, Senior Enlisted</li></ul><p style="margin-bottom: 0.5rem;"><strong>Writing Tips:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;"><li>Focus on leadership actions that inspired others and improved the unit</li><li>Highlight moral courage, ethical decision-making, and mentorship</li><li>Include examples of leading through adversity or complex situations</li><li>Show impact on mission readiness AND people development</li><li>Emphasize character traits that align with Sijan's legacy (courage, perseverance, selflessness)</li><li>Use specific examples of how the nominee's leadership stands out from peers</li></ul>`,
+          leoMarquez: `<h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Lt. Gen. Leo Marquez Award</h3><p style="margin-bottom: 1rem;"><strong>Goal:</strong> Named after the "Godfather of Air Force Maintenance," this award recognizes military and civilian aircraft, munitions, missile, and communications-electronics maintenance personnel who perform hands-on maintenance or manage a maintenance function with exceptional excellence.</p><p style="margin-bottom: 0.5rem;"><strong>Key Criteria:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;"><li><strong>Job Performance:</strong> Outstanding performance in maintenance duties - must exceed the standard</li><li><strong>Job Knowledge:</strong> Deep technical expertise and application of maintenance principles</li><li><strong>Sortie Generation:</strong> Direct involvement in generating aircraft sorties and mission readiness</li><li><strong>Efficiency & Results:</strong> Quantifiable improvements in mission capability rates, cost savings, or innovation</li><li><strong>Categories:</strong> Aircraft Maintenance, Munitions/Missile Maintenance, Communications-Electronics Maintenance (Officer, NCO, Airman, Civilian categories within each)</li></ul><p style="margin-bottom: 0.5rem;"><strong>Writing Tips:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;"><li>Lead with quantifiable metrics: MC rates, sortie generation, cost savings, downtime reduction</li><li>Highlight technical innovation or process improvements that had lasting impact</li><li>Emphasize hands-on work and direct contribution to mission readiness</li><li>Include examples of working under pressure, combat operations, or austere conditions</li><li>Show how the nominee went beyond normal duties to solve critical problems</li><li>Focus on sustained excellence, not just single achievements</li><li>Use maintenance-specific language: sorties generated, FMC rates, code-3 repairs, phase inspections</li></ul>`,
+          quarterlyAnnual: `<h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Quarterly / Annual Awards</h3><p style="margin-bottom: 1rem;"><strong>Goal:</strong> Recognize sustained superior performance over the award period (quarter or year). These awards identify top performers in categories like Airman, NCO, SNCO, CGO, FGO, and Civilian, fostering morale and highlighting exceptional contributions.</p><p style="margin-bottom: 0.5rem;"><strong>Key Criteria:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;"><li><strong>Performance in Primary Duty:</strong> Must show exceptional job performance with quantifiable impact</li><li><strong>Leadership:</strong> Demonstrate leadership abilities appropriate to rank/position</li><li><strong>Whole Airman Concept:</strong> Self-improvement (education, training) and base/community involvement</li><li><strong>Time-Bound:</strong> All accomplishments must occur within the award period</li><li><strong>Sustained Excellence:</strong> Consistency throughout the period, not just one-time achievements</li></ul><p style="margin-bottom: 0.5rem;"><strong>AF Form 1206 Format (Common):</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;"><li><strong>Quarterly (Typical):</strong> 9 lines total including headers<ul style="margin-left: 1.5rem; margin-top: 0.25rem;"><li>Job Performance: 4-5 bullets</li><li>Leadership: 1-2 bullets</li><li>Whole Airman Concept: 1-2 bullets</li></ul></li><li><strong>Annual (Typical):</strong> 18 lines total including headers<ul style="margin-left: 1.5rem; margin-top: 0.25rem;"><li>Leadership & Job Performance: 12 bullets</li><li>Whole Airman Concept: 5 bullets</li></ul></li><li><em>Note: Specific line counts vary by unit/MAJCOM - always check local guidance</em></li></ul><p style="margin-bottom: 0.5rem;"><strong>Writing Tips:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;"><li><strong>Use Performance Statements:</strong> Action + Impact/Result format</li><li><strong>Quantify Everything:</strong> Numbers, percentages, dollar amounts, time saved</li><li><strong>Show Impact:</strong> How did actions improve the mission, unit, or people?</li><li><strong>Be Specific:</strong> Avoid vague statements; include concrete details</li><li><strong>Balance:</strong> Address all categories (job performance, leadership, whole person)</li><li><strong>Front-Load Impact:</strong> Put the most impressive result first in each bullet</li><li><strong>Vary Sentence Structure:</strong> Avoid repetitive phrasing</li><li><strong>Stay in Period:</strong> Only include accomplishments from the award quarter/year</li><li><strong>Compare to Peers:</strong> Show how performance exceeds others at same rank/position</li><li><strong>Use Strong Action Verbs:</strong> Led, implemented, streamlined, achieved, generated</li></ul><p style="margin-top: 1rem; margin-bottom: 0.5rem;"><strong>Example Bullet Structure:</strong></p><p style="margin-left: 1.5rem; font-style: italic;">- Managed 500 vouchers worth $2M--maintained 99% accuracy rate; ensured zero mission delays during critical exercises</p>`,
+          msm: `<h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Meritorious Service Medal (MSM)</h3><p style="margin-bottom: 1rem;"><strong>Goal:</strong> The MSM recognizes outstanding meritorious achievement or service over an extended period (typically end-of-tour or retirement). It's awarded for acts comparable to the Legion of Merit but at a lesser level of responsibility.</p><p style="margin-bottom: 0.5rem;"><strong>Key Criteria:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;"><li><strong>Extended Service:</strong> Typically covers 2-4 years of service at one assignment</li><li><strong>Career Impact:</strong> Focus on tour-level achievements with lasting impact</li><li><strong>Sustained Excellence:</strong> Consistent superior performance throughout the period</li><li><strong>Significant Contribution:</strong> Must show major contributions to mission success</li><li><strong>Typical Recipients:</strong> Field grade officers (O-4 to O-6) and senior NCOs (E-7 to E-9)</li><li><strong>Authority:</strong> Typically approved by O-6 (Colonel) or higher</li></ul><p style="margin-bottom: 0.5rem;"><strong>Writing Tips:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;"><li><strong>Narrative Format:</strong> Citations are written in paragraph form (not bullets)</li><li><strong>Character Limit:</strong> Maximum 1,350 characters for citation body</li><li><strong>Opening Sentence:</strong> Use proper format - "distinguished himself/herself by meritorious service as [duty title]"</li><li><strong>Highlight Major Accomplishments:</strong> Focus on 3-5 most significant achievements</li><li><strong>Show Strategic Impact:</strong> Emphasize wing/base/MAJCOM-level effects</li><li><strong>Include Career Development:</strong> Mention significant training, certifications, or education completed</li><li><strong>Use Active Voice:</strong> Strong verbs that show leadership and initiative</li><li><strong>Quantify Impact:</strong> Dollar amounts, percentages, people managed, assets controlled</li><li><strong>Professional Tone:</strong> Formal military writing - avoid casual language</li><li><strong>Closing Sentence:</strong> "The distinctive accomplishments of [rank/name] reflect credit upon himself/herself and the United States Air Force"</li></ul><p style="margin-top: 1rem; margin-bottom: 0.5rem;"><strong>Common MSM Scenarios:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;"><li>End of 3-4 year assignment for outstanding performance</li><li>Retirement decoration for career-level achievements</li><li>Completion of significant project with major impact</li><li>Can be awarded for combat zone service (since 2003)</li></ul>`,
+          afcm: `<h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Air Force Commendation Medal (AFCM)</h3><p style="margin-bottom: 1rem;"><strong>Goal:</strong> The AFCM recognizes outstanding achievement or meritorious service that is distinctive but not sufficient for a higher award. It's a mid-level decoration for specific accomplishments or sustained performance over a shorter period than the MSM.</p><p style="margin-bottom: 0.5rem;"><strong>Key Criteria:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;"><li><strong>Meritorious Achievement:</strong> Distinctive accomplishment or single outstanding act</li><li><strong>Meritorious Service:</strong> Exemplary service over 1-2 years (shorter than MSM)</li><li><strong>Acts of Courage:</strong> Non-combat acts not meeting Airman's Medal criteria</li><li><strong>Above and Beyond:</strong> Performance clearly exceeds normal duty expectations</li><li><strong>Typical Recipients:</strong> Company grade officers and junior NCOs (but any rank below O-7)</li><li><strong>Authority:</strong> Must be approved by O-6 (Colonel) or higher</li><li><strong>Devices:</strong> "V" for Valor, "C" for Combat, "R" for Remote operations</li></ul><p style="margin-bottom: 0.5rem;"><strong>Writing Tips:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;"><li><strong>Narrative Format:</strong> Paragraph style, maximum 1,350 characters</li><li><strong>Opening Sentence:</strong> "distinguished himself/herself by outstanding achievement" OR "by meritorious service as [duty title]"</li><li><strong>Focus on Specifics:</strong> Clearly articulate what makes this achievement distinctive</li><li><strong>Show Direct Impact:</strong> Emphasize immediate mission effects and tangible results</li><li><strong>Achievement vs Service:</strong><ul style="margin-left: 1.5rem; margin-top: 0.25rem;"><li><em>Achievement:</em> Single act or specific accomplishment (deployment, project, event)</li><li><em>Service:</em> Sustained performance over 1-2 years showing consistent excellence</li></ul></li><li><strong>Quantify Results:</strong> Numbers demonstrate impact - cost savings, efficiency gains, mission success</li><li><strong>Appropriate Scope:</strong> Squadron/group level impact is suitable (not necessarily wing-level)</li><li><strong>Use Strong Action Words:</strong> Managed, executed, coordinated, achieved, implemented</li></ul><p style="margin-top: 1rem; margin-bottom: 0.5rem;"><strong>Common AFCM Scenarios:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;"><li>Successful completion of deployment (4-6 months)</li><li>Outstanding performance during TDY or exercise</li><li>Leading a significant project to successful completion</li><li>Mid-tour recognition (18-24 months into assignment)</li><li>End-of-tour for junior personnel (1-2 years)</li><li>One-time extraordinary achievement deserving special recognition</li></ul>`,
+          afam: `<h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Air Force Achievement Medal (AFAM)</h3><p style="margin-bottom: 1rem;"><strong>Goal:</strong> The AFAM recognizes outstanding achievement or meritorious service rendered specifically on behalf of the Air Force. It is a junior-level decoration for a single specific act or for a shorter period of service than the AFCM.</p><p style="margin-bottom: 0.5rem;"><strong>Key Criteria:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;"><li><strong>Specific Achievement:</strong> A single, noteworthy act or accomplishment.</li><li><strong>Meritorious Service:</strong> Sustained, excellent performance over a shorter period (e.g., 1 year).</li><li><strong>Impact:</strong> The impact is typically at the flight or squadron level.</li><li><strong>Typical Recipients:</strong> Primarily awarded to junior officers and enlisted personnel.</li></ul><p style="margin-bottom: 0.5rem;"><strong>Writing Tips:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;"><li>Be concise and focus on the single most important achievement.</li><li>Clearly state the action taken and the direct, measurable result.</li><li>Keep the narrative to 1-2 sentences in the citation body.</li><li>Use strong, active verbs to describe the accomplishment.</li></ul>`,
+          custom: `<h3 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">Custom Award</h3><p style="margin-bottom: 1rem;"><strong>Goal:</strong> This option is for non-standard awards such as unit-level recognition, functional awards, special trophies, or organization-specific awards not covered by the standard categories.</p><p style="margin-bottom: 1rem;"><strong>Instructions:</strong> Use the <strong>"Custom Award Instructions"</strong> field below to provide specific information about your custom award. This helps the AI understand what criteria and format to use.</p><p style="margin-bottom: 0.5rem;"><strong>What to Include in Custom Instructions:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;"><li><strong>Award Name:</strong> Full title of the award (e.g., "John L. Hennessy Award" or "Squadron Maintainer of the Quarter")</li><li><strong>Award Purpose:</strong> What this award recognizes (innovation, safety, specific job function, etc.)</li><li><strong>Key Criteria:</strong> What qualities or achievements are being evaluated?</li><li><strong>Format Requirements:</strong> Bullet format or narrative? Line limits? Character limits?</li><li><strong>Evaluation Categories:</strong> Are there specific sections (e.g., Job Performance, Innovation, Safety Record)?</li><li><strong>Target Recipients:</strong> Who typically receives this award? (specific AFSCs, positions, ranks)</li><li><strong>Approval Authority:</strong> Who approves this award?</li><li><strong>Unique Emphasis:</strong> Any special focus areas or metrics specific to this award?</li></ul><p style="margin-bottom: 0.5rem;"><strong>Example Custom Instructions:</strong></p><div style="background-color: rgba(128, 128, 128, 0.1); padding: 0.75rem; border-radius: 0.25rem; margin-bottom: 1rem; font-size: 0.9rem;"><p style="margin-bottom: 0.5rem;"><em>"This is the Squadron Dorm Manager of the Quarter award. It recognizes Airmen who demonstrate exceptional dormitory management and care for dorm residents. Criteria include:</em></p><ul style="list-style-type: disc; margin-left: 1.5rem;"><li><em>Quality of Life improvements for residents</em></li><li><em>Facility management and maintenance coordination</em></li><li><em>Mentorship and support provided to dorm residents</em></li><li><em>Community building activities</em></li><li><em>Format: AF Form 1206, 9 lines total including headers"</em></li></ul></div><p style="margin-bottom: 0.5rem;"><strong>Tips for Custom Awards:</strong></p><ul style="list-style-type: disc; margin-left: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;"><li>Be as specific as possible about unique criteria and expectations</li><li>If the award has an AFI or local instruction, mention it</li><li>Include examples if you have successful past submissions</li><li>Note any unconventional aspects that differ from standard awards</li><li>Specify if there are specific buzzwords or terminology that should be included</li><li>Clarify whether quantitative or qualitative emphasis is more important</li></ul>`
+      };
+
+      // --- START: DYNAMIC AFSC DROPDOWN LOGIC ---
+      let afscPickerPath = [];
+
+      function getAfscPickerItems(path) {
+          if (!path) path = [];
+
+          if (path.length === 0) {
+              // Level 0: Show only default and top-level headers
+              return [
+                  afscOptions[0], // '-- Select...'
+                  ...afscOptions.filter(opt => opt.type === 'header')
+              ];
+          }
+
+          if (path.length === 1) {
+              // Level 1: Check if the selected header has subheaders.
+              const headerText = path[0];
+              const items = [];
+              let inSection = false;
+              let sectionHasSubheaders = false;
+
+              // First pass: Check for any subheaders within this header's section
+              for (const opt of afscOptions) {
+                  if (opt.type === 'header' && opt.text === headerText) {
+                      inSection = true;
+                      continue;
+                  }
+                  if (inSection && opt.type === 'header') break; // End of section
+                  if (inSection && opt.type === 'subheader') {
+                      sectionHasSubheaders = true;
+                      break;
+                  }
+              }
+
+              // Second pass: Collect the appropriate items
+              inSection = false;
+              for (const opt of afscOptions) {
+                  if (opt.type === 'header' && opt.text === headerText) {
+                      inSection = true;
+                      continue;
+                  }
+                  if (inSection && opt.type === 'header') break;
+                  
+                  if (inSection) {
+                      if (sectionHasSubheaders) {
+                          // If subheaders exist, only show those
+                          if (opt.type === 'subheader') {
+                              items.push(opt);
+                          }
+                      } else {
+                          // If no subheaders, show the final items directly
+                          if (!opt.type) {
+                              items.push(opt);
+                          }
+                      }
+                  }
+              }
+              return items;
+          }
+
+          if (path.length === 2) {
+              // Level 2: Show final AFSCs under a subheader
+              const headerText = path[0];
+              const subheaderText = path[1];
+              const items = [];
+              let inHeaderSection = false;
+              let inSubheaderSection = false;
+              for (const opt of afscOptions) {
+                  if (opt.type === 'header' && opt.text === headerText) {
+                      inHeaderSection = true;
+                      continue;
+                  }
+                  if (inHeaderSection && opt.type === 'header') break;
+
+                  if (inHeaderSection) {
+                      if (opt.type === 'subheader' && opt.text === subheaderText) {
+                          inSubheaderSection = true;
+                          continue;
+                      }
+                      if (inSubheaderSection && (opt.type === 'subheader' || opt.type === 'header')) break;
+
+                      if (inSubheaderSection && !opt.type) {
+                          items.push(opt);
+                      }
+                  }
+              }
+              return items;
+          }
+          return [];
+      }
+      
+      const pickerOverlay = document.getElementById('picker-overlay');
+      const pickerSearchInput = document.getElementById('picker-search-input');
+      const pickerOptionsList = document.getElementById('picker-options-list');
+      const pickerBackBtn = document.getElementById('picker-back-btn');
+      let currentPickerField = null;
+      let currentPickerOptions = [];
+      
+      function openPicker(fieldId, options) {
+        currentPickerField = fieldId;
+        pickerSearchInput.value = '';
+        if (fieldId === 'jobTitle') {
+            afscPickerPath = [];
+            renderAfscPickerOptions();
+        } else {
+            currentPickerOptions = options;
+            renderGenericPickerOptions(options);
+            pickerBackBtn.classList.add('hidden');
+        }
+        pickerOverlay.classList.add('visible');
+        pickerSearchInput.focus();
+      }
+
+      function closePicker() { pickerOverlay.classList.remove('visible'); }
+
+      function renderAfscPickerOptions() {
+          pickerOptionsList.innerHTML = '';
+          const items = getAfscPickerItems(afscPickerPath);
+          pickerBackBtn.classList.toggle('hidden', afscPickerPath.length === 0);
+
+          items.forEach(opt => {
+              const li = document.createElement('li');
+              const isCategory = opt.type === 'header' || opt.type === 'subheader';
+
+              if (opt.type === 'header') li.className = 'picker-option-header';
+              else if (opt.type === 'subheader') li.className = 'picker-option-subheader';
+              else li.className = 'picker-option-item';
+              li.textContent = opt.text;
+
+              if (isCategory) {
+                  li.addEventListener('click', () => {
+                      afscPickerPath.push(opt.text);
+                      renderAfscPickerOptions();
+                  });
+              } else {
+                  li.dataset.value = opt.value;
+                  li.addEventListener('click', () => selectPickerOption(opt));
+              }
+              pickerOptionsList.appendChild(li);
+          });
+      }
+
+      function renderGenericPickerOptions(options) {
+        pickerOptionsList.innerHTML = '';
+        options.forEach(opt => {
+            const li = document.createElement('li');
+            li.className = 'picker-option-item';
+            li.textContent = opt.text;
+            li.dataset.value = opt.value;
+            li.addEventListener('click', () => selectPickerOption(opt));
+            pickerOptionsList.appendChild(li);
+        });
+      }
+
+      function selectPickerOption(option) {
+        if (!currentPickerField) return;
+        const field = document.getElementById(currentPickerField);
+        if (field) {
+            field.textContent = option.text;
+            field.dataset.value = option.value;
+            if (currentPickerField === 'jobTitle' && option.value === 'other') {
+                document.getElementById('otherJobField').classList.remove('hidden');
+            } else if (currentPickerField === 'jobTitle') {
+                document.getElementById('otherJobField').classList.add('hidden');
+            }
+        }
+        closePicker();
+      }
+
+      pickerBackBtn.addEventListener('click', () => {
+          if (currentPickerField === 'jobTitle' && afscPickerPath.length > 0) {
+              afscPickerPath.pop();
+              renderAfscPickerOptions();
+          }
+      });
+      pickerSearchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase();
+        if (currentPickerField !== 'jobTitle') {
+             const filtered = currentPickerOptions.filter(opt => opt.text.toLowerCase().includes(query));
+             renderGenericPickerOptions(filtered);
+        } else {
+            // Search is complex for tree view, so we disable it for simplicity. 
+            // A full implementation would search the final nodes and show their paths.
+        }
+      });
+      pickerOverlay.addEventListener('click', (e) => { if (e.target === pickerOverlay) closePicker(); });
+      
+      let activeDropdown = null;
+
+      function renderAfscDropdownContent(dropdownEl, selectedEl) {
+          dropdownEl.innerHTML = '';
+          const items = getAfscPickerItems(afscPickerPath);
+
+          if (afscPickerPath.length > 0) {
+              const backBtn = document.createElement('div');
+              backBtn.className = 'floating-dropdown-option';
+              backBtn.innerHTML = '<strong>← Back</strong>';
+              backBtn.addEventListener('click', (e) => {
+                  e.stopPropagation();
+                  afscPickerPath.pop();
+                  renderAfscDropdownContent(dropdownEl, selectedEl);
+              });
+              dropdownEl.appendChild(backBtn);
+          }
+
+          items.forEach(opt => {
+              const optDiv = document.createElement('div');
+              const isCategory = opt.type === 'header' || opt.type === 'subheader';
+
+              if (isCategory) {
+                  optDiv.className = opt.type === 'header' ? 'floating-dropdown-header' : 'floating-dropdown-subheader';
+                  optDiv.textContent = opt.text;
+                  optDiv.addEventListener('click', (e) => {
+                      e.stopPropagation();
+                      afscPickerPath.push(opt.text);
+                      renderAfscDropdownContent(dropdownEl, selectedEl);
+                  });
+              } else {
+                  optDiv.className = 'floating-dropdown-option';
+                  optDiv.textContent = opt.text;
+                  if (opt.value === selectedEl.dataset.value) optDiv.classList.add('selected');
+                  optDiv.addEventListener('click', () => {
+                      selectedEl.textContent = opt.text;
+                      selectedEl.dataset.value = opt.value;
+                      if (opt.value === 'other') {
+                          document.getElementById('otherJobField').classList.remove('hidden');
+                      } else {
+                          document.getElementById('otherJobField').classList.add('hidden');
+                      }
+                      closeAllDropdowns();
+                  });
+              }
+              dropdownEl.appendChild(optDiv);
+          });
+      }
+
+      function createAfscDropdown(containerId, fieldId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        const selected = document.createElement('div');
+        selected.className = 'custom-dropdown-selected';
+        selected.id = fieldId;
+        selected.textContent = afscOptions[0].text;
+        selected.dataset.value = afscOptions[0].value;
+        container.innerHTML = ''; // Clear container
+        container.appendChild(selected);
+
+        selected.addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeAllDropdowns();
+            afscPickerPath = [];
+            const rect = selected.getBoundingClientRect();
+            const dropdown = document.createElement('div');
+            dropdown.className = 'floating-dropdown-options';
+            dropdown.style.cssText = `position: absolute; top: ${rect.bottom + window.scrollY + 5}px; left: ${rect.left + window.scrollX}px; width: ${rect.width}px;`;
+            
+            renderAfscDropdownContent(dropdown, selected);
+            
+            document.body.appendChild(dropdown);
+            activeDropdown = dropdown;
+        });
+      }
+
+      function createSimpleDropdown(containerId, options, fieldId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        const selected = document.createElement('div');
+        selected.className = 'custom-dropdown-selected';
+        selected.id = fieldId;
+        selected.textContent = options[0].text;
+        selected.dataset.value = options[0].value;
+        container.innerHTML = ''; // Clear container
+        container.appendChild(selected);
+
+        selected.addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeAllDropdowns();
+            const rect = selected.getBoundingClientRect();
+            const dropdown = document.createElement('div');
+            dropdown.className = 'floating-dropdown-options';
+            dropdown.style.cssText = `position: absolute; top: ${rect.bottom + window.scrollY + 5}px; left: ${rect.left + window.scrollX}px; width: ${rect.width}px;`;
+            options.forEach(opt => {
+                const optDiv = document.createElement('div');
+                optDiv.className = 'floating-dropdown-option';
+                optDiv.textContent = opt.text;
+                if (opt.value === selected.dataset.value) optDiv.classList.add('selected');
+                optDiv.addEventListener('click', () => {
+                    selected.textContent = opt.text;
+                    selected.dataset.value = opt.value;
+                    closeAllDropdowns();
+                });
+                dropdown.appendChild(optDiv);
+            });
+            document.body.appendChild(dropdown);
+            activeDropdown = dropdown;
+        });
+      }
+
+      function createResponsiveSelect(containerId, options, fieldId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        container.innerHTML = ''; // Clear previous content
+
+        if (fieldId === 'jobTitle') {
+             if (isTouchDevice) {
+                const picker = document.createElement('div');
+                picker.className = 'custom-picker-input'; picker.id = fieldId;
+                picker.textContent = options[0].text; picker.dataset.value = options[0].value;
+                picker.addEventListener('click', () => openPicker(fieldId, options));
+                container.appendChild(picker);
+            } else {
+                createAfscDropdown(containerId, fieldId);
+            }
+        } else {
+            if (isTouchDevice) {
+                const picker = document.createElement('div');
+                picker.className = 'custom-picker-input'; picker.id = fieldId;
+                picker.textContent = options[0].text; picker.dataset.value = options[0].value;
+                picker.addEventListener('click', () => openPicker(fieldId, options));
+                container.appendChild(picker);
+            } else {
+                createSimpleDropdown(containerId, options, fieldId);
+            }
+        }
+      }
+
+      function closeAllDropdowns() { if (activeDropdown) { activeDropdown.remove(); activeDropdown = null; } }
+      // --- END: DYNAMIC AFSC DROPDOWN LOGIC ---
+      
+      // Helper Functions
+      function showModal(id) { document.getElementById(id)?.classList.add('visible'); }
+      function hideModal(id) { document.getElementById(id)?.classList.remove('visible'); }
+      function switchScreen(hideId, showId) {
+          document.getElementById(hideId)?.classList.add('hidden');
+          document.getElementById(showId)?.classList.remove('hidden');
+      }
+
+     // PROMPT ASSEMBLY LOGIC
+     function assembleInteractivePrompt(inputs) {
+    const { rank, jobTitle, majcom, mga, userChoice, accomplishment, customAwardInstructions } = inputs;
+    let promptParts = [];
+
+    // 1. SYSTEM ROLE & INSTRUCTIONS
+    promptParts.push(promptData.base || "ROLE: You are a USAF Performance Statement Coach.");
+    
+    // 2. CONTEXT BLOCK (Using Text Headers)
+    promptParts.push("### CONTEXT DATA ###");
+    if (rank) promptParts.push(`Rank: ${rank}`);
+    if (jobTitle) promptParts.push(`Job Title: ${jobTitle}`);
+    if (majcom) promptParts.push(`MAJCOM: ${majcom}`);
+    if (mga) promptParts.push(`Target MGA: ${mga}`);
+
+    // 3. TASK SPECIFICS
+    promptParts.push("### TASK DEFINITION ###");
+    if (userChoice.main === 'performance-report') {
+        promptParts.push(promptData.typeAddons?.performanceReport);
+    } else if (userChoice.main === 'award-package') {
+        promptParts.push(promptData.typeAddons?.awardPackage);
+        if (promptData.awardAddons?.[userChoice.awardType]) {
+            promptParts.push(promptData.awardAddons[userChoice.awardType]);
+        }
+        if (customAwardInstructions) {
+            promptParts.push(`CUSTOM USER INSTRUCTIONS: ${customAwardInstructions}`);
+        }
+    }
+    
+    // 4. RANK SPECIFIC TONE
+    const juniorRanks = ['E-1', 'E-2', 'E-3', 'E-4'];
+    const isJuniorEnlisted = rank ? juniorRanks.some(jr => rank.startsWith(jr)) : false;
+    
+    if (promptData.rankAddons) {
+         if (isJuniorEnlisted) promptParts.push(promptData.rankAddons.e1_e4);
+         else promptParts.push(promptData.rankAddons.e6_plus);
+    }
+
+    // 5. FEW-SHOT EXAMPLES (Robustness Booster)
+    if (promptData.examples && promptData.examples.narrative) {
+        promptParts.push("### REFERENCE EXAMPLES ###");
+        promptParts.push("Follow this style exactly:");
+        promptParts.push(promptData.examples.narrative);
+    }
+
+    // 6. FINAL INSTRUCTIONS & USER INPUT
+    promptParts.push("### USER ACCOMPLISHMENT INPUT ###");
+    promptParts.push(accomplishment);
+    
+    promptParts.push("### FINAL INSTRUCTION ###");
+    promptParts.push(promptData.finalInstructions);
+    promptParts.push("Start your Step 1 Analysis now. Remember: NARRATIVE FORMAT ONLY. NO BULLETS.");
+
+    return promptParts.join('\n\n');
+}
+
+      function assembleDecorationPrompt(inputs) {
+          const { userChoice, single, pca, custom } = inputs;
+          let promptParts = [];
+          
+  	      if (promptData.decorationAddons?.[userChoice.decorationType]) {
+          	  promptParts.push(promptData.decorationAddons[userChoice.decorationType]);
+          }
+
+          let reasonText = '';
+          let achievementText = '';
+
+          if (userChoice.decorationReason === 'single') {
+              reasonText = "This decoration is for a single, outstanding achievement.";
+              achievementText = single;
+          } else if (userChoice.decorationReason === 'pca') {
+              reasonText = "This is an end-of-tour PCS/PCA decoration summarizing multiple achievements.";
+              achievementText = pca.map((a, i) => `${i+1}. ${a}`).join('\n');
+          } else if (userChoice.decorationReason === 'custom') {
+              reasonText = `This is a custom decoration. User Instructions: ${custom.instructions}`;
+              achievementText = custom.achievement;
+          }
+          
+          promptParts.push(`DECORATION CONTEXT: ${reasonText}`);
+          promptParts.push(promptData.finalInstructions || "// FINAL INSTRUCTIONS PLACEHOLDER");
+          promptParts.push(`\n**MEMBER'S ACHIEVEMENTS:**\n${achievementText}`);
+
+          return promptParts.join('\n\n');
+      }
+
+      // --- DATA LOADING FUNCTIONS ---
+      async function loadJSON(url) {
+          try {
+              const response = await fetch(url);
+              if (!response.ok) {
+                  throw new Error(`Failed to load ${url}: ${response.statusText}`);
+              }
+              return await response.json();
+          } catch (error) {
+              console.error(`Error loading ${url}:`, error);
+              throw error;
+          }
+      }
+
+      async function loadAllData() {
+          try {
+              // Load all data files in parallel
+              const [prompts, afsc, ranks, majcoms, mgas] = await Promise.all([
+                  loadJSON('./prompts.json'),
+                  loadJSON('./data/afscOptions.json'),
+                  loadJSON('./data/rankOptions.json'),
+                  loadJSON('./data/majcomOptions.json'),
+                  loadJSON('./data/mgaOptions.json')
+              ]);
+
+              // Assign to global variables
+              promptData = prompts;
+              afscOptions = afsc;
+              rankOptions = ranks;
+              majcomOptions = majcoms;
+              mgaOptions = mgas;
+
+              console.log('All data loaded successfully.');
+              return true;
+          } catch (error) {
+              console.error('Failed to load application data:', error);
+              // Show user-friendly error message
+              const errorMsg = document.createElement('div');
+              errorMsg.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; background: #ef4444; color: white; padding: 1rem; text-align: center; z-index: 10000;';
+              errorMsg.textContent = 'Failed to load application data. Please refresh the page.';
+              document.body.appendChild(errorMsg);
+              return false;
+          }
+      }
+
+      // Main Application Logic
+      document.addEventListener('DOMContentLoaded', async function() {
+        // Load all data first
+        const dataLoaded = await loadAllData();
+        if (!dataLoaded) {
+            return; // Stop initialization if data failed to load
+        }
+        
+        // Initialize all dropdowns/pickers
+        createResponsiveSelect('jobTitleContainer', afscOptions, 'jobTitle');
+        createResponsiveSelect('rankContainer', rankOptions, 'rank');
+        createResponsiveSelect('majcomContainer', majcomOptions, 'majcom');
+        createResponsiveSelect('mgaContainer', mgaOptions, 'mga');
+        
+        // Modal and Theme toggle setup
+        const alertModal = document.getElementById('alert-modal');
+        const alertOkBtn = document.getElementById('alert-ok');
+        const copyModal = document.getElementById('copy-confirmation-modal');
+        const closeCopyModalBtn = document.getElementById('close-copy-modal');
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const sunIcon = document.getElementById('sun-icon');
+        const moonIcon = document.getElementById('moon-icon');
+        
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            sunIcon.style.display = theme === 'dark' ? 'block' : 'none';
+            moonIcon.style.display = theme === 'light' ? 'block' : 'none';
+        }
+
+        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        applyTheme(savedTheme);
+
+        themeToggleBtn.addEventListener('click', () => {
+            const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        // Main UI controller function
+        function showTool() {
+            let titleText = '';
+            const mainTool = document.getElementById('main-tool-container');
+            const decTool = document.getElementById('decoration-tool-container');
+            
+            // Hide all tools by default
+            mainTool.style.display = 'none';
+            decTool.style.display = 'none';
+
+            if (userChoice.main === 'performance-report') {
+                titleText = 'Performance Report';
+                mainTool.style.display = '';
+                document.getElementById('mga-form-group').classList.remove('hidden');
+                document.getElementById('custom-award-instructions-form-group').classList.add('hidden');
+                document.getElementById('info-panel-wrapper').style.display = 'none';
+                mainTool.classList.remove('lg:col-span-2');
+                mainTool.classList.add('lg:col-span-3');
+
+            } else if (userChoice.main === 'award-package') {
+                const awardName = document.querySelector(`#award-selection-screen [data-award-type="${userChoice.awardType}"]`).textContent;
+                titleText = `Award Package: ${awardName}`;
+                mainTool.style.display = '';
+                document.getElementById('mga-form-group').classList.add('hidden');
+                document.getElementById('custom-award-instructions-form-group').classList.toggle('hidden', userChoice.awardType !== 'custom');
+                document.getElementById('info-panel-wrapper').style.display = '';
+                mainTool.classList.remove('lg:col-span-3');
+                mainTool.classList.add('lg:col-span-2');
+                const infoPanel = document.getElementById('award-info-panel');
+                const infoContent = document.getElementById('award-info-content');
+                if (infoPanel && infoContent && awardInfoContent[userChoice.awardType]) {
+                    infoPanel.classList.remove('hidden');
+                    infoContent.innerHTML = awardInfoContent[userChoice.awardType];
+                }
+
+            } else if (userChoice.main === 'decoration') {
+                const decName = document.querySelector(`#decoration-selection-screen [data-decoration-type="${userChoice.decorationType}"]`).textContent;
+                const reasonName = document.querySelector(`#decoration-reason-screen [data-decoration-reason="${userChoice.decorationReason}"]`).textContent;
+                titleText = `Decoration: ${decName} (${reasonName})`;
+                decTool.style.display = '';
+                
+                // Show correct input section for decoration reason
+                document.getElementById('dec-single-achievement-section').classList.toggle('hidden', userChoice.decorationReason !== 'single');
+                document.getElementById('dec-pca-section').classList.toggle('hidden', userChoice.decorationReason !== 'pca');
+                document.getElementById('dec-custom-section').classList.toggle('hidden', userChoice.decorationReason !== 'custom');
+            }
+
+            document.body.classList.add('selection-made');
+            document.getElementById('animated-title-container').innerHTML = `<div class="animated-title">${titleText}</div>`;
+        }
+
+
+        // --- Event Listeners for main selections ---
+        document.getElementById('select-report')?.addEventListener('click', function() {
+            userChoice.main = 'performance-report';
+            showTool();
+        });
+
+        document.getElementById('select-award')?.addEventListener('click', () => {
+             userChoice.main = 'award-package';
+             switchScreen('initial-selection-screen', 'award-selection-screen');
+        });
+        
+        document.getElementById('select-decoration')?.addEventListener('click', () => {
+            userChoice.main = 'decoration';
+            switchScreen('initial-selection-screen', 'decoration-selection-screen');
+        });
+
+        // --- Event Listeners for sub-selections ---
+        document.querySelectorAll('#award-selection-screen .selection-bubble').forEach(button => {
+            button.addEventListener('click', function() {
+                userChoice.awardType = this.dataset.awardType;
+                showTool();
+            });
+        });
+
+        document.querySelectorAll('#decoration-selection-screen .selection-bubble').forEach(button => {
+            button.addEventListener('click', function() {
+                userChoice.decorationType = this.dataset.decorationType;
+                switchScreen('decoration-selection-screen', 'decoration-reason-screen');
+            });
+        });
+
+        document.querySelectorAll('#decoration-reason-screen .selection-bubble').forEach(button => {
+            button.addEventListener('click', function() {
+                userChoice.decorationReason = this.dataset.decorationReason;
+                showTool();
+            });
+        });
+
+        // --- Character Counter Logic ---
+        const charCounterTextBox = document.getElementById('charCounterTextBox');
+        const charCounterCount = document.getElementById('charCounterCount');
+        if (charCounterTextBox && charCounterCount) {
+            charCounterTextBox.addEventListener('input', () => {
+                const count = charCounterTextBox.value.length;
+                charCounterCount.textContent = count;
+                charCounterCount.style.color = count > 250 ? 'var(--danger-color)' : count > 175 ? '#f59e0b' : 'var(--primary-cyan)';
+            });
+        }
+        
+        // --- Generate Button Logic ---
+        function handleGenerate() {
+            let prompt = '';
+            let isValid = false;
+
+            if (userChoice.main === 'decoration') {
+                if (userChoice.decorationReason === 'single') {
+                    const single = document.getElementById('dec-single-achievement').value.trim();
+                    if (!single) { 
+                        showModal('alert-modal'); 
+                        document.getElementById('alert-body').textContent = "Please describe the single achievement.";
+                        return; 
+                    }
+                    prompt = assembleDecorationPrompt({ userChoice, single });
+                } else if (userChoice.decorationReason === 'pca') {
+                    const pca = [
+                        document.getElementById('dec-achievement-1')?.value.trim(),
+                        document.getElementById('dec-achievement-2')?.value.trim(),
+                        document.getElementById('dec-achievement-3')?.value.trim(),
+                    ].filter(Boolean);
+                    if (pca.length < 3) {
+                        showModal('alert-modal');
+                        document.getElementById('alert-body').textContent = "Please provide at least 3 achievement statements for a PCS/PCA decoration.";
+                        return;
+                    }
+                     const optionalPca = [
+                        document.getElementById('dec-achievement-4')?.value.trim(),
+                        document.getElementById('dec-achievement-5')?.value.trim(),
+                    ].filter(Boolean);
+                    prompt = assembleDecorationPrompt({ userChoice, pca: [...pca, ...optionalPca] });
+                } else if (userChoice.decorationReason === 'custom') {
+                    const instructions = document.getElementById('dec-custom-instructions').value.trim();
+                    const achievement = document.getElementById('dec-custom-achievement').value.trim();
+                     if (!instructions || !achievement) { 
+                        showModal('alert-modal');
+                        document.getElementById('alert-body').textContent = "Please provide both custom instructions and achievement details.";
+                        return;
+                    }
+                    prompt = assembleDecorationPrompt({ userChoice, custom: { instructions, achievement } });
+                }
+                isValid = true;
+
+            } else { // Performance Report or Award Package
+                const accomplishment = document.getElementById('accomplishment')?.value.trim();
+                if (!accomplishment) {
+                    document.getElementById('alert-title').textContent = 'Input Required';
+                    document.getElementById('alert-body').textContent = "Please fill in the 'Accomplishment Details' field before generating a prompt.";
+                    showModal('alert-modal');
+                    return;
+                }
+                isValid = true;
+                const getElValue = (id) => document.getElementById(id)?.dataset.value || '';
+                let jobTitle = getElValue('jobTitle');
+                if (jobTitle === 'other') jobTitle = document.getElementById('otherJobTitle')?.value.trim();
+                
+                const promptInputs = {
+                    rank: getElValue('rank'), jobTitle, majcom: getElValue('majcom'), mga: getElValue('mga'), userChoice, accomplishment,
+                    customAwardInstructions: document.getElementById('customAwardInstructions')?.value.trim()
+                };
+                prompt = assembleInteractivePrompt(promptInputs);
+            }
+
+            if (isValid && prompt) {
+                navigator.clipboard.writeText(prompt).then(() => {
+                    showModal('copy-confirmation-modal');
+                    document.getElementById('final-cards-container')?.classList.remove('hidden');
+                }).catch(err => {
+                    console.error('Clipboard copy failed: ', err);
+                    alert('Failed to copy. Please copy the prompt manually from the console.');
+                    console.log("--- PROMPT ---", prompt);
+                });
+            }
+        }
+        
+        document.getElementById('generateButtonMain')?.addEventListener('click', handleGenerate);
+        document.getElementById('generateButtonDec')?.addEventListener('click', handleGenerate);
+
+        // --- Reset Logic ---
+        function handleReset() {
+            // Reset text areas
+            const textAreas = ['accomplishment', 'otherJobTitle', 'customAwardInstructions', 
+                               'dec-achievement-1', 'dec-achievement-2', 'dec-achievement-3', 'dec-achievement-4', 'dec-achievement-5',
+                               'dec-single-achievement', 'dec-custom-instructions', 'dec-custom-achievement'];
+            textAreas.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            
+            // Reset dropdowns
+            ['jobTitle', 'rank', 'majcom', 'mga'].forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                let options;
+                switch (id) {
+                    case 'jobTitle': options = afscOptions; break;
+                    case 'rank': options = rankOptions; break;
+                    case 'majcom': options = majcomOptions; break;
+                    case 'mga': options = mgaOptions; break;
+                }
+                if (options) {
+                    el.textContent = options[0].text;
+                    el.dataset.value = options[0].value;
+                }
+            });
+
+            // Reset UI state
+            document.body.className = '';
+            userChoice = { main: '', awardType: '', decorationType: '', decorationReason: '' };
+            activeBubbleText = '';
+            document.getElementById('animated-title-container').innerHTML = '';
+            
+            // Hide all conditional UI elements
+            const conditionalElements = ['otherJobField', 'custom-award-instructions-form-group', 'award-info-panel', 
+                                       'final-cards-container', 'nipr-link-btn-main', 'nipr-link-btn-dec',
+                                       'dec-single-achievement-section', 'dec-pca-section', 'dec-custom-section'];
+            conditionalElements.forEach(id => {
+                 document.getElementById(id)?.classList.add('hidden');
+            });
+             document.getElementById('info-panel-wrapper').style.display = 'none';
+            document.getElementById('mga-form-group')?.classList.remove('hidden');
+             document.getElementById('main-tool-container').style.display = 'none';
+             document.getElementById('decoration-tool-container').style.display = 'none';
+
+             // Reset selection screens
+             switchScreen('award-selection-screen', 'initial-selection-screen');
+             switchScreen('decoration-selection-screen', 'initial-selection-screen');
+             switchScreen('decoration-reason-screen', 'initial-selection-screen');
+             document.getElementById('initial-selection-screen').classList.remove('hidden');
+             document.getElementById('award-selection-screen').classList.add('hidden');
+             document.getElementById('decoration-selection-screen').classList.add('hidden');
+             document.getElementById('decoration-reason-screen').classList.add('hidden');
+            
+            // Reset char counter
+            if (charCounterTextBox) charCounterTextBox.value = '';
+            if (charCounterCount) {
+                charCounterCount.textContent = '0';
+                charCounterCount.style.color = 'var(--primary-cyan)';
+            }
+        }
+        document.getElementById('resetBtn')?.addEventListener('click', handleReset);
+        document.getElementById('resetBtn2')?.addEventListener('click', handleReset);
+        
+        // Modal closing logic
+        function showNiprLink() {
+            hideModal('copy-confirmation-modal');
+            const linkId = userChoice.main === 'decoration' ? 'nipr-link-btn-dec' : 'nipr-link-btn-main';
+            document.getElementById(linkId)?.classList.remove('hidden');
+        }
+        alertOkBtn?.addEventListener('click', () => hideModal('alert-modal'));
+        alertModal?.addEventListener('click', (e) => { if (e.target === alertModal) hideModal('alert-modal'); });
+        closeCopyModalBtn?.addEventListener('click', showNiprLink);
+        copyModal?.addEventListener('click', (e) => { if (e.target === copyModal) showNiprLink(); });
+
+        window.addEventListener('click', () => { if (!isTouchDevice) closeAllDropdowns(); });
+
+        // DEBUG PANEL FUNCTIONALITY
+        const debugToggle = document.getElementById('debug-toggle');
+        const debugPanel = document.getElementById('debug-panel');
+        const debugOutput = document.getElementById('debug-output');
+        const debugPanelClose = document.getElementById('debug-panel-close');
+        let debugActive = false;
+
+        debugToggle.addEventListener('click', () => {
+            debugActive = !debugActive;
+            debugToggle.classList.toggle('active');
+            if (debugActive) {
+                debugPanel.classList.remove('hidden');
+                updateDebugOutput();
+            } else {
+                debugPanel.classList.add('hidden');
+            }
+        });
+
+        debugPanelClose.addEventListener('click', () => {
+            debugActive = false;
+            debugToggle.classList.remove('active');
+            debugPanel.classList.add('hidden');
+        });
+
+        function updateDebugOutput() {
+            if (!debugActive) return;
+            
+            let debugText = '=== PROMPT ASSEMBLY DEBUG ===\n\n';
+
+            // Get current selections
+            const getElValue = (id) => document.getElementById(id)?.dataset.value || '';
+            const getRankValue = () => {
+                const el = document.getElementById('rank');
+                return el?.textContent?.trim() || '';
+            };
+            const getJobTitle = () => {
+                const el = document.getElementById('jobTitle');
+                if (el?.textContent?.includes('Select')) return '[NOT SELECTED]';
+                return el?.textContent?.trim() || '';
+            };
+            const getMajcom = () => {
+                const el = document.getElementById('majcom');
+                if (el?.textContent?.includes('Select')) return '[NOT SELECTED]';
+                return el?.textContent?.trim() || '';
+            };
+            const getMga = () => {
+                const el = document.getElementById('mga');
+                if (el?.textContent?.includes('Select')) return '[NOT SELECTED]';
+                return el?.textContent?.trim() || '';
+            };
+
+            debugText += '📋 FORM INPUTS:\n';
+            debugText += `  Rank: ${getRankValue()}\n`;
+            debugText += `  Job Title: ${getJobTitle()}\n`;
+            debugText += `  MAJCOM: ${getMajcom()}\n`;
+            debugText += `  MGA: ${getMga()}\n`;
+            debugText += `  User Choice (main): ${userChoice.main || '[NOT SELECTED]'}\n`;
+            debugText += `  User Choice (type): ${userChoice.awardType || userChoice.decorationType || '[N/A]'}\n`;
+
+            const accomplishmentText = document.getElementById('accomplishment')?.value?.trim();
+            debugText += `  Accomplishment: ${accomplishmentText ? '✓ Provided' : '✗ EMPTY'}\n`;
+
+            debugText += '\n📝 ASSEMBLED PROMPT:\n';
+            debugText += '─'.repeat(50) + '\n\n';
+
+            // Assemble prompt
+            let prompt = '';
+            if (userChoice.main === 'performance-report' || userChoice.main === 'award-package') {
+                const inputs = {
+                    rank: getRankValue(),
+                    jobTitle: getJobTitle(),
+                    majcom: getMajcom(),
+                    mga: getMga(),
+                    userChoice,
+                    accomplishment: accomplishmentText || '[No accomplishment provided]',
+                    customAwardInstructions: document.getElementById('customAwardInstructions')?.value.trim() || ''
+                };
+                prompt = assembleInteractivePrompt(inputs);
+            } else if (userChoice.main === 'decoration') {
+                const inputs = {
+                    userChoice,
+                    single: document.getElementById('dec-single-achievement')?.value.trim() || '',
+                    pca: [
+                        document.getElementById('dec-achievement-1')?.value.trim() || '',
+                        document.getElementById('dec-achievement-2')?.value.trim() || '',
+                        document.getElementById('dec-achievement-3')?.value.trim() || '',
+                        document.getElementById('dec-achievement-4')?.value.trim() || '',
+                        document.getElementById('dec-achievement-5')?.value.trim() || ''
+                    ].filter(a => a),
+                    custom: {
+                        instructions: document.getElementById('dec-custom-instructions')?.value.trim() || '',
+                        achievement: document.getElementById('dec-custom-achievement')?.value.trim() || ''
+                    }
+                };
+                prompt = assembleDecorationPrompt(inputs);
+            } else {
+                prompt = '[Select a tool type above to preview prompt]';
+            }
+
+            debugText += prompt;
+            debugOutput.textContent = debugText;
+        }
+
+        // Update debug output on form changes
+        if (debugActive || true) { // Always listen for changes
+            document.addEventListener('input', (e) => {
+                if (debugActive) updateDebugOutput();
+            });
+            
+            // Watch for dropdown changes
+            const observer = new MutationObserver(() => {
+                if (debugActive) updateDebugOutput();
+            });
+            
+            ['rank', 'jobTitle', 'majcom', 'mga'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    observer.observe(el, { characterData: true, subtree: true, attributes: true });
+                }
+            });
+        }
+      });
+    </script>
+
+    <!-- Debug Panel HTML -->
+    <button id="debug-toggle" title="Toggle Debug Panel">🐛</button>
+    <div id="debug-panel" class="hidden">
+        <div id="debug-panel-header">
+            <h3>Debug: Live Prompt Preview</h3>
+            <button id="debug-panel-close" title="Close">✕</button>
+        </div>
+        <textarea id="debug-output" readonly></textarea>
+    </div>
+
