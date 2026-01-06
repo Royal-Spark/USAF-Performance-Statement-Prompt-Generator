@@ -156,7 +156,9 @@
             bottom: 1rem;
             right: 1rem;
             width: min(1000px, 80vw);
-            max-height: calc(100vh - 80px);
+            top: 1rem;
+            bottom: 1rem;
+            max-height: 1080px;
             background: var(--card-bg);
             border: 2px solid var(--primary-cyan);
             border-radius: 0.75rem;
@@ -178,7 +180,7 @@
         #debug-toggle.active { background: linear-gradient(to right, var(--primary-cyan), var(--primary-purple)); }
 
         /* --- Floating Character Count Panel --- */
-        #char-toggle { position: fixed; bottom: 1rem; right: 6.2rem; width: 48px; height: 48px; border-radius: 10px; background: linear-gradient(135deg, rgba(10, 132, 255, 0.12), rgba(34,211,238,0.08)); border: 1px solid var(--border-color); color: var(--text-secondary); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 502; }
+        #char-toggle { position: fixed; bottom: 1rem; right: 6.2rem; width: auto; height: 48px; border-radius: 10px; background: linear-gradient(135deg, rgba(10, 132, 255, 0.12), rgba(34,211,238,0.08)); border: 1px solid var(--border-color); color: var(--text-secondary); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 502; }
         #char-toggle.active { background: linear-gradient(to right, var(--primary-purple), var(--primary-cyan)); color: #fff; }
         #char-panel { position: fixed; bottom: 4.25rem; right: 1.25rem; width: min(520px, 45vw); max-height: calc(100vh - 160px); background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.75rem; box-shadow: 0 8px 30px rgba(0,0,0,0.35); display: none; flex-direction: column; z-index: 503; overflow: hidden; }
         #char-panel.visible { display: flex; }
@@ -389,7 +391,7 @@
         </div>
     </div>
 
-    <button id="char-toggle" title="Toggle Character Tool">🔤</button>
+    <button id="char-toggle" title="Toggle Character Tool">Character Counter - Use To Get Specific Lengths!</button>
     <button id="debug-toggle" title="Toggle Debug Panel">🐛</button>
 
 
