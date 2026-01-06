@@ -1,0 +1,298 @@
+{
+  "sijanLeadership": {
+    "title": "Lance P. Sijan Leadership Award",
+    "content": "Established in 1981 and named after Captain Lance P. Sijan, the first U.S. Air Force Academy graduate to receive the Medal of Honor. This prestigious award recognizes individuals who have demonstrated the highest qualities of leadership in their professional performance and personal conduct.",
+    "bullets": [
+      "Demonstrates outstanding leadership abilities in the performance of duties and conduct of personal life",
+      "Available to both officer and enlisted members across four categories (Company Grade Officer, Field Grade Officer, Senior NCO, Junior NCO)",
+      "Posthumous nominations are not eligible",
+      "Recipients are entitled to wear the Air Force Recognition Ribbon",
+      "One of the Air Force's most prestigious leadership awards"
+    ]
+  },
+  "leoMarquez": {
+    "title": "Lt Gen Leo Marquez Maintenance Excellence Award",
+    "content": "Named after Lt Gen Leo Marquez, known as the 'Godfather' of Air Force maintenance. This award recognizes maintainers who have demonstrated the highest degree of sustained job performance, job knowledge, job efficiency and results in maintenance operations.",
+    "bullets": [
+      "Recognizes excellence in aircraft, munitions/missile, and communications-electronics maintenance",
+      "Criteria include sustained job performance, job knowledge, job efficiency and results",
+      "Demonstrates direct sortie generation involvement and mission impact",
+      "Awarded at multiple levels: unit, MAJCOM, and Air Force-wide",
+      "Honors military and civilian maintenance personnel who exceed standards in their career field"
+    ]
+  },
+  "quarterlyAnnual": {
+    "title": "Quarterly / Annual Award",
+    "content": "Standard recognition program at flight, squadron, group, wing, MAJCOM and Air Force levels. Recognizes outstanding performance during quarterly or annual periods across various categories of personnel.",
+    "bullets": [
+      "Categories typically include: Airman, NCO, SNCO, CGO, FGO, First Sergeant, and Civilian",
+      "Evaluation criteria: Leadership and Job Performance in Primary Duty, Significant Self-Improvement, Base or Community Involvement",
+      "Nominations submitted on AF Form 1206 with specific line limitations by level",
+      "Quarterly awards typically use 9-11 lines; Annual awards typically use 18 lines of justification",
+      "Recognizes well-rounded Airmen demonstrating excellence across multiple areas"
+    ]
+  },
+  "msm": {
+    "title": "Meritorious Service Medal (MSM)",
+    "content": "Established by Executive Order 11448 on January 16, 1969. Awarded for outstanding meritorious achievement or service to the United States. Originally created as the counterpart to the Bronze Star Medal for recognition of meritorious non-combat service.",
+    "bullets": [
+      "Recognizes outstanding non-combat meritorious achievement or service",
+      "Typically awarded to field grade officers and senior enlisted personnel",
+      "Since 2003, may be awarded for service in combat zones for non-combat achievements (retroactive to September 11, 2001)",
+      "Approval authority typically rests with first O-6 or above in chain of command",
+      "Often used for end-of-tour and retirement recognition for exceptional service"
+    ]
+  },
+  "afcm": {
+    "title": "Air Force Commendation Medal (AFCM)",
+    "content": "Established March 28, 1958 by Secretary of the Air Force James H. Douglas, Jr. A mid-level decoration recognizing sustained acts of heroism or meritorious service. Now known as the Air and Space Commendation Medal (effective November 16, 2020).",
+    "bullets": [
+      "Awarded for heroism, outstanding achievement, or meritorious service not of sufficient nature to justify a higher award",
+      "Must be signed by Colonel (O-6) or equivalent and above",
+      "Not awarded to general or flag officer grades (O-7 and above)",
+      "Emphasis on award to outstanding company grade officers and junior NCOs",
+      "May include Valor (V), Combat (C), or Remote (R) devices for specific circumstances"
+    ]
+  },
+  "afam": {
+    "title": "Air Force Achievement Medal (AFAM)",
+    "content": "Established October 12, 1980 by Secretary of the Air Force Hans M. Mark. Recognizes outstanding achievement or meritorious service by junior personnel that does not meet the requirements for the Commendation Medal. Now known as the Air and Space Achievement Medal (effective November 16, 2020).",
+    "bullets": [
+      "Awarded to junior personnel: officers at O-4 and below, enlisted at E-6 and below",
+      "Recognizes outstanding achievement or meritorious service rendered on behalf of the Air Force",
+      "No more than one AFAM may be awarded during a 1-year period except under extraordinary circumstances",
+      "Not awarded for aerial achievement or retirement",
+      "Award authority may be delegated to wing or equivalent commanders (O-6 and above)"
+    ]
+  },
+  "custom": {
+    "title": "Custom Award",
+    "content": "Please refer to your specific MAJCOM or Wing guidance.",
+    "bullets": ["Custom criteria as defined by authority"]
+  },
+
+  "outstandingAirman": {
+    "title": "Outstanding Airman of the Year",
+    "content": "Sponsored by the Air Force Association, this award recognizes 12 outstanding enlisted members annually who have distinguished themselves through exceptional leadership, job performance, and community involvement.",
+    "bullets": [
+      "Recognizes 12 outstanding enlisted Airmen across the Air Force annually",
+      "Selected from MAJCOM-level annual award winners",
+      "Criteria include leadership, job performance, significant self-improvement, and community involvement",
+      "One of the Air Force's most prestigious enlisted recognition programs",
+      "Winners represent the highest caliber of enlisted performance across the service"
+    ]
+  },
+  "sijanAward": {
+    "title": "Sijan Award (alt)",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "spiritOfHope": {
+    "title": "Spirit of Hope Award",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "mackayTrophy": {
+    "title": "Mackay Trophy",
+    "content": "Recognizes the most meritorious flight of the year by an Air Force person, persons, or organization.",
+    "bullets": [
+      "Awarded annually for the most meritorious flight of the year",
+      "Considers flights that demonstrate extraordinary skill, innovation, or importance to national defense",
+      "May be awarded to individuals, crews, or organizations",
+      "One of the Air Force's oldest and most prestigious aviation awards",
+      "Criteria focus on exceptional aeronautical achievement with significant impact"
+    ]
+  },
+  "cheneyAward": {
+    "title": "Cheney Award",
+    "content": "Recognizes an act of valor, extreme fortitude, or self-sacrifice in a humanitarian interest, performed in connection with aircraft.",
+    "bullets": [
+      "Awarded for acts of valor, extreme fortitude, or self-sacrifice",
+      "Must be performed in connection with aircraft operations",
+      "Recognizes humanitarian interests and life-saving actions",
+      "One of the Air Force's most distinguished valor and humanitarian awards",
+      "Named after Lieutenant William H. Cheney"
+    ]
+  },
+  "daedalianPilotAward": {
+    "title": "Daedalian Pilot Award",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "lambertsenAward": {
+    "title": "Lambertsen Award",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+
+  "afsocCommandersLeadership": {
+    "title": "AFSOC Commander's Leadership Award",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "afsocOutstandingSoSquadron": {
+    "title": "AFSOC Outstanding Squadron",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "afspecwarAwards": {
+    "title": "AFSPECWAR Awards",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "afsocIndividualAwards": {
+    "title": "AFSOC Individual Awards",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+
+  "afmsAnnualAwards": {
+    "title": "AFMS Annual Awards (Medical)",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "haroldGrantAward": {
+    "title": "Harold Grant Award (Communications)",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "johnJumperAward": {
+    "title": "John Jumper Award",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "billyBolesMentorship": {
+    "title": "Billy Boles Mentorship Award",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "a1Awards": {
+    "title": "A1 Community Awards (Manpower/Personnel)",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "leoMarquezAward": {
+    "title": "Leo Marquez Award (alt)",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "williamTunnerAward": {
+    "title": "William H. Tunner Award",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "maintenanceEffectivenessAward": {
+    "title": "Maintenance Effectiveness Award",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "thomasBarnesAward": {
+    "title": "Thomas Barnes Award (Crew Chief)",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "redErwinAward": {
+    "title": "Red Erwin Award (Enlisted Aircrew)",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "vehicleManagementAwards": {
+    "title": "Vehicle Management Awards",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "lewAllenTrophy": {
+    "title": "Lew Allen Trophy",
+    "content": "Annual award recognizing excellence in sortie generation, technical expertise, and attention to detail in aircraft, munitions, or missile maintenance.",
+    "bullets": [
+      "Two categories: sortie generation excellence and technical expertise/attention to detail",
+      "Recognizes maintainers who demonstrate superior performance in maintenance operations",
+      "Named after General Lew Allen Jr., former Air Force Chief of Staff",
+      "Awarded at MAJCOM and Air Force levels",
+      "Emphasizes both operational readiness and maintenance quality"
+    ]
+  },
+
+  "afisrapAwards": {
+    "title": "AF ISR Awards",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "securityForcesAwards": {
+    "title": "Security Forces Awards",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "financialManagementAwards": {
+    "title": "Financial Management Awards",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "firstSergeantOfTheYear": {
+    "title": "First Sergeant of the Year",
+    "content": "Recognizes the most outstanding First Sergeant in the Air Force who exemplifies leadership, mentorship, and care for Airmen.",
+    "bullets": [
+      "Selected from MAJCOM First Sergeant of the Year winners",
+      "Criteria include leadership of enlisted force, unit morale and welfare programs",
+      "Demonstrates exceptional care for Airmen and their families",
+      "Selected through competitive board process at Air Force level",
+      "Represents the highest standard of First Sergeant leadership and performance"
+    ]
+  },
+  "jaParalegalAward": {
+    "title": "JAG Paralegal Award",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "cyberspaceEwAwards": {
+    "title": "Cyberspace & EW Awards",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "verneOrrAward": {
+    "title": "Verne Orr Award",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "geicoAward": {
+    "title": "GEICO Safety Award",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "joanOrrAward": {
+    "title": "Joan Orr Spouse Award",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "pitsenbargerAward": {
+    "title": "Pitsenbarger Award (CCAF Grant)",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "usoServiceMember": {
+    "title": "USO Service Member Recognition",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+
+  "unitExcellence": {
+    "title": "Unit Excellence Award",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "innovationAward": {
+    "title": "Innovation Award",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "safetyAward": {
+    "title": "Safety Award",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  },
+  "volunteerServiceAward": {
+    "title": "Volunteer Service Award",
+    "content": "Specific criteria text here...",
+    "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
+  }
+}
