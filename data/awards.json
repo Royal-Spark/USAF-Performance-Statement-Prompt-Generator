@@ -48,7 +48,6 @@
   { "key": "unitExcellence", "title": "Unit Excellence Award", "category": "unit" },
   { "key": "innovationAward", "title": "Innovation Award", "category": "general" },
   { "key": "safetyAward", "title": "Safety Award", "category": "general" },
-  { "key": "volunteerServiceAward", "title": "Volunteer Service Award", "category": "general" }
-  { "key": "afsocSraJulianScholtenIsrOperator", "title": "AFSOC SrA Julian S. Scholten ISR Operator of the Year", "category": "functional" }
+  { "key": "volunteerServiceAward", "title": "Volunteer Service Award", "category": "general" },
+  { "key": "afsocSraJulianScholtenIsrOperator", "title": "AFSOC SrA Julian S. Scholten ISR Operator of the Year", "category": "functional" }]
 
-]
