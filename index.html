@@ -636,6 +636,29 @@
               if (promptData.awardAddons?.[userChoice.awardType]) {
                   p.push(promptData.awardAddons[userChoice.awardType]);
               }
+			   // --- NEW: Include Award Criteria and strict instructions to map statements to criteria ---
+        const criteria = awardCriteriaData?.[userChoice.awardType];
+        if (criteria) {
+            // Build a readable criteria section
+            const critParts = [];
+            if (criteria.title) critParts.push(criteria.title);
+            if (criteria.content) critParts.push(criteria.content);
+            if (criteria.bullets && criteria.bullets.length) {
+                critParts.push('Criteria:');
+                criteria.bullets.forEach((b, i) => critParts.push(`${i + 1}. ${b}`));
+            }
+            p.push(`AWARD CRITERIA:\n${critParts.join('\n')}`);
+
+            // Add explicit instructions to require mapping
+            p.push(
+                "INSTRUCTIONS: Use the AWARD CRITERIA above as the authoritative requirements. " +
+                "When drafting performance statements, ensure EACH STATEMENT directly maps to one or more specific criteria bullets. " +
+                "After each drafted statement, append a short bracketed tag listing which criteria numbers it satisfies (e.g., [Criteria: 1,3]). " +
+                "Do not invent accomplishments, metrics, or dates. If the provided input lacks measurable details required to meet the criteria, " +
+                "first list the additional evidence or metrics needed, then propose 1–2 concise ways the author could strengthen the statement. " +
+                "Prefer active, impact-focused wording and include metrics when available."
+            );
+        }
               const customInstr = document.getElementById('customAwardInstructions')?.value;
               if (customInstr) p.push(`CUSTOM INSTRUCTIONS: ${customInstr}`);
               p.push(`INPUT: ${inputs.text}`);
