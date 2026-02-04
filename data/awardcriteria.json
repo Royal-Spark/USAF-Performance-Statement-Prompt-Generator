@@ -294,5 +294,18 @@
     "title": "Volunteer Service Award",
     "content": "Specific criteria text here...",
     "bullets": ["Criteria item 1", "Criteria item 2", "Criteria item 3"]
-  }
+  },
+  "afsocSraJulianScholtenIsrOperator": {
+  "title": "AFSOC Sra Julian S. Scholten ISR Operator of the Year",
+  "content": "Specific Purpose: To identify and recognize the most outstanding ISR member directly supporting/enabling Air Force Special Operations combat operations.\n\nEligibility: Assigned to Air Force Special Operations Command (AFSOC) or a direct enabling unit and directly supported Special Operations combat missions during the award period. Possess one of the following ISR or ISR-related Air Force Specialty Codes: 14N, 1A8, 1N0, 1N1A, 1N2A, 1N2C, 1N3 (all), 1N4A, 1N4B, 1N7, 1N8, 1U0, or 9S1. Eligible grades: Company Grade Officer (O-1 through O-3) and Enlisted Grades (E-1 through E-6) will compete for a single award.\n\nNomination Criteria: Nomination packages will cover the preceding calendar year (1 January–31 December). Each wing or group may nominate one individual. The SIO of each wing, group, or squadron may submit one nomination for each category of this award. Wings and Groups must aggregate awards and submit one nomination for all subordinate units.\n\nNomination should include: One PDF AF Form 1206 for award submission (use the current version from AF e-publishing). Limit the award nomination narrative to 19 typed, single-spaced lines, including the heading — Outstanding Leadership and Performance under Combat Conditions. Use narrative-style performance statements (each statement must include an action and at least one of: impact or result). Use 12-pitch Times New Roman font. Acronyms permitted but must be spelled out on the AF Form 1206 continuation page. Do NOT include community service, professional military education, or other education accomplishments.",
+  "bullets": [
+    "Identifies the award's purpose: recognize the most outstanding ISR member directly enabling AFSOC combat operations",
+    "Eligibility limited to personnel assigned to AFSOC or direct enabling units who directly supported Special Operations combat missions during the award period",
+    "Required AFSCs: 14N, 1A8, 1N0, 1N1A, 1N2A, 1N2C, 1N3 (ALL), 1N4A, 1N4B, 1N7, 1N8, 1U0, 9S1",
+    "Eligible grades: Company Grade Officers (O-1–O-3) and Enlisted (E-1–E-6) compete for a single award",
+    "Nomination window: previous calendar year (1 Jan–31 Dec); one nomination per wing/group; SIO may submit one nomination per category",
+    "Submission: single PDF AF Form 1206 (19 typed single-spaced lines incl. heading); narrative-style statements only; 12-pitch Times New Roman; acronyms spelled out on continuation page; exclude community service and PME"
+  ]
+}
+
 }
