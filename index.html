@@ -457,7 +457,7 @@
           return groups;
       }
 
-      function filterAwards(category, groupedData) {
+     function filterAwards(category, groupedData) {
           document.querySelectorAll('.award-tab').forEach(tab => {
               tab.classList.toggle('active', tab.dataset.category === category);
           });
@@ -469,10 +469,18 @@
               list.forEach(a => {
                   const btn = document.createElement('button');
                   btn.className = 'selection-bubble award-bubble';
+                  
+                  // Display the nice human-readable title
                   btn.textContent = a.title || 'Award';
-                  btn.dataset.awardType = a.key || a.title; 
+                  
+                  // Store the exact key (e.g., "sijanLeadership") for the logic to work
+                  // We use a fallback to title if key is missing, but your awards.json has keys.
+                  const awardKey = a.key || a.title;
+                  btn.dataset.awardType = awardKey; 
+
                   btn.onclick = () => {
-                      userChoice.awardType = btn.dataset.awardType;
+                      // This ensures 'sijanLeadership' is passed to renderCriteria()
+                      userChoice.awardType = awardKey;
                       showTool();
                   };
                   container.appendChild(btn);
