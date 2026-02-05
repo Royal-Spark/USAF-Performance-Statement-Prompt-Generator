@@ -543,8 +543,11 @@
           // Reset displays
           mainTool.style.display = 'none';
           decTool.style.display = 'none';
-          criteriaContainer.style.display = 'none'; // Use display none for clean opacity transition reset if needed, but handled by class logic mostly
+          
+          // Reset Criteria Card state: hide and set opacity to 0 for the transition
+          criteriaContainer.style.display = 'none'; 
           criteriaContainer.classList.add('hidden');
+          criteriaContainer.style.opacity = '0';
           
           document.body.classList.add('selection-made');
 
@@ -569,15 +572,26 @@
               
               document.getElementById('mga-form-group').classList.add('hidden');
               
-              const isCustom = userChoice.awardType === 'custom' || !awardsList.find(a => a.key === userChoice.awardType);
+              // Check if criteria actually exists for this key in your criteria data
+              const hasCriteria = awardCriteriaData && awardCriteriaData[userChoice.awardType];
+              const isCustom = userChoice.awardType === 'custom' || !hasCriteria;
+              
+              // Toggle Custom Instructions based on whether criteria was found
               document.getElementById('custom-award-instructions-form-group').classList.toggle('hidden', !isCustom);
               
-              // Show Criteria Card
-              criteriaContainer.classList.remove('hidden');
-              criteriaContainer.style.display = 'block';
-              setTimeout(() => criteriaContainer.style.opacity = '1', 50); // fade in
-              
-              renderCriteria(userChoice.awardType);
+              // Only show and animate Criteria Card if data exists
+              if (hasCriteria) {
+                  criteriaContainer.classList.remove('hidden');
+                  criteriaContainer.style.display = 'block';
+                  
+                  // Render the specific content
+                  renderCriteria(userChoice.awardType);
+                  
+                  // Small delay to trigger the CSS opacity transition
+                  setTimeout(() => {
+                      criteriaContainer.style.opacity = '1';
+                  }, 50);
+              }
               
           } else if (userChoice.main === 'decoration') {
               title = `Decoration: ${userChoice.decorationType.toUpperCase()} (${userChoice.decorationReason})`;
