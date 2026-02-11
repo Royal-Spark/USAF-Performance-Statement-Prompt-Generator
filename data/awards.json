@@ -2,9 +2,6 @@
   { "key": "sijanLeadership", "title": "Lance P. Sijan Leadership Award", "category": "leadership" },
   { "key": "leoMarquez", "title": "Lt Gen Leo Marquez Maintenance Excellence Award", "category": "maintenance" },
   { "key": "quarterlyAnnual", "title": "Quarterly / Annual Award", "category": "general" },
-  { "key": "msm", "title": "Meritorious Service Medal (MSM)", "category": "decoration" },
-  { "key": "afcm", "title": "Air Force Commendation Medal (AFCM)", "category": "decoration" },
-  { "key": "afam", "title": "Air Force Achievement Medal (AFAM)", "category": "decoration" },
   { "key": "custom", "title": "Custom Award", "category": "custom" },
 
   { "key": "outstandingAirman", "title": "Outstanding Airman of the Year", "category": "leadership" },
@@ -50,4 +47,5 @@
   { "key": "safetyAward", "title": "Safety Award", "category": "general" },
   { "key": "volunteerServiceAward", "title": "Volunteer Service Award", "category": "general" },
   { "key": "afsocSraJulianScholtenIsrOperator", "title": "AFSOC SrA Julian S. Scholten ISR Operator of the Year", "category": "functional" }]
+
 
